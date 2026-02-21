@@ -57,9 +57,10 @@ export default class Player {
   }
 
   update() {
-    this.overlays.head.x = this.sprite.x;
-    this.overlays.head.y = this.sprite.y;
+    
+    
     if (this.isAttacking) { return }
+    
     if (this.destination) {
       const angle = Phaser.Math.Angle.Between(
         this.sprite.x, this.sprite.y,
