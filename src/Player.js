@@ -3,6 +3,12 @@ export default class Player {
     this.sprite = scene.add.sprite(x, y, "player_idle1_diag");
     this.destination = null;
     this.stats = { moveSpeed: 3 };
+    this.isAttacking = false;
+
+    this.sprite.on("animationcomplete", () => {
+      this.isAttacking = false;
+      this.sprite.play(this.getIdleAnim());
+    });
   }
 
   static preload(scene) {
@@ -10,6 +16,8 @@ export default class Player {
       { key: "player_idle1_diag", path: "assets/Medieval_Warfare_Male_1_idle1_diag.png" },
       { key: "player_idle2_diag", path: "assets/Medieval_Warfare_Male_1_idle2_diag.png" },
       { key: "player_walking_diag", path: "assets/Medieval_Warfare_Male_1_walking_diag.png" },
+      { key: "player_attack1", path: "assets/Medieval_Warfare_Male_1_MVsv_alt_attack1.png" },
+      { key: "player_attack2", path: "assets/Medieval_Warfare_Male_1_MVsv_alt_attack2.png" },
     ];
     sheets.forEach((sheet) => {
       scene.load.spritesheet(sheet.key, sheet.path, { frameWidth: 128, frameHeight: 128 });
@@ -29,14 +37,26 @@ export default class Player {
   }
 
   getIdleAnim() {
-    const current = this.sprite.anims.currentAnim?.key
+    const current = this.sprite.anims.currentAnim?.key;
     if (current?.startsWith("walk_")) {
-      return current.replace("walk_", "idle_")
+      return current.replace("walk_", "idle_");
     }
-    return "idle_sw"
+    if (current?.startsWith("attack")) {
+      return "idle_sw";
+    }
+    return current || "idle_sw";
+  }
+
+  attack(pointerX) {
+    if (this.isAttacking) { return }
+    this.isAttacking = true;
+    this.destination = null;
+    this.sprite.flipX = pointerX < this.sprite.x;
+    this.sprite.play("attack1");
   }
 
   update() {
+    if (this.isAttacking) { return }
     if (this.destination) {
       const angle = Phaser.Math.Angle.Between(
         this.sprite.x, this.sprite.y,
@@ -69,6 +89,8 @@ export default class Player {
       { key: "idle_nw", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 3, end: 5 }), frameRate: 6, repeat: -1 },
       { key: "idle_se", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 6, end: 8 }), frameRate: 6, repeat: -1 },
       { key: "idle_ne", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 9, end: 11 }), frameRate: 6, repeat: -1 },
+      { key: "attack1", frames: scene.anims.generateFrameNumbers("player_attack1", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
+      { key: "attack2", frames: scene.anims.generateFrameNumbers("player_attack2", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
     ];
     anims.forEach((anim) => {
       scene.anims.create(anim);
