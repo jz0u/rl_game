@@ -1,6 +1,7 @@
 export default class Player {
   constructor(scene, x, y) {
     this.sprite = scene.add.sprite(x, y, "player_idle1_diag");
+    this.overlays = {head:null,chest:null,legs:null,feet:null,weapon:null,offhand:null}
     this.destination = null;
     this.stats = { moveSpeed: 3 };
     this.isAttacking = false;
@@ -56,6 +57,8 @@ export default class Player {
   }
 
   update() {
+    this.overlays.head.x = this.sprite.x;
+    this.overlays.head.y = this.sprite.y;
     if (this.isAttacking) { return }
     if (this.destination) {
       const angle = Phaser.Math.Angle.Between(
