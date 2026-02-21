@@ -51,7 +51,7 @@ export default class Player {
     if (this.isAttacking) { return }
     this.isAttacking = true;
     this.destination = null;
-    this.sprite.flipX = pointerX < this.sprite.x;
+    this.sprite.flipX = pointerX > this.sprite.x;
     this.sprite.play("attack1");
   }
 

@@ -22,9 +22,11 @@ class GameScene extends Phaser.Scene {
     this.input.mouse.disableContextMenu();
     this.input.on("pointerdown", (pointer) => {
       // pointer.x and pointer.y are where the click happened
-        if(pointer.rightButtonDown()){
-          this.player.moveTo(pointer.x,pointer.y);
-        }
+      if (pointer.rightButtonDown()) {
+        this.player.moveTo(pointer.x, pointer.y);
+      } else if (pointer.leftButtonDown()) {
+        this.player.attack(pointer.x);
+      }
     });
   }
 
