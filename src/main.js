@@ -18,7 +18,8 @@ class GameScene extends Phaser.Scene {
     // Phaser calls this ONCE after preload finishes.
     // This is where you build your scene — add objects, set up physics, etc.
     this.player = new Player(this, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
-    this.input.mouse.disableContextMenu()
+    Player.createAnims(this);
+    this.input.mouse.disableContextMenu();
     this.input.on("pointerdown", (pointer) => {
       // pointer.x and pointer.y are where the click happened
         if(pointer.rightButtonDown()){
