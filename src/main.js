@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import Player from "./player";
+import Player from "./Player";
 const PLAYER_SPAWN_X = 500;
 const PLAYER_SPAWN_Y = 500;
 // A Scene is like a "screen" in your game.
