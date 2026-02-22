@@ -9,11 +9,25 @@ export default class Shop {
     const cx = width / 2;
     const cy = height / 2;
 
-    // ── Layout constants ──
-    this.cellSize = 100;
-    this.padding = 8;
-    this.gridLeft = cx + 250 - 200;
-    this.gridTop = cy - 200;
+    // ══════════════════════════════════════════════════
+    // Grid & panel layout constants — edit these to
+    // resize or reposition the item grid.
+    // ══════════════════════════════════════════════════
+    const COLS          = 4;
+    const ROWS          = 4;
+    const CELL_SIZE     = 100;
+    const CELL_PAD      = 8;
+    const GRID_WIDTH    = 450;
+    const GRID_HEIGHT   = 450;
+    const GRID_CENTER_X = cx + 250;
+    const GRID_CENTER_Y = cy;
+
+    this.cols     = COLS;
+    this.rows     = ROWS;
+    this.cellSize = CELL_SIZE;
+    this.padding  = CELL_PAD;
+    this.gridLeft = GRID_CENTER_X - (COLS * CELL_SIZE) / 2;
+    this.gridTop  = GRID_CENTER_Y - (ROWS * CELL_SIZE) / 2;
 
     // ── Toggle button ──
     this.shopBtn = this.scene.add
@@ -48,7 +62,7 @@ export default class Shop {
       wordWrap: { width: 420 },
     });
 
-    const itemGrid = this.scene.add.rectangle(cx + 250, cy, 450, 450, 0x222222);
+    const itemGrid = this.scene.add.rectangle(GRID_CENTER_X, GRID_CENTER_Y, GRID_WIDTH, GRID_HEIGHT, 0x222222);
 
     this.shopPanel.add([shopWindow, itemPreview, itemDescBox, this.previewBase, this.previewImage, this.itemDescText, itemGrid]);
 
@@ -86,7 +100,7 @@ export default class Shop {
     });
 
     this.nextBtn.on("pointerdown", () => {
-      const totalPages = Math.ceil(this.items.length / 16);
+      const totalPages = Math.ceil(this.items.length / (this.cols * this.rows));
       if (this.currentPage < totalPages - 1) {
         this.currentPage++;
         this._renderPage();
@@ -108,15 +122,16 @@ export default class Shop {
     this.gridCells.forEach(obj => obj.destroy());
     this.gridCells = [];
   
-    const start = this.currentPage * 16;
-    const pageItems = this.items.slice(start, start + 16);
+    const perPage = this.cols * this.rows;
+    const start = this.currentPage * perPage;
+    const pageItems = this.items.slice(start, start + perPage);
   
-    const totalPages = Math.ceil(this.items.length / 16);
+    const totalPages = Math.ceil(this.items.length / perPage);
     this.pageLabel.setText(`${this.currentPage + 1} / ${totalPages}`);
   
     pageItems.forEach((item, index) => {
-      const col = index % 4;
-      const row = Math.floor(index / 4);
+      const col = index % this.cols;
+      const row = Math.floor(index / this.cols);
       const x = this.gridLeft + col * this.cellSize + this.cellSize / 2;
       const y = this.gridTop + row * this.cellSize + this.cellSize / 2;
       const size = this.cellSize - this.padding;
