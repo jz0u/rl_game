@@ -85,6 +85,8 @@ class GameScene extends Phaser.Scene {
     this.player = new Player(this, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
     Player.createAnims(this);
 
+    this.player.equip({ slot: "weapon", animPrefix: "longsword" });
+
     // Disable the right-click context menu so we can use right-click to move.
     this.input.mouse.disableContextMenu();
 
