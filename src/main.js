@@ -44,8 +44,9 @@ class GameScene extends Phaser.Scene {
   _createInput() {
     this.input.mouse.disableContextMenu();
 
-    this.input.on("pointerdown", (pointer) => {
-      if (this.shop.shopPanel.visible) return;
+    this.input.on("pointerdown", (pointer, currentlyOver) => {
+      if (currentlyOver.length > 0) return;
+      if (this.shop.isAnyPanelOpen()) return;
 
       if (pointer.rightButtonDown()) {
         this.player.moveTo(pointer.x, pointer.y);
