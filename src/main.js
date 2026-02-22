@@ -43,7 +43,7 @@ class GameScene extends Phaser.Scene {
       })
       .setInteractive()
       .setScrollFactor(0);
-
+    /////////////////////////////////////////////////////////////
     // ── ITEMS PANEL ──
     // A Container groups multiple display objects so they move/hide together.
     // setScrollFactor(0) keeps it fixed to the screen (HUD-style).
@@ -55,22 +55,34 @@ class GameScene extends Phaser.Scene {
       .rectangle(
         this.scale.width / 2,
         this.scale.height / 2,
-        400,
+        1000,
         500,
         0x222222,
         0.9,
       )
       .setInteractive();
-
-    // Panel title text, anchored to its center-top (origin 0.5, 0).
-    const title = this.add
-      .text(this.scale.width / 2, this.scale.height / 2 - 220, "ITEMS", {
-        fontSize: "20px",
-        color: "#fff",
-      })
-      .setOrigin(0.5, 0);
-
-    shopPanel.add([shopWindow, title]);
+      //item preview
+      const itemPreview = 
+      this.add.rectangle(
+        this.scale.width / 2 - 250,  // Width of the preview rectangle
+        this.scale.height / 2,       // Height of the preview rectangle
+        450,
+        450,
+        0x222222,                    // Color of the preview rectangle
+        0.9,                         // Alpha value (opacity) of the preview rectangle
+      );
+      //item grid
+      const itemGrid = 
+      this.add.rectangle(
+        this.scale.width / 2 + 250,
+        this.scale.height / 2,
+        450,
+        450,
+        0x222222,
+        0.9,
+      );
+   
+    shopPanel.add([shopWindow, itemPreview, itemGrid]);
     shopPanel.setVisible(false);
     // setDepth controls draw order — higher numbers appear on top.
     shopPanel.setDepth(10);
@@ -79,7 +91,7 @@ class GameScene extends Phaser.Scene {
     btn.on("pointerdown", () => {
       shopPanel.setVisible(!shopPanel.visible);
     });
-
+    /////////////////////////////////////////////////////////////
     // ── PLAYER ──
     // Spawn the player at the defined coordinates and register all animations.
     this.player = new Player(this, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
