@@ -1,7 +1,7 @@
 export default class Player {
   constructor(scene, x, y) {
     this.sprite = scene.add.sprite(x, y, "player_idle1_diag");
-    this.overlays = {head:null,chest:null,legs:null,feet:null,weapon:null,offhand:null}
+    this.overlays = {head:null,chest:null,bottom:null,feet:null,weapon:null,offhand:null}
     this.destination = null;
     this.stats = { moveSpeed: 3 };
     this.isAttacking = false;
@@ -14,11 +14,11 @@ export default class Player {
 
   static preload(scene) {
     const sheets = [
-      { key: "player_idle1_diag", path: "assets/Medieval_Warfare_Male_1_idle1_diag.png" },
-      { key: "player_idle2_diag", path: "assets/Medieval_Warfare_Male_1_idle2_diag.png" },
-      { key: "player_walking_diag", path: "assets/Medieval_Warfare_Male_1_walking_diag.png" },
-      { key: "player_attack1", path: "assets/Medieval_Warfare_Male_1_MVsv_alt_attack1.png" },
-      { key: "player_attack2", path: "assets/Medieval_Warfare_Male_1_MVsv_alt_attack2.png" },
+      { key: "player_idle1_diag", path: "assets/player/Medieval_Warfare_Male_1_idle1_diag.png" },
+      { key: "player_idle2_diag", path: "assets/player/Medieval_Warfare_Male_1_idle2_diag.png" },
+      { key: "player_walking_diag", path: "assets/player/Medieval_Warfare_Male_1_walking_diag.png" },
+      { key: "player_attack1", path: "assets/player/Medieval_Warfare_Male_1_MVsv_alt_attack1.png" },
+      { key: "player_attack2", path: "assets/player/Medieval_Warfare_Male_1_MVsv_alt_attack2.png" },
     ];
     sheets.forEach((sheet) => {
       scene.load.spritesheet(sheet.key, sheet.path, { frameWidth: 128, frameHeight: 128 });
@@ -53,7 +53,12 @@ export default class Player {
     this.isAttacking = true;
     this.destination = null;
     this.sprite.flipX = pointerX > this.sprite.x;
-    this.sprite.play("attack1");
+    if(this.overlays.weapon) {
+      this.sprite.play("attack1");
+    } else {
+      this.sprite.play("attack2");
+    }
+    
   }
 
   update() {

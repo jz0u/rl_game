@@ -460,3 +460,13 @@ export const Armory = {
     },
   ],
 };
+
+export function getItemPaths(item) {
+  const base = `assets/armory/${item.slot}`;
+  return {
+    idle:    `${base}/${item.slot}_idle/${item.baseName}_idle1_diag.png`,
+    walking: `${base}/${item.slot}_walking/${item.baseName}_walking_diag.png`,
+    attack1: `${base}/${item.slot}_attacking/${item.baseName}_MVsv_alt_attack1.png`,
+    attack2: `${base}/${item.slot}_attacking/${item.baseName}_MVsv_alt_attack2.png`,
+  };
+}
