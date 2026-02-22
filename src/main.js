@@ -5,8 +5,8 @@ import Player from "./Player";
 //  CONSTANTS
 //  Put magic numbers here so they're easy to find and change later.
 // ─────────────────────────────────────────────
-const PLAYER_SPAWN_X = 500;
-const PLAYER_SPAWN_Y = 500;
+const PLAYER_SPAWN_X = 200;
+const PLAYER_SPAWN_Y = 200;
 
 // ─────────────────────────────────────────────
 //  GAME SCENE
@@ -47,11 +47,11 @@ class GameScene extends Phaser.Scene {
     // ── ITEMS PANEL ──
     // A Container groups multiple display objects so they move/hide together.
     // setScrollFactor(0) keeps it fixed to the screen (HUD-style).
-    const panel = this.add.container(0, 0).setScrollFactor(0);
+    const shopPanel = this.add.container(0, 0).setScrollFactor(0);
 
-    // The dark semi-transparent background rectangle for the panel.
+    // The dark semi-transparent background rectangle for the shopPanel.
     // setInteractive() here "blocks" clicks from passing through to the game world.
-    const bg = this.add
+    const shopWindow = this.add
       .rectangle(
         this.scale.width / 2,
         this.scale.height / 2,
@@ -70,14 +70,14 @@ class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5, 0);
 
-    panel.add([bg, title]);
-    panel.setVisible(false);
+    shopPanel.add([shopWindow, title]);
+    shopPanel.setVisible(false);
     // setDepth controls draw order — higher numbers appear on top.
-    panel.setDepth(10);
+    shopPanel.setDepth(10);
 
-    // Toggle the panel open/closed when the button is clicked.
+    // Toggle the shopPanel open/closed when the button is clicked.
     btn.on("pointerdown", () => {
-      panel.setVisible(!panel.visible);
+      shopPanel.setVisible(!shopPanel.visible);
     });
 
     // ── PLAYER ──
@@ -93,8 +93,8 @@ class GameScene extends Phaser.Scene {
     // ── INPUT ──
     // Listen for any pointer (mouse/touch) press anywhere in the scene.
     this.input.on("pointerdown", (pointer) => {
-      // Clicks while the inventory panel is open should not affect the game world.
-      if (panel.visible) return;
+      // Clicks while the inventory shopPanel is open should not affect the game world.
+      if (shopPanel.visible) return;
 
       if (pointer.rightButtonDown()) {
         this.player.moveTo(pointer.x, pointer.y);
