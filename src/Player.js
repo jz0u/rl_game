@@ -153,8 +153,12 @@ export default class Player {
     this.destination = null;
 
     this.sprite.flipX = pointerX > this.sprite.x;
-
-    this.sprite.play("attack2");
+    if(this.overlays.weapon) {
+      this.sprite.play("attack1");
+    } else {
+      this.sprite.play("attack2");
+    }
+    
   }
 
   // ─────────────────────────────────────────────
