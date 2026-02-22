@@ -14,8 +14,10 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     Player.preload(this);
+    this.load.image('player_paperdoll', 'assets/icons/uncropped/Medieval_Warfare_Male_1_Paperdoll.png');
     allItems.forEach(item => {
       this.load.image(item.id, item.paperdollPath);
+      this.load.image(item.id + '_full', item.paperdollPathFull);
   });
   }
 

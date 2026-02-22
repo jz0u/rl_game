@@ -7,6 +7,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_1',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_1_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_1_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -16,6 +17,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_2',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_2_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_2_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -25,6 +27,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_3',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_3_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_3_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -34,6 +37,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Head_4',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_4_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_4_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -43,6 +47,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Head_5',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_5_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_5_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -52,6 +57,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_6',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_6_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_6_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -61,6 +67,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_7',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_7_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_7_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -70,6 +77,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_8',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_8_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_8_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -79,6 +87,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_9',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_9_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_9_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -88,6 +97,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_10',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Head_10_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Head_10_Paperdoll.png',
       stats: { armorValue: 0 },
     },
   ],
@@ -99,6 +109,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_1',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_1_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_1_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -108,6 +119,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Tabard_2',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_2_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_2_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -117,6 +129,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_3',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_3_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_3_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -126,6 +139,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Tabard_4',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_4_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_4_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -135,6 +149,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_5',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_5_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_5_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -144,6 +159,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_6',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_6_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_6_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -153,6 +169,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_7',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_7_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_7_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -162,6 +179,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Tabard_8',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_8_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_8_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -171,6 +189,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_9',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Tabard_9_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Tabard_9_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -180,6 +199,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_1',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Top_1_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Top_1_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -189,6 +209,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_2',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Top_2_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Top_2_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -198,6 +219,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Top_3',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Top_3_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Top_3_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -207,6 +229,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Top_4',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Top_4_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Top_4_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -216,6 +239,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Top_5',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Top_5_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Top_5_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -225,6 +249,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_6',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Top_6_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Top_6_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -234,6 +259,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_7',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Top_7_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Top_7_Paperdoll.png',
       stats: { armorValue: 0 },
     },
   ],
@@ -245,6 +271,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Bottom_1',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Bottom_1_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Bottom_1_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -254,6 +281,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Bottom_2',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Bottom_2_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Bottom_2_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -263,6 +291,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Bottom_3',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Bottom_3_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Bottom_3_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -272,6 +301,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Bottom_4',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Bottom_4_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Bottom_4_Paperdoll.png',
       stats: { armorValue: 0 },
     },
   ],
@@ -283,6 +313,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Feet_1',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Feet_1_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Feet_1_Paperdoll.png',
       stats: { armorValue: 0 },
     },
     {
@@ -292,6 +323,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Feet_2',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Feet_2_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Feet_2_Paperdoll.png',
       stats: { armorValue: 0 },
     },
   ],
@@ -303,6 +335,7 @@ export const Armory = {
       type: 'ranged',
       baseName: 'Medieval_Warfare_Male_Weapon_Arquebus',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Arquebus_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Arquebus_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -312,6 +345,7 @@ export const Armory = {
       type: 'ranged',
       baseName: 'Medieval_Warfare_Male_Weapon_Bow',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Bow_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Bow_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -321,6 +355,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_CrosshiltSword',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_CrosshiltSword_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_CrosshiltSword_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -330,6 +365,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Doubleaxe',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Doubleaxe_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Doubleaxe_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -339,6 +375,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_FlangedMace',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_FlangedMace_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_FlangedMace_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -348,6 +385,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Halberd',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Halberd_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Halberd_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -357,6 +395,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Longsword',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Longsword_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Longsword_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -366,6 +405,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Mace',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Mace_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Mace_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -375,6 +415,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Pike',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Pike_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Pike_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -384,6 +425,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Warhammer',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Warhammer_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Warhammer_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -393,6 +435,7 @@ export const Armory = {
       type: 'ranged',
       baseName: 'Medieval_Warfare_Male_Weapon_Xbow',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_XBow_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_XBow_Paperdoll.png',
       stats: { damageValue: 0 },
     },
     {
@@ -402,6 +445,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Zweihander',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Zweihander_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Zweihander_Paperdoll.png',
       stats: { damageValue: 0 },
     },
   ],
@@ -413,6 +457,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_CrosshiltSword',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_CrosshiltSword_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_CrosshiltSword_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -422,6 +467,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_FlangedMace',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_FlangedMace_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_FlangedMace_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -431,6 +477,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Longsword',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Longsword_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Longsword_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -440,6 +487,7 @@ export const Armory = {
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Mace',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Weapon_Mace_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Weapon_Mace_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -449,6 +497,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Shield_1',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_1_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_1_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -458,6 +507,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_2',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_2_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_2_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -467,6 +517,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Shield_3',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_3_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_3_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -476,6 +527,7 @@ export const Armory = {
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Shield_4',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_4_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_4_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -485,6 +537,7 @@ export const Armory = {
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Shield_5',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_5_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_5_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -494,6 +547,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_6',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_6_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_6_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -503,6 +557,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_7',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_7_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_7_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
     {
@@ -512,6 +567,7 @@ export const Armory = {
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_8',
       paperdollPath: 'assets/icons/cropped/Medieval_Warfare_Male_Shield_8_Paperdoll.png',
+      paperdollPathFull: 'assets/icons/uncropped/Medieval_Warfare_Male_Shield_8_Paperdoll.png',
       stats: { armorValue: 0, blockChance: 0 },
     },
   ],

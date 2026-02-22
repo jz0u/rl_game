@@ -36,8 +36,11 @@ export default class Shop {
     const itemPreview = this.scene.add.rectangle(cx - 250, cy - 112, 450, 225, 0x333333);
     const itemDescBox = this.scene.add.rectangle(cx - 250, cy + 112, 450, 225, 0x2a2a2a);
 
+    this.previewBase = this.scene.add.image(cx - 250, cy - 112, 'player_paperdoll');
+    this.previewBase.setDisplaySize(225, 225);
+
     this.previewImage = this.scene.add.image(cx - 250, cy - 112, '').setVisible(false);
-    this.previewImage.setDisplaySize(180, 180);
+    this.previewImage.setDisplaySize(225, 225);
 
     this.itemDescText = this.scene.add.text(cx - 465, cy + 10, "Select an item...", {
       fontSize: "14px",
@@ -47,7 +50,7 @@ export default class Shop {
 
     const itemGrid = this.scene.add.rectangle(cx + 250, cy, 450, 450, 0x222222);
 
-    this.shopPanel.add([shopWindow, itemPreview, itemDescBox, this.previewImage, this.itemDescText, itemGrid]);
+    this.shopPanel.add([shopWindow, itemPreview, itemDescBox, this.previewBase, this.previewImage, this.itemDescText, itemGrid]);
 
     // ── Pagination buttons ──
     this.prevBtn = this.scene.add
@@ -133,7 +136,8 @@ export default class Shop {
   }
 
   _selectItem(item) {
-    this.previewImage.setTexture(item.id);
+    this.previewImage.setTexture(item.id + '_full');
+    this.previewImage.setDisplaySize(225, 225);
     this.previewImage.setVisible(true);
 
     const lines = [item.displayName || item.id];
@@ -150,6 +154,17 @@ export default class Shop {
   // ── Visibility ──
 
   show() { this.shopPanel.setVisible(true); }
-  hide() { this.shopPanel.setVisible(false); }
-  toggle() { this.shopPanel.setVisible(!this.shopPanel.visible); }
+  hide() {
+    this.previewImage.setVisible(false);
+    this.itemDescText.setText('Select an item...');
+    this.shopPanel.setVisible(false);
+  }
+
+  toggle() {
+    if (this.shopPanel.visible) {
+      this.hide();
+    } else {
+      this.shopPanel.setVisible(true);
+    }
+  }
 }
