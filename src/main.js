@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Player from "./Player";
 import Shop from "./Shop";
+import Inventory from "./Inventory";
 import { Armory } from "./Armory";
 const allItems = Object.values(Armory).flat();
 
@@ -29,6 +30,10 @@ class GameScene extends Phaser.Scene {
 
   _createShopUI() {
     this.shop = new Shop(this, allItems);
+    this.inventory = new Inventory(this);
+
+    this.shop.shopBtn.on("pointerdown", () => this.inventory.hide());
+    this.inventory.inventoryBtn.on("pointerdown", () => this.shop.hide());
   }
 
   // ── Player ──
@@ -46,7 +51,7 @@ class GameScene extends Phaser.Scene {
 
     this.input.on("pointerdown", (pointer, currentlyOver) => {
       if (currentlyOver.length > 0) return;
-      if (this.shop.isAnyPanelOpen()) return;
+      if (this.shop.shopPanel.visible || this.inventory.panel.visible) return;
 
       if (pointer.rightButtonDown()) {
         this.player.moveTo(pointer.x, pointer.y);

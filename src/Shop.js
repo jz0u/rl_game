@@ -26,32 +26,6 @@ export default class Shop {
       .setInteractive()
       .setScrollFactor(0);
 
-    // ── Inventory button ──
-    this.inventoryBtn = this.scene.add
-      .text(20, 56, "INVENTORY", {
-        fontSize: "16px",
-        backgroundColor: "#333",
-        padding: { x: 10, y: 6 },
-        color: "#fff",
-      })
-      .setInteractive()
-      .setScrollFactor(0);
-
-    // ── Inventory panel ──
-    this.inventoryPanel = this.scene.add.container(0, 0).setScrollFactor(0);
-    const invWindow = this.scene.add
-      .rectangle(cx, cy, 1000, 500, 0x222222, 0.9)
-      .setInteractive();
-    const invTitle = this.scene.add.text(cx, cy - 230, "Inventory", {
-      fontSize: "20px",
-      color: "#fff",
-    }).setOrigin(0.5);
-    this.inventoryPanel.add([invWindow, invTitle]);
-    this.inventoryPanel.setVisible(false);
-    this.inventoryPanel.setDepth(10);
-
-    this.inventoryBtn.on("pointerdown", () => this.toggleInventory());
-
     // ── Shop panel ──
     this.shopPanel = this.scene.add.container(0, 0).setScrollFactor(0);
 
@@ -190,23 +164,7 @@ export default class Shop {
     if (this.shopPanel.visible) {
       this.hide();
     } else {
-      this.hideInventory();
       this.shopPanel.setVisible(true);
     }
-  }
-
-  showInventory() { this.inventoryPanel.setVisible(true); }
-  hideInventory() { this.inventoryPanel.setVisible(false); }
-  toggleInventory() {
-    if (this.inventoryPanel.visible) {
-      this.hideInventory();
-    } else {
-      this.hide();
-      this.inventoryPanel.setVisible(true);
-    }
-  }
-
-  isAnyPanelOpen() {
-    return this.shopPanel.visible || this.inventoryPanel.visible;
   }
 }
