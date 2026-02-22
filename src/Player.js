@@ -14,7 +14,7 @@ export default class Player {
     // null means "nothing equipped" in that slot.
     this.overlays = {
       head: null,
-      chest: null,
+      body: null,
       bottom: null,
       feet: null,
       weapon: null,
