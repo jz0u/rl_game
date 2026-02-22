@@ -6,7 +6,7 @@ export const Armory = {
       slot: 'head',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_1',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_2',
@@ -14,7 +14,7 @@ export const Armory = {
       slot: 'head',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_2',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_3',
@@ -22,7 +22,7 @@ export const Armory = {
       slot: 'head',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_3',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_4',
@@ -30,7 +30,7 @@ export const Armory = {
       slot: 'head',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Head_4',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_5',
@@ -38,7 +38,7 @@ export const Armory = {
       slot: 'head',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Head_5',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_6',
@@ -46,7 +46,7 @@ export const Armory = {
       slot: 'head',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_6',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_7',
@@ -54,7 +54,7 @@ export const Armory = {
       slot: 'head',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_7',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_8',
@@ -62,7 +62,7 @@ export const Armory = {
       slot: 'head',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_8',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_9',
@@ -70,7 +70,7 @@ export const Armory = {
       slot: 'head',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Head_9',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'head_10',
@@ -78,7 +78,7 @@ export const Armory = {
       slot: 'head',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Head_10',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
   ],
   body: [
@@ -88,7 +88,7 @@ export const Armory = {
       slot: 'body',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_1',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_2',
@@ -96,7 +96,7 @@ export const Armory = {
       slot: 'body',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Tabard_2',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_3',
@@ -104,7 +104,7 @@ export const Armory = {
       slot: 'body',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_3',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_4',
@@ -112,7 +112,7 @@ export const Armory = {
       slot: 'body',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Tabard_4',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_5',
@@ -120,7 +120,7 @@ export const Armory = {
       slot: 'body',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_5',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_6',
@@ -128,7 +128,7 @@ export const Armory = {
       slot: 'body',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_6',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_7',
@@ -136,7 +136,7 @@ export const Armory = {
       slot: 'body',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_7',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_8',
@@ -144,7 +144,7 @@ export const Armory = {
       slot: 'body',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Tabard_8',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_9',
@@ -152,7 +152,7 @@ export const Armory = {
       slot: 'body',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Tabard_9',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_10',
@@ -160,7 +160,7 @@ export const Armory = {
       slot: 'body',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_1',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_11',
@@ -168,7 +168,7 @@ export const Armory = {
       slot: 'body',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_2',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_12',
@@ -176,7 +176,7 @@ export const Armory = {
       slot: 'body',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Top_3',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_13',
@@ -184,7 +184,7 @@ export const Armory = {
       slot: 'body',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Top_4',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_14',
@@ -192,7 +192,7 @@ export const Armory = {
       slot: 'body',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Top_5',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_15',
@@ -200,7 +200,7 @@ export const Armory = {
       slot: 'body',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_6',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'body_16',
@@ -208,7 +208,7 @@ export const Armory = {
       slot: 'body',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Top_7',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
   ],
   bottom: [
@@ -218,7 +218,7 @@ export const Armory = {
       slot: 'bottom',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Bottom_1',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'bottom_2',
@@ -226,7 +226,7 @@ export const Armory = {
       slot: 'bottom',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Bottom_2',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'bottom_3',
@@ -234,7 +234,7 @@ export const Armory = {
       slot: 'bottom',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Bottom_3',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'bottom_4',
@@ -242,7 +242,7 @@ export const Armory = {
       slot: 'bottom',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Bottom_4',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
   ],
   feet: [
@@ -252,7 +252,7 @@ export const Armory = {
       slot: 'feet',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Feet_1',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
     {
       id: 'feet_2',
@@ -260,7 +260,7 @@ export const Armory = {
       slot: 'feet',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Feet_2',
-      stats:{armorValue: 0},
+      stats: { armorValue: 0 },
     },
   ],
   weapon: [
@@ -270,7 +270,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'ranged',
       baseName: 'Medieval_Warfare_Male_Weapon_Arquebus',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_2',
@@ -278,7 +278,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'ranged',
       baseName: 'Medieval_Warfare_Male_Weapon_Bow',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_3',
@@ -286,7 +286,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_CrosshiltSword',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_4',
@@ -294,7 +294,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Doubleaxe',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_5',
@@ -302,7 +302,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_FlangedMace',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_6',
@@ -310,7 +310,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Halberd',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_7',
@@ -318,7 +318,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Longsword',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_8',
@@ -326,7 +326,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Mace',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_9',
@@ -334,7 +334,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Pike',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_10',
@@ -342,7 +342,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Warhammer',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_11',
@@ -350,7 +350,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'ranged',
       baseName: 'Medieval_Warfare_Male_Weapon_Xbow',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
     {
       id: 'weapon_12',
@@ -358,7 +358,7 @@ export const Armory = {
       slot: 'weapon',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Zweihander',
-      stats:{damageValue: 0},
+      stats: { damageValue: 0 },
     },
   ],
   offhand: [
@@ -368,7 +368,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_CrosshiltSword',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_2',
@@ -376,7 +376,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_FlangedMace',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_3',
@@ -384,7 +384,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Longsword',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_4',
@@ -392,7 +392,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'melee',
       baseName: 'Medieval_Warfare_Male_Weapon_Mace',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_5',
@@ -400,7 +400,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Shield_1',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_6',
@@ -408,7 +408,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_2',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_7',
@@ -416,7 +416,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Shield_3',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_8',
@@ -424,7 +424,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'medium',
       baseName: 'Medieval_Warfare_Male_Shield_4',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_9',
@@ -432,7 +432,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'heavy',
       baseName: 'Medieval_Warfare_Male_Shield_5',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_10',
@@ -440,7 +440,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_6',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_11',
@@ -448,7 +448,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_7',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
     {
       id: 'offhand_12',
@@ -456,7 +456,7 @@ export const Armory = {
       slot: 'offhand',
       type: 'light',
       baseName: 'Medieval_Warfare_Male_Shield_8',
-      stats:{armorValue: 0, blockChance: 0},
+      stats: { armorValue: 0, blockChance: 0 },
     },
   ],
 };

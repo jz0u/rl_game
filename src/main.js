@@ -14,8 +14,20 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // ── ITEMS BUTTON ──
-    const btn = this.add
+    this._createShopUI();
+    this._createPlayer();
+    this._createInput();
+  }
+
+  // ── Shop UI ──
+
+  _createShopUI() {
+    const { width, height } = this.scale;
+    const cx = width / 2;
+    const cy = height / 2;
+
+    // Toggle button (fixed to screen)
+    this.shopBtn = this.add
       .text(20, 20, "ITEMS", {
         fontSize: "16px",
         backgroundColor: "#333",
@@ -25,87 +37,69 @@ class GameScene extends Phaser.Scene {
       .setInteractive()
       .setScrollFactor(0);
 
-    // ── SHOP PANEL ──
-    const shopPanel = this.add.container(0, 0).setScrollFactor(0);
+    // Panel container (fixed to screen)
+    this.shopPanel = this.add.container(0, 0).setScrollFactor(0);
 
-    // outer window
     const shopWindow = this.add
-      .rectangle(this.scale.width / 2, this.scale.height / 2, 1000, 500, 0x222222, 0.9)
+      .rectangle(cx, cy, 1000, 500, 0x222222, 0.9)
       .setInteractive();
 
-    // left pane — top half (item image)
-    const itemPreview = this.add.rectangle(
-      this.scale.width / 2 - 250,
-      this.scale.height / 2 - 112,
-      450, 225, 0x333333, 1,
-    );
+    const itemPreview = this.add.rectangle(cx - 250, cy - 112, 450, 225, 0x333333);
+    const itemDescBox = this.add.rectangle(cx - 250, cy + 112, 450, 225, 0x2a2a2a);
+    const itemDescText = this.add.text(cx - 465, cy + 10, "Select an item...", {
+      fontSize: "14px",
+      color: "#aaaaaa",
+      wordWrap: { width: 420 },
+    });
+    const itemGrid = this.add.rectangle(cx + 250, cy, 450, 450, 0x222222);
 
-    // left pane — bottom half (item description)
-    const itemPreviewTextbox = this.add.rectangle(
-      this.scale.width / 2 - 250,
-      this.scale.height / 2 + 112,
-      450, 225, 0x2a2a2a, 1,
-    );
+    this.shopPanel.add([shopWindow, itemPreview, itemDescBox, itemDescText, itemGrid]);
 
-    // placeholder text inside the textbox
-    const itemPreviewText = this.add.text(
-      this.scale.width / 2 - 465,
-      this.scale.height / 2 + 10,
-      "Select an item...",
-      { fontSize: "14px", color: "#aaaaaa", wordWrap: { width: 420 } }
-    );
-
-    // right pane — item grid background
-    const itemGrid = this.add.rectangle(
-      this.scale.width / 2 + 250,
-      this.scale.height / 2,
-      450, 450, 0x222222, 1,
-    );
-
-    // backgrounds first so cells draw on top
-    shopPanel.add([shopWindow, itemPreview, itemPreviewTextbox, itemPreviewText, itemGrid]);
-
-    // ── ITEM GRID CELLS ──
+    // 4x4 item grid cells
     const cellSize = 100;
     const padding = 8;
-    const gridLeft = this.scale.width / 2 + 250 - 200;
-    const gridTop = this.scale.height / 2 - 200;
+    const gridLeft = cx + 250 - 200;
+    const gridTop = cy - 200;
 
     for (let row = 0; row < 4; row++) {
       for (let col = 0; col < 4; col++) {
         const x = gridLeft + col * cellSize + cellSize / 2;
         const y = gridTop + row * cellSize + cellSize / 2;
-        const cell = this.add.rectangle(x, y, cellSize - padding, cellSize - padding, 0x444444);
+        const size = cellSize - padding;
+
+        const cell = this.add.rectangle(x, y, size, size, 0x444444);
         const border = this.add.graphics();
         border.lineStyle(1, 0x888888, 1);
-        border.strokeRect(
-          x - (cellSize - padding) / 2,
-          y - (cellSize - padding) / 2,
-          cellSize - padding,
-          cellSize - padding,
-        );
-        shopPanel.add(cell);
-        shopPanel.add(border);
+        border.strokeRect(x - size / 2, y - size / 2, size, size);
+
+        this.shopPanel.add([cell, border]);
       }
     }
 
-    shopPanel.setVisible(false);
-    shopPanel.setDepth(10);
+    this.shopPanel.setVisible(false);
+    this.shopPanel.setDepth(10);
 
-    btn.on("pointerdown", () => {
-      shopPanel.setVisible(!shopPanel.visible);
+    this.shopBtn.on("pointerdown", () => {
+      this.shopPanel.setVisible(!this.shopPanel.visible);
     });
+  }
 
-    // ── PLAYER ──
+  // ── Player ──
+
+  _createPlayer() {
     this.player = new Player(this, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
     Player.createAnims(this);
     this.player.equip({ slot: "weapon", animPrefix: "longsword" });
+  }
 
+  // ── Input ──
+
+  _createInput() {
     this.input.mouse.disableContextMenu();
 
-    // ── INPUT ──
     this.input.on("pointerdown", (pointer) => {
-      if (shopPanel.visible) return;
+      if (this.shopPanel.visible) return;
+
       if (pointer.rightButtonDown()) {
         this.player.moveTo(pointer.x, pointer.y);
       } else if (pointer.leftButtonDown()) {
