@@ -26,11 +26,11 @@ export default class Shop {
       .setInteractive()
       .setScrollFactor(0);
 
-    // ── Shop panel ──
+    // ── Shop panel container ──
     this.shopPanel = this.scene.add.container(0, 0).setScrollFactor(0);
 
-    const shopWindow = this.scene.add
-      .rectangle(cx, cy, 1000, 500, 0x222222, 0.9)
+    const shopWindow = this.scene.add.image(cx, cy, 'shop_panel')
+      .setDisplaySize(1000, 500)
       .setInteractive();
 
     const itemPreview = this.scene.add.rectangle(cx - 250, cy - 112, 450, 225, 0x333333);
