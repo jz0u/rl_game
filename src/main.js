@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import Player from "./Player";
-import { Armory } from "./Armory";
 
 // ─────────────────────────────────────────────
 //  CONSTANTS
@@ -85,9 +84,6 @@ class GameScene extends Phaser.Scene {
     // Spawn the player at the defined coordinates and register all animations.
     this.player = new Player(this, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
     Player.createAnims(this);
-
-    const sword = Armory.weapon.find(w => w.id === "weapon_7");
-    this.player.equip(sword);
 
     // Disable the right-click context menu so we can use right-click to move.
     this.input.mouse.disableContextMenu();
