@@ -14,21 +14,57 @@ class GameScene extends Phaser.Scene {
     Player.preload(this);
   }
 
-  create() {
-    // Phaser calls this ONCE after preload finishes.
-    // This is where you build your scene — add objects, set up physics, etc.
-    this.player = new Player(this, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
-    Player.createAnims(this);
-    this.input.mouse.disableContextMenu();
-    this.input.on("pointerdown", (pointer) => {
-      // pointer.x and pointer.y are where the click happened
-      if (pointer.rightButtonDown()) {
-        this.player.moveTo(pointer.x, pointer.y);
-      } else if (pointer.leftButtonDown()) {
-        this.player.attack(pointer.x);
-      }
-    });
-  }
+create() {
+  const btn = this.add
+    .text(20, 20, "ITEMS", {
+      fontSize: "16px",
+      backgroundColor: "#333",
+      padding: { x: 10, y: 6 },
+      color: "#fff",
+    })
+    .setInteractive()
+    .setScrollFactor(0);
+
+  const panel = this.add.container(0, 0).setScrollFactor(0);
+
+  const bg = this.add
+    .rectangle(
+      this.scale.width / 2,
+      this.scale.height / 2,
+      400,
+      500,
+      0x222222,
+      0.9,
+    )
+    .setInteractive();
+
+  const title = this.add
+    .text(this.scale.width / 2, this.scale.height / 2 - 220, "Inventory", {
+      fontSize: "20px",
+      color: "#fff",
+    })
+    .setOrigin(0.5, 0);
+
+  panel.add([bg, title]); // 👈 was missing
+  panel.setVisible(false);
+  panel.setDepth(10); // 👈 was missing
+
+  btn.on("pointerdown", () => {
+    panel.setVisible(!panel.visible); // 👈 toggle instead of just logging
+  });
+
+  this.player = new Player(this, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
+  Player.createAnims(this);
+  this.input.mouse.disableContextMenu();
+  this.input.on("pointerdown", (pointer) => {
+    if (panel.visible) return; 
+    if (pointer.rightButtonDown()) {
+      this.player.moveTo(pointer.x, pointer.y);
+    } else if (pointer.leftButtonDown()) {
+      this.player.attack(pointer.x);
+    }
+  });
+}
 
   update() {
     // Phaser calls this 60 times per second, forever.
