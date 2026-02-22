@@ -36,6 +36,9 @@ export default class Shop {
     const itemPreview = this.scene.add.rectangle(cx - 250, cy - 112, 450, 225, 0x333333);
     const itemDescBox = this.scene.add.rectangle(cx - 250, cy + 112, 450, 225, 0x2a2a2a);
 
+    this.previewImage = this.scene.add.image(cx - 250, cy - 112, '').setVisible(false);
+    this.previewImage.setDisplaySize(180, 180);
+
     this.itemDescText = this.scene.add.text(cx - 465, cy + 10, "Select an item...", {
       fontSize: "14px",
       color: "#aaaaaa",
@@ -44,7 +47,7 @@ export default class Shop {
 
     const itemGrid = this.scene.add.rectangle(cx + 250, cy, 450, 450, 0x222222);
 
-    this.shopPanel.add([shopWindow, itemPreview, itemDescBox, this.itemDescText, itemGrid]);
+    this.shopPanel.add([shopWindow, itemPreview, itemDescBox, this.previewImage, this.itemDescText, itemGrid]);
 
     // ── Pagination buttons ──
     this.prevBtn = this.scene.add
@@ -115,9 +118,11 @@ export default class Shop {
       const y = this.gridTop + row * this.cellSize + this.cellSize / 2;
       const size = this.cellSize - this.padding;
   
-      const cell = this.scene.add.rectangle(x, y, size, size, 0x444444);
+      const cell = this.scene.add.rectangle(x, y, size, size, 0x444444)
+        .setInteractive();
+      cell.on('pointerdown', () => this._selectItem(item));
       const icon = this.scene.add.image(x, y, item.id);
-      icon.setDisplaySize(size, size);  // ← add this
+      icon.setDisplaySize(size, size);
       const border = this.scene.add.graphics();
       border.lineStyle(1, 0x888888, 1);
       border.strokeRect(x - size / 2, y - size / 2, size, size);
@@ -125,6 +130,21 @@ export default class Shop {
       this.shopPanel.add([cell, icon, border]);
       this.gridCells.push(cell, icon, border);
     });
+  }
+
+  _selectItem(item) {
+    this.previewImage.setTexture(item.id);
+    this.previewImage.setVisible(true);
+
+    const lines = [item.displayName || item.id];
+    if (item.slot) lines.push(`Slot: ${item.slot}`);
+    if (item.type) lines.push(`Type: ${item.type}`);
+    if (item.stats) {
+      Object.entries(item.stats).forEach(([stat, val]) => {
+        lines.push(`${stat}: ${val}`);
+      });
+    }
+    this.itemDescText.setText(lines.join('\n'));
   }
 
   // ── Visibility ──
