@@ -39,7 +39,7 @@ create() {
     .setInteractive();
 
   const title = this.add
-    .text(this.scale.width / 2, this.scale.height / 2 - 220, "Inventory", {
+    .text(this.scale.width / 2, this.scale.height / 2 - 220, "ITEMS", {
       fontSize: "20px",
       color: "#fff",
     })
