@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 import Player from "./Player";
+import { Armory } from "./Armory";
+const allItems = Object.values(Armory).flat();
 
 const PLAYER_SPAWN_X = 200;
 const PLAYER_SPAWN_Y = 200;
@@ -11,6 +13,9 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     Player.preload(this);
+    allItems.forEach(item => {
+      this.load.image(item.id, item.paperdollPath);
+  });
   }
 
   create() {
@@ -61,20 +66,21 @@ class GameScene extends Phaser.Scene {
     const gridLeft = cx + 250 - 200;
     const gridTop = cy - 200;
 
-    for (let row = 0; row < 4; row++) {
-      for (let col = 0; col < 4; col++) {
-        const x = gridLeft + col * cellSize + cellSize / 2;
-        const y = gridTop + row * cellSize + cellSize / 2;
-        const size = cellSize - padding;
+    allItems.forEach((item, index) => {
+  const col = index % 4;
+  const row = Math.floor(index / 4);
+  const x = gridLeft + col * cellSize + cellSize / 2;
+  const y = gridTop + row * cellSize + cellSize / 2;
+  const size = cellSize - padding;
 
-        const cell = this.add.rectangle(x, y, size, size, 0x444444);
-        const border = this.add.graphics();
-        border.lineStyle(1, 0x888888, 1);
-        border.strokeRect(x - size / 2, y - size / 2, size, size);
+  const cell = this.add.rectangle(x, y, size, size, 0x444444);
+  const border = this.add.graphics();
+  border.lineStyle(1, 0x888888, 1);
+  border.strokeRect(x - size / 2, y - size / 2, size, size);
+ 
+  this.shopPanel.add([cell, border]);
+});
 
-        this.shopPanel.add([cell, border]);
-      }
-    }
 
     this.shopPanel.setVisible(false);
     this.shopPanel.setDepth(10);
