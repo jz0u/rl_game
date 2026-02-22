@@ -1,16 +1,12 @@
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from "./main";
 export default class Shop {
   constructor(scene, items) {
     this.scene = scene;
     this.items = items;
-    this.currentPage = 0;
-    this.gridCells = [];
 
-    const { width, height } = this.scene.scale;
-    const cx = width / 2;
-    const cy = height / 2;
 
-    const WIN_W = 1080;
-    const WIN_H = 600;
+    const ShopWindowWidth = GAME_WINDOW_WIDTH;
+    const ShopWindowHeight = GAME_WINDOW_HEIGHT;
 
     // ── Toggle button ──
     this.shopBtn = this.scene.add
@@ -22,23 +18,33 @@ export default class Shop {
       })
       .setInteractive()
       .setScrollFactor(0);
+    //end toggle button
 
     // ── Shop panel container ──
     this.shopPanel = this.scene.add.container(0, 0).setScrollFactor(0);
+    const shopWindowActual = this.scene.add.rectangle(
+      GAME_WINDOW_CENTER.X, 
+      GAME_WINDOW_CENTER.Y, 
+      ShopWindowWidth, 
+      ShopWindowHeight, 
+      0x222222, 
+      0.8
+    );
 
-    const shopWindow = this.scene.add.image(cx, cy, 'shop_panel')
-      .setDisplaySize(WIN_W, WIN_H)
+    const shopWindow = this.scene.add.image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel')
+      .setDisplaySize(ShopWindowWidth, ShopWindowHeight)
+      .setAlpha(0.8)
       .setInteractive();
 
-    this.shopPanel.add([shopWindow]);
+    this.shopPanel.add([shopWindow, shopWindowActual]);
 
     this._renderPage();
 
-    this.shopPanel.setVisible(false);
+    //this.shopPanel.setVisible(false);
     this.shopPanel.setDepth(10);
 
     this.shopBtn.on("pointerdown", () => this.toggle());
-  }
+  }//END Shop Panel Container
 
   _renderPage() {}
 

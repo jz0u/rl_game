@@ -8,6 +8,11 @@ const allItems = Object.values(Armory).flat();
 const PLAYER_SPAWN_X = 200;
 const PLAYER_SPAWN_Y = 200;
 
+export const GAME_WINDOW_WIDTH = 1280;
+export const GAME_WINDOW_HEIGHT = 720;
+export const GAME_WINDOW_CENTER = {X: GAME_WINDOW_WIDTH / 2, Y: GAME_WINDOW_HEIGHT / 2};
+
+
 class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: "GameScene" });
@@ -20,7 +25,7 @@ class GameScene extends Phaser.Scene {
       this.load.image(item.id, item.paperdollPath);
       this.load.image(item.id + '_full', item.paperdollPathFull);
   });
-  this.load.image('shop_panel', 'assets/ui/Game Menu/1x/Asset 1.2 - 1080p.png');
+  this.load.image('shop_panel', 'assets/ui/Asset 1.2 - 1080p.png');
   }
 
   create() {
@@ -69,8 +74,8 @@ class GameScene extends Phaser.Scene {
 
 new Phaser.Game({
   type: Phaser.AUTO,
-  width: 1280,
-  height: 720,
+  width: GAME_WINDOW_WIDTH,
+  height: GAME_WINDOW_HEIGHT,
   backgroundColor: "#fff999",
   scale: {
     mode: Phaser.Scale.FIT,
