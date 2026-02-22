@@ -8,6 +8,7 @@ export default class Shop {
     const ShopWindowWidth = GAME_WINDOW_WIDTH*.75;
     const ShopWindowHeight = GAME_WINDOW_HEIGHT*.75;
 
+
     // ── Toggle button ──
     this.shopBtn = this.scene.add
       .text(20, 20, "ITEMS", {
@@ -23,12 +24,26 @@ export default class Shop {
     // ── Shop panel container ──
     this.shopPanel = this.scene.add.container(0, 0).setScrollFactor(0);
     
-
     const shopWindow = this.scene.add.image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel')
-      .setDisplaySize(ShopWindowWidth, ShopWindowHeight)
+      .setDisplaySize(ShopWindowWidth+100, ShopWindowHeight+10)
       .setAlpha(0.8)
       .setInteractive();
 
+      const ShopWinBoundaryLeft = this.scene.add.rectangle(
+        GAME_WINDOW_CENTER.X - ShopWindowWidth / 4,
+        GAME_WINDOW_CENTER.Y,
+        ShopWindowWidth / 2,
+        ShopWindowHeight,
+        0xff0000, 0.9
+      );
+      const ShopWinBoundaryRight = this.scene.add.rectangle(
+        GAME_WINDOW_CENTER.X + ShopWindowWidth / 4,
+        GAME_WINDOW_CENTER.Y,
+        ShopWindowWidth / 2,
+        ShopWindowHeight,
+        0xfff000, 0.9
+      );
+  //add to panel container
     this.shopPanel.add([shopWindow]);
 
     this._renderPage();
