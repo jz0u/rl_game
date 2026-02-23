@@ -37,10 +37,20 @@ export default class Shop {
       0xff0000, 0.9
     );
     //DOLL
-    const playerDoll = this.scene.add.image(GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
+    this.playerDoll = this.scene.add.image(GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
       .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
       .setAlpha(1)
       .setInteractive();
+
+    this.itemOverlay = this.scene.add.image(
+      GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2,
+      GAME_WINDOW_CENTER.Y,
+      'player_paperdoll'
+    )
+      .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
+      .setVisible(false);
+
+
     //DEV
     const ShopWinBoundaryRight = this.scene.add.rectangle(
       GAME_WINDOW_CENTER.X + this.ShopWindowWidth / 4,
@@ -51,8 +61,27 @@ export default class Shop {
     );
     ShopWinBoundaryRight.setVisible(false);
     //add to panel container
-    this.shopPanel.add([shopWindow, ShopWinBoundaryLeft, ShopWinBoundaryRight, playerDoll]);
+    this.shopPanel.add([shopWindow, ShopWinBoundaryLeft, ShopWinBoundaryRight, this.playerDoll, this.itemOverlay]);
+    this.nameText = this.scene.add.text( GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4 + 10,
+      GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2 + 40,
+      '', {
+      fontFamily: 'Georgia, serif',
+      fontSize: '20px',
+      color: '#ffffff',
+    });
 
+    this.statsText = this.scene.add.text(
+      GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4 + 10,
+      GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2 + 70,
+      '',
+      {
+        fontSize: '13px',
+        color: '#ffffff',
+        wordWrap: { width: this.ShopWindowWidth / 4 - 20 },
+        lineSpacing: 6,
+      }
+    );
+    this.shopPanel.add([this.nameText, this.statsText]);
     this._renderPage(0);
     // ── Prev/Next buttons ──
     const panelBottom = (GAME_WINDOW_CENTER.Y + this.ShopWindowHeight / 2 - this.ShopWindowHeight * 0.05) + 10;
@@ -89,6 +118,19 @@ export default class Shop {
     this.shopBtn.on("pointerdown", () => this.toggle());
     //END Shop Panel Container
   }
+  _renderPreview(item) {
+    this.itemOverlay.setTexture(item.id + '_full').setVisible(true);
+    const statsLines = Object.entries(item.stats)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join('\n');
+
+    this.nameText.setText(item.displayName);
+    this.statsText.setText(
+      `${item.slot.toUpperCase()} | ${item.type.toUpperCase()}${item.hands ? ' | ' + item.hands.toUpperCase() : ''}\n\n` +
+      `${statsLines}\n\n` +
+      `${item.description}`
+    );
+  }
   _renderPage(pageNumber) {
     this.onPage.forEach(icon => icon.destroy());
     this.onPage = [];
@@ -113,19 +155,26 @@ export default class Shop {
       const icon = this.scene.add.image(x, y, item.id)
         .setDisplaySize(iconSize, iconSize)
         .setInteractive();
+      icon.on('pointerdown', () => this._renderPreview(item));
       this.onPage.push(icon);
       this.shopPanel.add(icon);
     });
   }
 
-  show() { this.shopPanel.setVisible(true); }
+  show() {
+    this.itemOverlay.setVisible(false);
+    this.statsText.setText('');
+    this.shopPanel.setVisible(true);
+    this.nameText.setText('')
+  }
+
   hide() { this.shopPanel.setVisible(false); }
 
   toggle() {
     if (this.shopPanel.visible) {
       this.hide();
     } else {
-      this.shopPanel.setVisible(true);
+      this.show();  // use show() not setVisible directly
     }
   }
 }
