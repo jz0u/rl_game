@@ -1,8 +1,25 @@
+/**
+ * Player — the controllable character sprite.
+ *
+ * Owns the base body sprite and a set of equipment overlay sprites, one per
+ * slot. Overlays are kept in sync with the body every frame so they stay
+ * positioned and play the matching directional animation.
+ */
 export default class Player {
+  /**
+   * @param {Phaser.Scene} scene - The scene this player belongs to.
+   * @param {number} x - Initial world X position.
+   * @param {number} y - Initial world Y position.
+   */
   constructor(scene, x, y) {
     this.scene = scene;
     this.sprite = scene.add.sprite(x, y, "player_idle1_diag");
 
+    /**
+     * One sprite overlay per equipment slot; null if that slot is empty.
+     * Each overlay plays an animation whose key is `{animPrefix}_{baseAnim}`,
+     * mirroring the body's current animation direction.
+     */
     this.overlays = {
       head: null,
       body: null,
@@ -12,10 +29,13 @@ export default class Player {
       offhand: null,
     };
 
+    /** World-space target the player is walking toward; null when idle. */
     this.destination = null;
     this.stats = { moveSpeed: 3 };
+    /** True while an attack animation is playing — blocks movement and re-triggering. */
     this.isAttacking = false;
 
+    // When an attack animation finishes, clear the flag and return to idle.
     this.sprite.on("animationcomplete", () => {
       this.isAttacking = false;
       this.sprite.play(this.getIdleAnim());
@@ -24,17 +44,17 @@ export default class Player {
 
   // ── Asset loading ──
 
+  /**
+   * Loads all base player spritesheets. Call this from the scene's preload().
+   * Equipment spritesheets are loaded separately when an item is equipped.
+   * @param {Phaser.Scene} scene
+   */
   static preload(scene) {
     const sheets = [
-      { key: "player_idle1_diag", path: "assets/player/Medieval_Warfare_Male_1_idle1_diag.png" },
-      { key: "player_walking_diag", path: "assets/player/Medieval_Warfare_Male_1_walking_diag.png" },
-      { key: "player_attack1", path: "assets/player/Medieval_Warfare_Male_1_MVsv_alt_attack1.png" },
-      { key: "player_attack2", path: "assets/player/Medieval_Warfare_Male_1_MVsv_alt_attack2.png" },
-
-      { key: "longsword_idle", path: "assets/armory/weapon/weapon_idle/Medieval_Warfare_Male_Weapon_Longsword_idle1_diag.png" },
-      { key: "longsword_walking", path: "assets/armory/weapon/weapon_walking/Medieval_Warfare_Male_Weapon_Longsword_walking_diag.png" },
-      { key: "longsword_attack1", path: "assets/armory/weapon/weapon_attacking/Medieval_Warfare_Male_Weapon_Longsword_MVsv_alt_attack1.png" },
-      { key: "longsword_attack2", path: "assets/armory/weapon/weapon_attacking/Medieval_Warfare_Male_Weapon_Longsword_MVsv_alt_attack2.png" },
+      { key: "player_idle1_diag", path: "assets/player/player_idle.png" },
+      { key: "player_walking_diag", path: "assets/player/player_walk.png" },
+      { key: "player_attack1", path: "assets/player/player_attack1.png" },
+      { key: "player_attack2", path: "assets/player/player_attack2.png" },
     ];
 
     sheets.forEach((sheet) => {
@@ -44,16 +64,27 @@ export default class Player {
 
   // ── Equipment ──
 
+  /**
+   * Places an equipment overlay sprite for the given item's slot.
+   * If the slot already has an overlay it is destroyed first.
+   * The item must have its spritesheets and animations pre-loaded before calling this.
+   * @param {{ slot: string, animPrefix: string }} item
+   */
   equip(item) {
     if (this.overlays[item.slot]) {
       this.overlays[item.slot].destroy();
     }
 
-    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, "longsword_idle");
+    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, `${item.animPrefix}_idle`);
     overlay.animPrefix = item.animPrefix;
     this.overlays[item.slot] = overlay;
   }
 
+  /**
+   * Called every frame to keep all overlay sprites locked to the body sprite.
+   * Matches each overlay's position, flip, and animation to the body's current state.
+   * Animation keys follow the pattern `{animPrefix}_{bodyAnimKey}` (e.g. "longsword_walk_sw").
+   */
   _syncOverlays() {
     const currentAnim = this.sprite.anims.currentAnim?.key;
 
@@ -76,6 +107,11 @@ export default class Player {
 
   // ── Movement ──
 
+  /**
+   * Sets the world-space position the player should walk toward.
+   * @param {number} x
+   * @param {number} y
+   */
   moveTo(x, y) {
     this.destination = { x, y };
   }
@@ -92,6 +128,11 @@ export default class Player {
     return "walk_nw";
   }
 
+  /**
+   * Returns the idle animation key that matches the player's current facing direction.
+   * Converts "walk_{dir}" → "idle_{dir}". Falls back to "idle_sw" if unknown.
+   * @returns {string} Animation key.
+   */
   getIdleAnim() {
     const current = this.sprite.anims.currentAnim?.key;
     if (current?.startsWith("walk_")) return current.replace("walk_", "idle_");
@@ -101,6 +142,12 @@ export default class Player {
 
   // ── Combat ──
 
+  /**
+   * Triggers an attack animation toward the given X coordinate.
+   * Cancels any active movement. Does nothing if already attacking.
+   * Uses attack1 when a weapon overlay is equipped, attack2 (unarmed) otherwise.
+   * @param {number} pointerX - World X of the click, used to determine facing direction.
+   */
   attack(pointerX) {
     if (this.isAttacking) return;
 
@@ -113,6 +160,11 @@ export default class Player {
 
   // ── Game loop ──
 
+  /**
+   * Called every frame. Handles movement toward the current destination and
+   * stops when within one step (avoiding oscillation at the target).
+   * Overlays are synced first so they track the sprite even when idle.
+   */
   update() {
     this._syncOverlays();
     if (this.isAttacking) return;
@@ -145,6 +197,12 @@ export default class Player {
 
   // ── Animations ──
 
+  /**
+   * Registers all base player animations with the Phaser animation manager.
+   * Must be called once after preload(), before any sprites are played.
+   * Equipment items register their own animations when equipped.
+   * @param {Phaser.Scene} scene
+   */
   static createAnims(scene) {
     const anims = [
       // Player walk
@@ -163,21 +221,6 @@ export default class Player {
       { key: "attack1", frames: scene.anims.generateFrameNumbers("player_attack1", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
       { key: "attack2", frames: scene.anims.generateFrameNumbers("player_attack2", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
 
-      // Longsword walk
-      { key: "longsword_walk_sw", frames: scene.anims.generateFrameNumbers("longsword_walking", { start: 0, end: 7 }), frameRate: 8, repeat: -1 },
-      { key: "longsword_walk_nw", frames: scene.anims.generateFrameNumbers("longsword_walking", { start: 8, end: 15 }), frameRate: 8, repeat: -1 },
-      { key: "longsword_walk_se", frames: scene.anims.generateFrameNumbers("longsword_walking", { start: 16, end: 23 }), frameRate: 8, repeat: -1 },
-      { key: "longsword_walk_ne", frames: scene.anims.generateFrameNumbers("longsword_walking", { start: 24, end: 31 }), frameRate: 8, repeat: -1 },
-
-      // Longsword idle
-      { key: "longsword_idle_sw", frames: scene.anims.generateFrameNumbers("longsword_idle", { start: 0, end: 2 }), frameRate: 6, repeat: -1 },
-      { key: "longsword_idle_nw", frames: scene.anims.generateFrameNumbers("longsword_idle", { start: 3, end: 5 }), frameRate: 6, repeat: -1 },
-      { key: "longsword_idle_se", frames: scene.anims.generateFrameNumbers("longsword_idle", { start: 6, end: 8 }), frameRate: 6, repeat: -1 },
-      { key: "longsword_idle_ne", frames: scene.anims.generateFrameNumbers("longsword_idle", { start: 9, end: 11 }), frameRate: 6, repeat: -1 },
-
-      // Longsword attack
-      { key: "longsword_attack1", frames: scene.anims.generateFrameNumbers("longsword_attack1", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
-      { key: "longsword_attack2", frames: scene.anims.generateFrameNumbers("longsword_attack2", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
     ];
 
     anims.forEach((anim) => scene.anims.create(anim));

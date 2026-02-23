@@ -1,3 +1,19 @@
+/**
+ * Armory — static catalogue of all equippable items, grouped by slot.
+ *
+ * Each item follows this schema:
+ * @typedef {object} Item
+ * @property {string} id            - Unique key used as the Phaser texture key for the shop icon.
+ * @property {string} displayName   - Human-readable name shown in the shop UI.
+ * @property {string} slot          - Equipment slot: 'head' | 'body' | 'bottom' | 'feet' | 'weapon' | 'offhand'.
+ * @property {string} type          - Armour class: 'light' | 'medium' | 'heavy'.
+ * @property {string} baseName      - Sprite filename prefix used to build animation asset paths.
+ * @property {string} paperdollPath     - Path to the cropped shop icon (loaded as item.id).
+ * @property {string} paperdollPathFull - Path to the full-body paperdoll shown in the preview panel (loaded as item.id + '_full').
+ * @property {object} stats         - Flat key/value stat bonuses (e.g. { armorValue: 2 }).
+ * @property {number} value         - Gold cost of the item.
+ * @property {string} description   - Flavour text shown in the shop preview.
+ */
 export const Armory = {
   head: [
     {
@@ -697,12 +713,3 @@ export const Armory = {
   ],
 };
 
-export function getItemPaths(item) {
-  const base = `assets/armory/${item.slot}`;
-  return {
-    idle:    `${base}/${item.slot}_idle/${item.baseName}_idle1_diag.png`,
-    walking: `${base}/${item.slot}_walking/${item.baseName}_walking_diag.png`,
-    attack1: `${base}/${item.slot}_attacking/${item.baseName}_MVsv_alt_attack1.png`,
-    attack2: `${base}/${item.slot}_attacking/${item.baseName}_MVsv_alt_attack2.png`,
-  };
-}

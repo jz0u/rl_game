@@ -1,9 +1,30 @@
 import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from "./main";
+
+const CELL_SIZE = 100; // pixel size of each grid slot in the item list
+const ICON_SIZE = 75;  // display size of the item icon within each slot
+
+/**
+ * Shop — the in-game item browsing UI.
+ *
+ * Layout: the panel occupies 75% of the window.
+ *   Left quarter  → paperdoll preview + item stats text.
+ *   Right half    → paginated grid of item icons.
+ *
+ * Clicking an icon calls _renderPreview() to update the left panel.
+ * The panel is toggled via the "ITEMS" button (shopBtn).
+ */
 export default class Shop {
+  /**
+   * Builds and adds all Shop UI elements to the scene.
+   * The panel starts visible; call hide() to open closed.
+   * @param {Phaser.Scene} scene
+   * @param {object[]} items - Full item catalogue from Armory (all slots combined).
+   */
   constructor(scene, items) {
     this.scene = scene;
     this.items = items;
     this.currentPage = 0;
+    /** Icons currently rendered on this page; destroyed and rebuilt on page change. */
     this.onPage = [];
     this.ShopWindowWidth = GAME_WINDOW_WIDTH * .75;
     this.ShopWindowHeight = GAME_WINDOW_HEIGHT * .75;
@@ -19,7 +40,6 @@ export default class Shop {
       })
       .setInteractive()
       .setScrollFactor(0);
-    //end toggle button
 
     // ── Shop panel container ──
     this.shopPanel = this.scene.add.container(0, 0).setScrollFactor(0);
@@ -29,7 +49,6 @@ export default class Shop {
       .setAlpha(0.8)
       .setInteractive();
     
-    //DOLL
     this.playerDoll = this.scene.add.image(GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
       .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
       .setAlpha(1)
@@ -45,7 +64,6 @@ export default class Shop {
 
  
     
-    //add to panel container
     this.shopPanel.add([shopWindow, this.playerDoll, this.itemOverlay]);
     this.nameText = this.scene.add.text( GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4 + 10,
       GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2 + 40,
@@ -97,12 +115,14 @@ export default class Shop {
     this.shopPanel.add([this.prevBtn, this.nextBtn]);
 
 
-    //this.shopPanel.setVisible(false);
     this.shopPanel.setDepth(10);
 
     this.shopBtn.on("pointerdown", () => this.toggle());
-    //END Shop Panel Container
   }
+  /**
+   * Updates the left panel to show the selected item's paperdoll and stats.
+   * @param {object} item - An Armory item definition.
+   */
   _renderPreview(item) {
     this.itemOverlay.setTexture(item.id + '_full').setVisible(true);
     const statsLines = Object.entries(item.stats)
@@ -116,15 +136,24 @@ export default class Shop {
       `${item.description}`
     );
   }
+  /**
+   * Destroys the current page's icons and builds a new grid for the given page.
+   * The grid fills the right half of the panel. Items are laid out left-to-right,
+   * top-to-bottom with equal padding on all sides.
+   * @param {number} pageNumber - Zero-based page index.
+   */
   _renderPage(pageNumber) {
     this.onPage.forEach(icon => icon.destroy());
     this.onPage = [];
-    const cellSize = 100;
-    const iconSize = 75;
+    const cellSize = CELL_SIZE;
+    const iconSize = ICON_SIZE;
+    // How many columns/rows fit in the right half of the panel.
     const cols = Math.floor((this.ShopWindowWidth / 2) / cellSize);
     const rows = Math.floor(this.ShopWindowHeight / cellSize);
+    // Center the grid within the available space.
     const paddingX = (this.ShopWindowWidth / 2 - cols * cellSize) / 2;
     const paddingY = (this.ShopWindowHeight - rows * cellSize) / 2;
+    // Top-left corner of the grid, starting from the center of the panel.
     const originX = (GAME_WINDOW_CENTER.X + paddingX);
     const originY = (GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2) + paddingY;
     const itemsPerPage = cols * rows;
@@ -146,20 +175,23 @@ export default class Shop {
     });
   }
 
+  /** Shows the panel and resets the preview so no stale item is displayed. */
   show() {
     this.itemOverlay.setVisible(false);
     this.statsText.setText('');
     this.shopPanel.setVisible(true);
-    this.nameText.setText('')
+    this.nameText.setText('');
   }
 
+  /** Hides the entire shop panel. */
   hide() { this.shopPanel.setVisible(false); }
 
+  /** Toggles the panel open/closed. */
   toggle() {
     if (this.shopPanel.visible) {
       this.hide();
     } else {
-      this.show();  // use show() not setVisible directly
+      this.show();
     }
   }
 }
