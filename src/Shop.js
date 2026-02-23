@@ -28,14 +28,7 @@ export default class Shop {
       .setDisplaySize(this.ShopWindowWidth + 100, this.ShopWindowHeight + 10)
       .setAlpha(0.8)
       .setInteractive();
-    //DEV
-    const ShopWinBoundaryLeft = this.scene.add.rectangle(
-      GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4,
-      GAME_WINDOW_CENTER.Y,
-      this.ShopWindowWidth / 2,
-      this.ShopWindowHeight,
-      0xff0000, 0.9
-    );
+    
     //DOLL
     this.playerDoll = this.scene.add.image(GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
       .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
@@ -50,18 +43,10 @@ export default class Shop {
       .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
       .setVisible(false);
 
-
-    //DEV
-    const ShopWinBoundaryRight = this.scene.add.rectangle(
-      GAME_WINDOW_CENTER.X + this.ShopWindowWidth / 4,
-      GAME_WINDOW_CENTER.Y,
-      this.ShopWindowWidth / 2,
-      this.ShopWindowHeight,
-      0xfff000, 0.9
-    );
-    ShopWinBoundaryRight.setVisible(false);
+ 
+    
     //add to panel container
-    this.shopPanel.add([shopWindow, ShopWinBoundaryLeft, ShopWinBoundaryRight, this.playerDoll, this.itemOverlay]);
+    this.shopPanel.add([shopWindow, this.playerDoll, this.itemOverlay]);
     this.nameText = this.scene.add.text( GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4 + 10,
       GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2 + 40,
       '', {
