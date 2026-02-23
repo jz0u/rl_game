@@ -28,7 +28,7 @@ export default class Shop {
       .setDisplaySize(this.ShopWindowWidth + 100, this.ShopWindowHeight + 10)
       .setAlpha(0.8)
       .setInteractive();
-
+    //DEV
     const ShopWinBoundaryLeft = this.scene.add.rectangle(
       GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4,
       GAME_WINDOW_CENTER.Y,
@@ -36,6 +36,12 @@ export default class Shop {
       this.ShopWindowHeight,
       0xff0000, 0.9
     );
+    //DOLL
+    const playerDoll = this.scene.add.image(GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
+      .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
+      .setAlpha(1)
+      .setInteractive();
+    //DEV
     const ShopWinBoundaryRight = this.scene.add.rectangle(
       GAME_WINDOW_CENTER.X + this.ShopWindowWidth / 4,
       GAME_WINDOW_CENTER.Y,
@@ -45,11 +51,11 @@ export default class Shop {
     );
     ShopWinBoundaryRight.setVisible(false);
     //add to panel container
-    this.shopPanel.add([shopWindow, ShopWinBoundaryLeft, ShopWinBoundaryRight]);
+    this.shopPanel.add([shopWindow, ShopWinBoundaryLeft, ShopWinBoundaryRight, playerDoll]);
 
     this._renderPage(0);
     // ── Prev/Next buttons ──
-    const panelBottom = (GAME_WINDOW_CENTER.Y + this.ShopWindowHeight / 2 - this.ShopWindowHeight * 0.05)+10;
+    const panelBottom = (GAME_WINDOW_CENTER.Y + this.ShopWindowHeight / 2 - this.ShopWindowHeight * 0.05) + 10;
     const nextX = GAME_WINDOW_CENTER.X + this.ShopWindowWidth / 2 - 10;
     const prevX = nextX - 30;
     this.prevBtn = this.scene.add.image(prevX, panelBottom, 'prev_btn')
@@ -63,7 +69,7 @@ export default class Shop {
         }
       });
 
-      this.nextBtn = this.scene.add.image(nextX-10, panelBottom, 'next_btn')
+    this.nextBtn = this.scene.add.image(nextX - 10, panelBottom, 'next_btn')
       .setDisplaySize(30, 30)
       .setInteractive()
       .setScrollFactor(0)
@@ -92,8 +98,8 @@ export default class Shop {
     const rows = Math.floor(this.ShopWindowHeight / cellSize);
     const paddingX = (this.ShopWindowWidth / 2 - cols * cellSize) / 2;
     const paddingY = (this.ShopWindowHeight - rows * cellSize) / 2;
-    const originX = (GAME_WINDOW_CENTER.X+paddingX);
-    const originY = (GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2)+paddingY;
+    const originX = (GAME_WINDOW_CENTER.X + paddingX);
+    const originY = (GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2) + paddingY;
     const itemsPerPage = cols * rows;
     this.totalPages = Math.ceil(this.items.length / itemsPerPage);
     const pageItems = this.items.slice(pageNumber * itemsPerPage, (pageNumber + 1) * itemsPerPage);
