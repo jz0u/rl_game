@@ -166,8 +166,10 @@ export default class Shop {
       const x = originX + col * cellSize + cellSize / 2;
       const y = originY + row * cellSize + cellSize / 2;
 
+      const src = this.scene.textures.get(item.id).getSourceImage();
+      const scale = Math.min(iconSize / src.width, iconSize / src.height);
       const icon = this.scene.add.image(x, y, item.id)
-        .setDisplaySize(iconSize, iconSize)
+        .setDisplaySize(src.width * scale, src.height * scale)
         .setInteractive();
       icon.on('pointerdown', () => this._renderPreview(item));
       this.onPage.push(icon);
