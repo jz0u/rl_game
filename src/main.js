@@ -45,8 +45,8 @@ class GameScene extends Phaser.Scene {
       this.load.image(item.id + '_full', item.paperdollPathFull);
     });
     this.load.image('shop_panel', 'assets/ui/shop_panel.png');
-    this.load.image('prev_btn', 'assets/ui/arrow_back.png');
-    this.load.image('next_btn', 'assets/ui/arrow_next.png');
+    this.load.image('prev_btn', 'assets/ui/shop_arrow_left.png');
+    this.load.image('next_btn', 'assets/ui/shop_arrow_right.png');
   }
 
   create() {

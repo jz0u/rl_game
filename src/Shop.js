@@ -88,11 +88,11 @@ export default class Shop {
     this.shopPanel.add([this.nameText, this.statsText]);
     this._renderPage(0);
     // ── Prev/Next buttons ──
-    const panelBottom = (GAME_WINDOW_CENTER.Y + this.ShopWindowHeight / 2 - this.ShopWindowHeight * 0.05) + 10;
-    const nextX = GAME_WINDOW_CENTER.X + this.ShopWindowWidth / 2 - 10;
-    const prevX = nextX - 30;
-    this.prevBtn = this.scene.add.image(prevX, panelBottom, 'prev_btn')
-      .setDisplaySize(30, 30)
+    const arrowY = GAME_WINDOW_CENTER.Y;
+    const nextX = GAME_WINDOW_WIDTH - 135;
+    const prevX = GAME_WINDOW_WIDTH - 180;
+    this.prevBtn = this.scene.add.image(prevX, arrowY, 'prev_btn')
+      .setDisplaySize(46, 167)
       .setInteractive()
       .setScrollFactor(0)
       .on('pointerdown', () => {
@@ -102,8 +102,8 @@ export default class Shop {
         }
       });
 
-    this.nextBtn = this.scene.add.image(nextX - 10, panelBottom, 'next_btn')
-      .setDisplaySize(30, 30)
+    this.nextBtn = this.scene.add.image(nextX, arrowY, 'next_btn')
+      .setDisplaySize(46, 167)
       .setInteractive()
       .setScrollFactor(0)
       .on('pointerdown', () => {
