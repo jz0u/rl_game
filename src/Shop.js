@@ -43,6 +43,7 @@ export default class Shop {
 
     // ── Shop panel container ──
     this.shopPanel = this.scene.add.container(0, 0).setScrollFactor(0);
+    
 
     const shopWindow = this.scene.add.image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel')
       .setDisplaySize(this.ShopWindowWidth + 100, this.ShopWindowHeight + 10)
@@ -119,6 +120,7 @@ export default class Shop {
     this.shopPanel.setDepth(10);
 
     this.shopBtn.on("pointerdown", () => this.toggle());
+    this.hide();
   }
   /**
    * Updates the left panel to show the selected item's paperdoll and stats.
