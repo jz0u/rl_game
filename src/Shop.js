@@ -43,6 +43,7 @@ export default class Shop {
       this.ShopWindowHeight,
       0xfff000, 0.9
     );
+    ShopWinBoundaryRight.setVisible(false);
     //add to panel container
     this.shopPanel.add([shopWindow, ShopWinBoundaryLeft, ShopWinBoundaryRight]);
 
@@ -85,8 +86,8 @@ export default class Shop {
   _renderPage(pageNumber) {
     this.onPage.forEach(icon => icon.destroy());
     this.onPage = [];
-    const cellSize = 128;
-    const iconSize = 100;
+    const cellSize = 100;
+    const iconSize = 75;
     const cols = Math.floor((this.ShopWindowWidth / 2) / cellSize);
     const rows = Math.floor(this.ShopWindowHeight / cellSize);
     const paddingX = (this.ShopWindowWidth / 2 - cols * cellSize) / 2;
