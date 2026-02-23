@@ -49,8 +49,9 @@ export default class Shop {
       .setAlpha(0.8)
       .setInteractive();
     
+    const dollSize = Math.min(this.ShopWindowWidth / 2, this.ShopWindowHeight);
     this.playerDoll = this.scene.add.image(GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
-      .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
+      .setDisplaySize(dollSize, dollSize)
       .setAlpha(1)
       .setInteractive();
 
@@ -59,7 +60,7 @@ export default class Shop {
       GAME_WINDOW_CENTER.Y,
       'player_paperdoll'
     )
-      .setDisplaySize(this.ShopWindowWidth / 2, this.ShopWindowHeight)
+      .setDisplaySize(dollSize, dollSize)
       .setVisible(false);
 
  
