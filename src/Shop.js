@@ -167,6 +167,14 @@ export default class Shop {
       const x = originX + col * cellSize + cellSize / 2;
       const y = originY + row * cellSize + cellSize / 2;
 
+      const bg = this.scene.add.graphics();
+      bg.fillStyle(0x1a1a1a, 0.5);
+      bg.fillRect(x - cellSize / 2, y - cellSize / 2, cellSize, cellSize);
+      bg.lineStyle(1, 0x8B6914, 0.8);
+      bg.strokeRect(x - cellSize / 2, y - cellSize / 2, cellSize, cellSize);
+      this.onPage.push(bg);
+      this.shopPanel.add(bg);
+
       const src = this.scene.textures.get(item.id).getSourceImage();
       const scale = Math.min(iconSize / src.width, iconSize / src.height);
       const icon = this.scene.add.image(x, y, item.id)
