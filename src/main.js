@@ -14,6 +14,7 @@ import Player from "./Player";
 import Shop from "./Shop";
 import Inventory from "./Inventory";
 import { Armory } from "./Armory";
+import { DEVTEST_INVENTORY } from "./DEVTEST";
 
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();
@@ -58,30 +59,7 @@ class GameScene extends Phaser.Scene {
     this._createInput();
     this._createInventory();
 //DEVTEST
-const testItem = { id: 'sword_01', name: 'Iron Sword', slot: 'weapon' };
-
-this.inventory.addItemToInventory(testItem);
-console.log('--- added item to inventory ---');
-console.log('inventory map:', [...this.inventory.inventory]);
-console.log('items in inventory:', this.inventory.itemsInInventory);
-console.log('empty slots:', [...this.inventory.emptySlots]);
-
-this.inventory.equipItemFromInventory(testItem);
-console.log('--- equipped item from inventory ---');
-console.log('equipped weapon:', this.inventory.equipped.get('weapon'));
-console.log('items in inventory:', this.inventory.itemsInInventory);
-
-this.inventory.removeItemFromEquipped(testItem);
-console.log('--- removed item from equipped ---');
-console.log('equipped weapon:', this.inventory.equipped.get('weapon'));
-console.log('inventory map:', [...this.inventory.inventory]);
-console.log('items in inventory:', this.inventory.itemsInInventory);
-
-this.inventory.removeItemFromInventory(testItem);
-console.log('--- removed item from inventory ---');
-console.log('inventory map:', [...this.inventory.inventory]);
-console.log('items in inventory:', this.inventory.itemsInInventory);
-console.log('empty slots:', [...this.inventory.emptySlots]);
+    DEVTEST_INVENTORY(this.inventory);
 //END DEVTEST
   }
   // inventory
