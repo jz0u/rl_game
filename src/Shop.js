@@ -69,48 +69,51 @@ export default class Shop {
       .setInteractive();
 
     const dollSize = Math.min(this.shopWindowWidth / 2, this.shopWindowHeight);
-    this.playerDoll = this.scene.add.image(
-      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2 + (this.shopWindowWidth / 4) / 2,
-      GAME_WINDOW_CENTER.Y,
-      'player_paperdoll'
-    )
+    const dollX = GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2 + this.shopWindowWidth / 4; // 400 = rect 2 center
+
+    this.playerDoll = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
       .setDisplaySize(dollSize, dollSize)
       .setAlpha(1)
       .setInteractive(); // TODO: wire up pointer events or remove .setInteractive()
 
-    this.itemOverlay = this.scene.add.image(
-      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2 + (this.shopWindowWidth / 4) / 2,
-      GAME_WINDOW_CENTER.Y,
-      'player_paperdoll'
-    )
+    this.itemOverlay = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
       .setDisplaySize(dollSize, dollSize)
       .setVisible(false);
 
     this.shopPanel.add([shopWindow, this.playerDoll, this.itemOverlay]);
 
-    this.nameText = this.scene.add.text(
-      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 4 + 10,
-      GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2 + 40,
-      '', {
-        fontFamily: 'Georgia, serif',
-        fontSize: '20px',
-        color: '#ffffff',
-      }
-    );
+    const leftX = GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2; // 160
+    const topY = GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2; // 90
+    const paneW = this.shopWindowWidth / 2;  // 480
+    const paneH = this.shopWindowHeight;     // 540
+    const rectW = paneW / 3;                 // 160
 
-    this.statsText = this.scene.add.text(
-      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 4 + 10,
-      GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2 + 70,
+    for (let i = 0; i < 3; i++) {
+      const rect = this.scene.add.graphics();
+      rect.fillStyle(0x1a1a1a, 0.5);
+      rect.fillRect(leftX + i * rectW, topY, rectW, paneH);
+      rect.lineStyle(1, 0x8B6914, 0.8);
+      rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
+      this.shopPanel.add(rect);
+    }
+
+    this.generalText = this.scene.add.text(
+      leftX + 10,
+      topY + 10,
       '',
-      {
-        fontSize: '13px',
-        color: '#ffffff',
-        wordWrap: { width: this.shopWindowWidth / 4 - 20 },
-        lineSpacing: 6,
-      }
+      { fontFamily: 'Georgia, serif', fontSize: '14px', color: '#ffffff',
+        wordWrap: { width: rectW - 20 }, lineSpacing: 5 }
     );
 
-    this.shopPanel.add([this.nameText, this.statsText]);
+    this.statText = this.scene.add.text(
+      leftX + 2 * rectW + 10,
+      topY + 10,
+      '',
+      { fontSize: '13px', color: '#ffffff',
+        wordWrap: { width: rectW - 20 }, lineSpacing: 6 }
+    );
+
+    this.shopPanel.add([this.generalText, this.statText]);
   }
 
   /**
@@ -152,15 +155,16 @@ export default class Shop {
    */
   _renderPreview(item) {
     this.itemOverlay.setTexture(item.id + '_full').setVisible(true);
-    const statsLines = Object.entries(item.stats)
-      .map(([k, v]) => `${k}: ${v}`)
-      .join('\n');
 
-    this.nameText.setText(item.displayName);
-    this.statsText.setText(
-      `${item.slot.toUpperCase()} | ${item.type.toUpperCase()}${item.hands ? ' | ' + item.hands.toUpperCase() : ''}\n\n` +
-      `${statsLines}\n\n` +
+    this.generalText.setText(
+      `${item.displayName}\n\n` +
+      `${item.slot.toUpperCase()} | ${item.type.toUpperCase()}` +
+      `${item.hands ? ' | ' + item.hands.toUpperCase() : ''}\n\n` +
       `${item.description}`
+    );
+
+    this.statText.setText(
+      Object.entries(item.stats).map(([k, v]) => `${k}: ${v}`).join('\n')
     );
   }
 
@@ -214,9 +218,9 @@ export default class Shop {
   /** Shows the panel and resets the preview so no stale item is displayed. */
   show() {
     this.itemOverlay.setVisible(false);
-    this.statsText.setText('');
+    this.generalText.setText('');
+    this.statText.setText('');
     this.shopPanel.setVisible(true);
-    this.nameText.setText('');
   }
 
   /** Hides the entire shop panel. */
