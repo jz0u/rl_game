@@ -57,9 +57,35 @@ class GameScene extends Phaser.Scene {
     this._createPlayer();
     this._createInput();
     this._createInventory();
+//DEVTEST
+const testItem = { id: 'sword_01', name: 'Iron Sword', slot: 'weapon' };
+
+this.inventory._addItemToInventory(testItem);
+console.log('--- added item to inventory ---');
+console.log('inventory map:', [...this.inventory.inventory]);
+console.log('items in inventory:', this.inventory.itemsInInventory);
+console.log('empty slots:', [...this.inventory.emptySlots]);
+
+this.inventory._equipItemFromInventory(testItem);
+console.log('--- equipped item from inventory ---');
+console.log('equipped weapon:', this.inventory.equipped.get('weapon'));
+console.log('items in inventory:', this.inventory.itemsInInventory);
+
+this.inventory._removeItemFromEquipped(testItem);
+console.log('--- removed item from equipped ---');
+console.log('equipped weapon:', this.inventory.equipped.get('weapon'));
+console.log('inventory map:', [...this.inventory.inventory]);
+console.log('items in inventory:', this.inventory.itemsInInventory);
+
+this.inventory._removeItemFromInventory(testItem);
+console.log('--- removed item from inventory ---');
+console.log('inventory map:', [...this.inventory.inventory]);
+console.log('items in inventory:', this.inventory.itemsInInventory);
+console.log('empty slots:', [...this.inventory.emptySlots]);
+//END DEVTEST
   }
   // inventory
-  _createInventory(){
+  _createInventory() {
     this.inventory = new Inventory();
   }
 
