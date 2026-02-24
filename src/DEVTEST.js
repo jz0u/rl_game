@@ -20,9 +20,9 @@ export function DEVTEST_INVENTORY(inventory) {
     console.log('inventory map:', [...inventory.inventory]);
     console.log('items in inventory:', inventory.itemsInInventory);
 
-    inventory.removeItemFromInventory(testItem);
-    console.log('--- removed item from inventory ---');
-    console.log('inventory map:', [...inventory.inventory]);
-    console.log('items in inventory:', inventory.itemsInInventory);
-    console.log('empty slots:', [...inventory.emptySlots]);
+    // inventory.removeItemFromInventory(testItem);
+    // console.log('--- removed item from inventory ---');
+    // console.log('inventory map:', [...inventory.inventory]);
+    // console.log('items in inventory:', inventory.itemsInInventory);
+    // console.log('empty slots:', [...inventory.emptySlots]);
 }

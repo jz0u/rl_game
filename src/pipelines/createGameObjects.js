@@ -1,6 +1,7 @@
 import Player from "../Player";
 import Shop from "../Shop";
 import Inventory from "../Inventory";
+import InventoryWindow from "../InventoryWindow";
 
 const PLAYER_SPAWN_X = 200;
 const PLAYER_SPAWN_Y = 200;
@@ -11,8 +12,9 @@ const PLAYER_SPAWN_Y = 200;
  * @param {object[]} allItems - Full item catalogue from Armory (all slots combined).
  */
 export function createGameObjects(scene, allItems) {
-    scene.player    = new Player(scene, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
+    scene.player          = new Player(scene, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
     Player.createAnims(scene);
-    scene.shop      = new Shop(scene, allItems);
-    scene.inventory = new Inventory();
+    scene.shop            = new Shop(scene, allItems);
+    scene.inventory       = new Inventory();
+    scene.inventoryWindow = new InventoryWindow(scene, scene.inventory, scene.player, allItems);
 }
