@@ -121,7 +121,7 @@ export default class Shop {
 
     this.shopBtn.on("pointerdown", () => this.toggle());
     this.hide();
-  }
+  }//end constructor
   /**
    * Updates the left panel to show the selected item's paperdoll and stats.
    * @param {object} item - An Armory item definition.

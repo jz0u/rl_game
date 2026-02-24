@@ -12,6 +12,7 @@
 import Phaser from "phaser";
 import Player from "./Player";
 import Shop from "./Shop";
+import Inventory from "./Inventory";
 import { Armory } from "./Armory";
 
 /** Flat array of every item across all equipment slots. */
@@ -45,6 +46,8 @@ class GameScene extends Phaser.Scene {
       this.load.image(item.id + '_full', item.paperdollPathFull);
     });
     this.load.image('shop_panel', 'assets/ui/shop_panel.png');
+    this.load.image('inventory_panel', 'assets/ui/shop_panel.png');
+
     this.load.image('prev_btn', 'assets/ui/shop_arrow_left.png');
     this.load.image('next_btn', 'assets/ui/shop_arrow_right.png');
   }
@@ -53,6 +56,11 @@ class GameScene extends Phaser.Scene {
     this._createShopUI();
     this._createPlayer();
     this._createInput();
+    this._createInventoryUI();
+  }
+  // inventory
+  _createInventoryUI(){
+    this.inventory = new Inventory(this);
   }
 
   // ── Shop ──
