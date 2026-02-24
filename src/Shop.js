@@ -53,6 +53,8 @@ export default class Shop {
     this._renderPage(0);
     this.shopPanel.bringToTop(this.prevBtn);
     this.shopPanel.bringToTop(this.nextBtn);
+    this.shopPanel.bringToTop(this.leftPrevBtn);
+    this.shopPanel.bringToTop(this.leftNextBtn);
 
     this.shopPanel.setDepth(10);
 
@@ -148,7 +150,32 @@ export default class Shop {
         }
       });
 
-    this.shopPanel.add([this.prevBtn, this.nextBtn]);
+    const leftPrevX = GAME_WINDOW_WIDTH - prevX - 4;  // 183
+    const leftNextX = GAME_WINDOW_WIDTH - nextX + 1;  // 136
+
+    this.leftPrevBtn = this.scene.add.image(leftPrevX, arrowY, 'next_btn')
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setInteractive()
+      .setScrollFactor(0)
+      .on('pointerdown', () => {
+        if (this.currentPage < this.totalPages - 1) {
+          this.currentPage++;
+          this._renderPage(this.currentPage);
+        }
+      });
+
+    this.leftNextBtn = this.scene.add.image(leftNextX, arrowY, 'prev_btn')
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setInteractive()
+      .setScrollFactor(0)
+      .on('pointerdown', () => {
+        if (this.currentPage > 0) {
+          this.currentPage--;
+          this._renderPage(this.currentPage);
+        }
+      });
+
+    this.shopPanel.add([this.prevBtn, this.nextBtn, this.leftPrevBtn, this.leftNextBtn]);
   }
 
   /**
@@ -198,7 +225,13 @@ export default class Shop {
       const x = originX + col * CELL_SIZE + CELL_SIZE / 2;
       const y = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
-      const bg = this.scene.add.image(x, y, 'item_slot_bg')
+      const goldRect = this.scene.add.graphics();
+      goldRect.fillStyle(0xB8860B, 0.5);
+      goldRect.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
+      this.onPage.push(goldRect);
+      this.shopPanel.add(goldRect);
+
+      const bg = this.scene.add.image(x, y, 'iconborder')
         .setDisplaySize(CELL_SIZE, CELL_SIZE);
       this.onPage.push(bg);
       this.shopPanel.add(bg);
@@ -216,6 +249,8 @@ export default class Shop {
     if (this.prevBtn) {
       this.shopPanel.bringToTop(this.prevBtn);
       this.shopPanel.bringToTop(this.nextBtn);
+      this.shopPanel.bringToTop(this.leftPrevBtn);
+      this.shopPanel.bringToTop(this.leftNextBtn);
     }
   }
 
