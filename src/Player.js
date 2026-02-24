@@ -17,6 +17,7 @@ export default class Player {
   constructor(scene, x, y) {
     this.scene = scene;
     this.sprite = scene.add.sprite(x, y, "player_idle1_diag");
+    this.balance = 0;
 
     /**
      * One sprite overlay per equipment slot; null if that slot is empty.
