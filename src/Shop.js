@@ -14,7 +14,7 @@ const SHOP_COLORS = {
   playerDoll:   { alpha: 1 },
   leftPaneRect: { fill: 0x1a1a1a, fillAlpha: 0.5, stroke: 0x8B6914, strokeAlpha: 0.8 },
   previewText:  { color: '#ffffff' },
-  itemSlotRect: { fill: 0x303234, alpha: 0.6 },
+  itemSlotRect: { fill: 0x303234, alpha: 0.0 },
   toggleBtn:    { background: '#333', color: '#fff' },
 };
 
@@ -116,7 +116,8 @@ export default class Shop {
       topY + 10,
       '',
       { fontFamily: 'Georgia, serif', fontSize: '14px', color: SHOP_COLORS.previewText.color,
-        wordWrap: { width: rectW - 20 }, lineSpacing: 5 }
+        wordWrap: { width: rectW - 52 }, lineSpacing: 5,
+        padding: { left: 16, right: 16, top: 12, bottom: 12 } }
     );
 
     this.statText = this.scene.add.text(
@@ -124,7 +125,8 @@ export default class Shop {
       topY + 10,
       '',
       { fontSize: '13px', color: SHOP_COLORS.previewText.color,
-        wordWrap: { width: rectW - 20 }, lineSpacing: 6 }
+        wordWrap: { width: rectW - 52 }, lineSpacing: 6,
+        padding: { left: 16, right: 16, top: 12, bottom: 12 } }
     );
 
     this.shopPanel.add([this.generalText, this.statText]);
