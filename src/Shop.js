@@ -8,6 +8,16 @@ const PANEL_SCALE = 0.75;
 const NAV_BTN_WIDTH = 46;
 const NAV_BTN_HEIGHT = 167;
 
+// ── Shop color & alpha palette ──────────────────────────────────────
+const SHOP_COLORS = {
+  shopWindow:   { alpha: 0.8 },
+  playerDoll:   { alpha: 1 },
+  leftPaneRect: { fill: 0x1a1a1a, fillAlpha: 0.5, stroke: 0x8B6914, strokeAlpha: 0.8 },
+  previewText:  { color: '#ffffff' },
+  itemSlotRect: { fill: 0x303234, alpha: 0.6 },
+  toggleBtn:    { background: '#333', color: '#fff' },
+};
+
 /**
  * Shop — the in-game item browsing UI.
  *
@@ -38,9 +48,9 @@ export default class Shop {
     this.shopBtn = this.scene.add
       .text(20, 20, "ITEMS", {
         fontSize: "16px",
-        backgroundColor: "#333",
+        backgroundColor: SHOP_COLORS.toggleBtn.background,
         padding: { x: 10, y: 6 },
-        color: "#fff",
+        color: SHOP_COLORS.toggleBtn.color,
       })
       .setInteractive()
       .setScrollFactor(0);
@@ -69,7 +79,7 @@ export default class Shop {
   _buildPreviewPane() {
     const shopWindow = this.scene.add.image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel')
       .setDisplaySize(this.shopWindowWidth + 100, this.shopWindowHeight + 10)
-      .setAlpha(0.8)
+      .setAlpha(SHOP_COLORS.shopWindow.alpha)
       .setInteractive();
 
     const dollSize = Math.min(this.shopWindowWidth / 2, this.shopWindowHeight);
@@ -77,7 +87,7 @@ export default class Shop {
 
     this.playerDoll = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
       .setDisplaySize(dollSize, dollSize)
-      .setAlpha(1)
+      .setAlpha(SHOP_COLORS.playerDoll.alpha)
       .setInteractive(); // TODO: wire up pointer events or remove .setInteractive()
 
     this.itemOverlay = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
@@ -94,9 +104,9 @@ export default class Shop {
 
     for (let i = 0; i < 3; i++) {
       const rect = this.scene.add.graphics();
-      rect.fillStyle(0x1a1a1a, 0.5);
+      rect.fillStyle(SHOP_COLORS.leftPaneRect.fill, SHOP_COLORS.leftPaneRect.fillAlpha);
       rect.fillRect(leftX + i * rectW, topY, rectW, paneH);
-      rect.lineStyle(1, 0x8B6914, 0.8);
+      rect.lineStyle(1, SHOP_COLORS.leftPaneRect.stroke, SHOP_COLORS.leftPaneRect.strokeAlpha);
       rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
       this.shopPanel.add(rect);
     }
@@ -105,7 +115,7 @@ export default class Shop {
       leftX + 10,
       topY + 10,
       '',
-      { fontFamily: 'Georgia, serif', fontSize: '14px', color: '#ffffff',
+      { fontFamily: 'Georgia, serif', fontSize: '14px', color: SHOP_COLORS.previewText.color,
         wordWrap: { width: rectW - 20 }, lineSpacing: 5 }
     );
 
@@ -113,7 +123,7 @@ export default class Shop {
       leftX + 2 * rectW + 10,
       topY + 10,
       '',
-      { fontSize: '13px', color: '#ffffff',
+      { fontSize: '13px', color: SHOP_COLORS.previewText.color,
         wordWrap: { width: rectW - 20 }, lineSpacing: 6 }
     );
 
@@ -226,7 +236,7 @@ export default class Shop {
       const y = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
       const goldRect = this.scene.add.graphics();
-      goldRect.fillStyle(0xB8860B, 0.5);
+      goldRect.fillStyle(SHOP_COLORS.itemSlotRect.fill, SHOP_COLORS.itemSlotRect.alpha);
       goldRect.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
       this.onPage.push(goldRect);
       this.shopPanel.add(goldRect);
