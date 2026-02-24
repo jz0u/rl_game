@@ -1,5 +1,10 @@
 import Player from "./Player";
 import { Armory } from "./Armory";
+
+/**
+ * Loads all game assets into the Phaser loader. Call from scene.preload().
+ * @param {Phaser.Scene} scene - The active Phaser scene.
+ */
 export function loadAssets(scene){
     const allItems = Object.values(Armory).flat();
     Player.preload(scene);
@@ -9,6 +14,7 @@ export function loadAssets(scene){
       scene.load.image(item.id + '_full', item.paperdollPathFull);
     });
     scene.load.image('shop_panel', 'assets/ui/shop_panel.png');
+    // TODO: 'inventory_panel' texture is loaded but never used — remove if not needed.
     scene.load.image('inventory_panel', 'assets/ui/shop_panel.png');
 
     scene.load.image('prev_btn', 'assets/ui/shop_arrow_left.png');

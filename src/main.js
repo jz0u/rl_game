@@ -30,16 +30,16 @@ class GameScene extends Phaser.Scene {
     super({ key: "GameScene" });
   }
 
+  /** Delegates all asset loading to the load pipeline. */
   preload() {
     loadAssets(this);
   }
 
+  /** Instantiates game objects, wires input, and runs dev tests if present. */
   create() {
     createGameObjects(this, allItems);
     setupInput(this);
-    //DEVTEST
-    DEVTEST_INVENTORY(this.inventory);
-    //END DEVTEST
+    DEVTEST_INVENTORY(this.inventory); // DEV ONLY
   }
 
   /** Called every frame by Phaser. */

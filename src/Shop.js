@@ -2,6 +2,11 @@ import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from "./mai
 
 const CELL_SIZE = 100; // pixel size of each grid slot in the item list
 const ICON_SIZE = 75;  // display size of the item icon within each slot
+/** Shop panel occupies 75% of the window on each axis. */
+const PANEL_SCALE = 0.75;
+/** Width and height of the prev/next navigation arrow buttons. */
+const NAV_BTN_WIDTH = 46;
+const NAV_BTN_HEIGHT = 167;
 
 /**
  * Shop — the in-game item browsing UI.
@@ -26,9 +31,8 @@ export default class Shop {
     this.currentPage = 0;
     /** Icons currently rendered on this page; destroyed and rebuilt on page change. */
     this.onPage = [];
-    this.ShopWindowWidth = GAME_WINDOW_WIDTH * .75;
-    this.ShopWindowHeight = GAME_WINDOW_HEIGHT * .75;
-
+    this.shopWindowWidth = GAME_WINDOW_WIDTH * PANEL_SCALE;
+    this.shopWindowHeight = GAME_WINDOW_HEIGHT * PANEL_SCALE;
 
     // ── Toggle button ──
     this.shopBtn = this.scene.add
@@ -43,57 +47,82 @@ export default class Shop {
 
     // ── Shop panel container ──
     this.shopPanel = this.scene.add.container(0, 0).setScrollFactor(0);
-    
 
+    this._buildPreviewPane();
+    this._buildNavButtons();
+    this._renderPage(0);
+
+    this.shopPanel.setDepth(10);
+
+    this.shopBtn.on("pointerdown", () => this.toggle());
+    this.hide();
+  }
+
+  /**
+   * Creates the paperdoll image, item overlay, and stat text objects,
+   * then adds them to the shop panel container.
+   */
+  _buildPreviewPane() {
     const shopWindow = this.scene.add.image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel')
-      .setDisplaySize(this.ShopWindowWidth + 100, this.ShopWindowHeight + 10)
+      .setDisplaySize(this.shopWindowWidth + 100, this.shopWindowHeight + 10)
       .setAlpha(0.8)
       .setInteractive();
-    
-    const dollSize = Math.min(this.ShopWindowWidth / 2, this.ShopWindowHeight);
-    this.playerDoll = this.scene.add.image(GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
+
+    const dollSize = Math.min(this.shopWindowWidth / 2, this.shopWindowHeight);
+    this.playerDoll = this.scene.add.image(
+      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2 + (this.shopWindowWidth / 4) / 2,
+      GAME_WINDOW_CENTER.Y,
+      'player_paperdoll'
+    )
       .setDisplaySize(dollSize, dollSize)
       .setAlpha(1)
-      .setInteractive();
+      .setInteractive(); // TODO: wire up pointer events or remove .setInteractive()
 
     this.itemOverlay = this.scene.add.image(
-      GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 2 + (this.ShopWindowWidth / 4) / 2,
+      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2 + (this.shopWindowWidth / 4) / 2,
       GAME_WINDOW_CENTER.Y,
       'player_paperdoll'
     )
       .setDisplaySize(dollSize, dollSize)
       .setVisible(false);
 
- 
-    
     this.shopPanel.add([shopWindow, this.playerDoll, this.itemOverlay]);
-    this.nameText = this.scene.add.text( GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4 + 10,
-      GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2 + 40,
+
+    this.nameText = this.scene.add.text(
+      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 4 + 10,
+      GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2 + 40,
       '', {
-      fontFamily: 'Georgia, serif',
-      fontSize: '20px',
-      color: '#ffffff',
-    });
+        fontFamily: 'Georgia, serif',
+        fontSize: '20px',
+        color: '#ffffff',
+      }
+    );
 
     this.statsText = this.scene.add.text(
-      GAME_WINDOW_CENTER.X - this.ShopWindowWidth / 4 + 10,
-      GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2 + 70,
+      GAME_WINDOW_CENTER.X - this.shopWindowWidth / 4 + 10,
+      GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2 + 70,
       '',
       {
         fontSize: '13px',
         color: '#ffffff',
-        wordWrap: { width: this.ShopWindowWidth / 4 - 20 },
+        wordWrap: { width: this.shopWindowWidth / 4 - 20 },
         lineSpacing: 6,
       }
     );
+
     this.shopPanel.add([this.nameText, this.statsText]);
-    this._renderPage(0);
-    // ── Prev/Next buttons ──
+  }
+
+  /**
+   * Creates the prev/next page navigation buttons and adds them to the shop panel container.
+   */
+  _buildNavButtons() {
     const arrowY = GAME_WINDOW_CENTER.Y;
     const nextX = GAME_WINDOW_WIDTH - 135;
     const prevX = GAME_WINDOW_WIDTH - 180;
+
     this.prevBtn = this.scene.add.image(prevX, arrowY, 'prev_btn')
-      .setDisplaySize(46, 167)
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
       .on('pointerdown', () => {
@@ -104,7 +133,7 @@ export default class Shop {
       });
 
     this.nextBtn = this.scene.add.image(nextX, arrowY, 'next_btn')
-      .setDisplaySize(46, 167)
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
       .on('pointerdown', () => {
@@ -115,13 +144,8 @@ export default class Shop {
       });
 
     this.shopPanel.add([this.prevBtn, this.nextBtn]);
+  }
 
-
-    this.shopPanel.setDepth(10);
-
-    this.shopBtn.on("pointerdown", () => this.toggle());
-    this.hide();
-  }//end constructor
   /**
    * Updates the left panel to show the selected item's paperdoll and stats.
    * @param {object} item - An Armory item definition.
@@ -139,6 +163,7 @@ export default class Shop {
       `${item.description}`
     );
   }
+
   /**
    * Destroys the current page's icons and builds a new grid for the given page.
    * The grid fills the right half of the panel. Items are laid out left-to-right,
@@ -148,17 +173,15 @@ export default class Shop {
   _renderPage(pageNumber) {
     this.onPage.forEach(icon => icon.destroy());
     this.onPage = [];
-    const cellSize = CELL_SIZE;
-    const iconSize = ICON_SIZE;
     // How many columns/rows fit in the right half of the panel.
-    const cols = Math.floor((this.ShopWindowWidth / 2) / cellSize);
-    const rows = Math.floor(this.ShopWindowHeight / cellSize);
+    const cols = Math.floor((this.shopWindowWidth / 2) / CELL_SIZE);
+    const rows = Math.floor(this.shopWindowHeight / CELL_SIZE);
     // Center the grid within the available space.
-    const paddingX = (this.ShopWindowWidth / 2 - cols * cellSize) / 2;
-    const paddingY = (this.ShopWindowHeight - rows * cellSize) / 2;
+    const paddingX = (this.shopWindowWidth / 2 - cols * CELL_SIZE) / 2;
+    const paddingY = (this.shopWindowHeight - rows * CELL_SIZE) / 2;
     // Top-left corner of the grid, starting from the center of the panel.
     const originX = (GAME_WINDOW_CENTER.X + paddingX);
-    const originY = (GAME_WINDOW_CENTER.Y - this.ShopWindowHeight / 2) + paddingY;
+    const originY = (GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2) + paddingY;
     const itemsPerPage = cols * rows;
     this.totalPages = Math.ceil(this.items.length / itemsPerPage);
     const pageItems = this.items.slice(pageNumber * itemsPerPage, (pageNumber + 1) * itemsPerPage);
@@ -166,19 +189,19 @@ export default class Shop {
     pageItems.forEach((item, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
-      const x = originX + col * cellSize + cellSize / 2;
-      const y = originY + row * cellSize + cellSize / 2;
+      const x = originX + col * CELL_SIZE + CELL_SIZE / 2;
+      const y = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
       const bg = this.scene.add.graphics();
       bg.fillStyle(0x1a1a1a, 0.5);
-      bg.fillRect(x - cellSize / 2, y - cellSize / 2, cellSize, cellSize);
+      bg.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
       bg.lineStyle(1, 0x8B6914, 0.8);
-      bg.strokeRect(x - cellSize / 2, y - cellSize / 2, cellSize, cellSize);
+      bg.strokeRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
       this.onPage.push(bg);
       this.shopPanel.add(bg);
 
       const src = this.scene.textures.get(item.id).getSourceImage();
-      const scale = Math.min(iconSize / src.width, iconSize / src.height);
+      const scale = Math.min(ICON_SIZE / src.width, ICON_SIZE / src.height);
       const icon = this.scene.add.image(x, y, item.id)
         .setDisplaySize(src.width * scale, src.height * scale)
         .setInteractive();

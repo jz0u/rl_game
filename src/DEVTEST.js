@@ -1,3 +1,5 @@
+// DEV ONLY — remove this file and its import in main.js before shipping.
+
 export function DEVTEST_INVENTORY(inventory) {
     const testItem = { id: 'sword_01', name: 'Iron Sword', slot: 'weapon' };
 

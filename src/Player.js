@@ -1,3 +1,6 @@
+/** All player spritesheets use 128×128 px frames. */
+const SPRITE_FRAME_SIZE = 128;
+
 /**
  * Player — the controllable character sprite.
  *
@@ -58,7 +61,7 @@ export default class Player {
     ];
 
     sheets.forEach((sheet) => {
-      scene.load.spritesheet(sheet.key, sheet.path, { frameWidth: 128, frameHeight: 128 });
+      scene.load.spritesheet(sheet.key, sheet.path, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
     });
   }
 
@@ -119,6 +122,9 @@ export default class Player {
   /**
    * Maps a movement angle to one of four diagonal walk animations.
    *   -90° = NE,  0° = SE,  90° = SW,  180° = NW
+   * Note: does not use `this` — could be static, kept as instance method for API consistency.
+   * @param {number} angle - Angle in radians from Phaser.Math.Angle.Between.
+   * @returns {string} Animation key (e.g. "walk_sw").
    */
   getDirectionAnim(angle) {
     const deg = Phaser.Math.RadToDeg(angle);
@@ -131,6 +137,7 @@ export default class Player {
   /**
    * Returns the idle animation key that matches the player's current facing direction.
    * Converts "walk_{dir}" → "idle_{dir}". Falls back to "idle_sw" if unknown.
+   * Note: does not use `this` — could be static, kept as instance method for API consistency.
    * @returns {string} Animation key.
    */
   getIdleAnim() {
