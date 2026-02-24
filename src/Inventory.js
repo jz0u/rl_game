@@ -19,7 +19,7 @@ export default class Inventory {
         this.emptySlots = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     }
 
-    _addItemToInventory(item) {
+    addItemToInventory(item) {
         if (this.itemsInInventory >= this.INVENTORYSIZE) {
             return false;
         }
@@ -36,7 +36,7 @@ export default class Inventory {
         }
     }
 
-    _removeItemFromInventory(item) {
+    removeItemFromInventory(item) {
         if (this.itemsInInventory === 0) {
             return false;
         }
@@ -53,7 +53,7 @@ export default class Inventory {
         }
     }
 
-    _equipItemFromInventory(item) {
+    equipItemFromInventory(item) {
         this.slot = item.slot;
         if (this.itemsInInventory === 0) {
             return false;
@@ -73,7 +73,7 @@ export default class Inventory {
         }
     }
 
-    _removeItemFromEquipped(item) {
+    removeItemFromEquipped(item) {
         this.slot = item.slot;
         if (this.itemSetForDupeCheckEquipped.size === 0) {
             return false;

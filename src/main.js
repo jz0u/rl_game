@@ -60,24 +60,24 @@ class GameScene extends Phaser.Scene {
 //DEVTEST
 const testItem = { id: 'sword_01', name: 'Iron Sword', slot: 'weapon' };
 
-this.inventory._addItemToInventory(testItem);
+this.inventory.addItemToInventory(testItem);
 console.log('--- added item to inventory ---');
 console.log('inventory map:', [...this.inventory.inventory]);
 console.log('items in inventory:', this.inventory.itemsInInventory);
 console.log('empty slots:', [...this.inventory.emptySlots]);
 
-this.inventory._equipItemFromInventory(testItem);
+this.inventory.equipItemFromInventory(testItem);
 console.log('--- equipped item from inventory ---');
 console.log('equipped weapon:', this.inventory.equipped.get('weapon'));
 console.log('items in inventory:', this.inventory.itemsInInventory);
 
-this.inventory._removeItemFromEquipped(testItem);
+this.inventory.removeItemFromEquipped(testItem);
 console.log('--- removed item from equipped ---');
 console.log('equipped weapon:', this.inventory.equipped.get('weapon'));
 console.log('inventory map:', [...this.inventory.inventory]);
 console.log('items in inventory:', this.inventory.itemsInInventory);
 
-this.inventory._removeItemFromInventory(testItem);
+this.inventory.removeItemFromInventory(testItem);
 console.log('--- removed item from inventory ---');
 console.log('inventory map:', [...this.inventory.inventory]);
 console.log('items in inventory:', this.inventory.itemsInInventory);
