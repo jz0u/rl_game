@@ -2,6 +2,7 @@
  * Registers all pointer input handlers for the scene.
  * Right-click moves the player; left-click triggers an attack.
  * Both actions are suppressed when the shop panel is open or a UI element is under the cursor.
+ * Pointer coordinates are converted to world-space (pointer.worldX/Y) before being passed to player methods.
  * @param {Phaser.Scene} scene - The active Phaser scene.
  */
 export function setupInput(scene) {
@@ -12,9 +13,9 @@ export function setupInput(scene) {
         if (scene.shop.shopPanel.visible) return;
 
         if (pointer.rightButtonDown()) {
-            scene.player.moveTo(pointer.x, pointer.y);
+            scene.player.moveTo(pointer.worldX, pointer.worldY);
         } else if (pointer.leftButtonDown()) {
-            scene.player.attack(pointer.x);
+            scene.player.attack(pointer.worldX);
         }
     });
 }

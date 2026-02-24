@@ -137,7 +137,7 @@ export default class Player {
   /**
    * Returns the idle animation key that matches the player's current facing direction.
    * Converts "walk_{dir}" → "idle_{dir}". Falls back to "idle_sw" if unknown.
-   * Note: does not use `this` — could be static, kept as instance method for API consistency.
+   * Note: reads this.sprite — cannot be static.
    * @returns {string} Animation key.
    */
   getIdleAnim() {
