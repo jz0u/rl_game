@@ -19,4 +19,5 @@ export function loadAssets(scene){
 
     scene.load.image('prev_btn', 'assets/ui/shop_arrow_left.png');
     scene.load.image('next_btn', 'assets/ui/shop_arrow_right.png');
+    scene.load.image('item_slot_bg', 'assets/ui/background.png');
 }

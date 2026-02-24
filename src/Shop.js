@@ -51,6 +51,8 @@ export default class Shop {
     this._buildPreviewPane();
     this._buildNavButtons();
     this._renderPage(0);
+    this.shopPanel.bringToTop(this.prevBtn);
+    this.shopPanel.bringToTop(this.nextBtn);
 
     this.shopPanel.setDepth(10);
 
@@ -122,7 +124,7 @@ export default class Shop {
   _buildNavButtons() {
     const arrowY = GAME_WINDOW_CENTER.Y;
     const nextX = GAME_WINDOW_WIDTH - 135;
-    const prevX = GAME_WINDOW_WIDTH - 180;
+    const prevX = GAME_WINDOW_WIDTH - 187;
 
     this.prevBtn = this.scene.add.image(prevX, arrowY, 'prev_btn')
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
@@ -196,11 +198,8 @@ export default class Shop {
       const x = originX + col * CELL_SIZE + CELL_SIZE / 2;
       const y = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
-      const bg = this.scene.add.graphics();
-      bg.fillStyle(0x1a1a1a, 0.5);
-      bg.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
-      bg.lineStyle(1, 0x8B6914, 0.8);
-      bg.strokeRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
+      const bg = this.scene.add.image(x, y, 'item_slot_bg')
+        .setDisplaySize(CELL_SIZE, CELL_SIZE);
       this.onPage.push(bg);
       this.shopPanel.add(bg);
 
@@ -213,6 +212,11 @@ export default class Shop {
       this.onPage.push(icon);
       this.shopPanel.add(icon);
     });
+
+    if (this.prevBtn) {
+      this.shopPanel.bringToTop(this.prevBtn);
+      this.shopPanel.bringToTop(this.nextBtn);
+    }
   }
 
   /** Shows the panel and resets the preview so no stale item is displayed. */
