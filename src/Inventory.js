@@ -38,7 +38,7 @@ export default class Inventory {
             return false;
         }
         else {
-            const slot = this.emptySlots.values().next().value;
+            const slot = Math.min(...this.emptySlots);
             this.emptySlots.delete(slot);
             this.inventory.set(slot, item);
             this.revertedInventoryMap.set(item.id, slot);
@@ -101,7 +101,7 @@ export default class Inventory {
                 this.emptySlots.add(incomingSlot);
 
                 // Move the previously equipped item back into inventory.
-                const returnSlot = this.emptySlots.values().next().value;
+                const returnSlot = Math.min(...this.emptySlots);
                 this.emptySlots.delete(returnSlot);
                 this.inventory.set(returnSlot, currentlyEquipped);
                 this.revertedInventoryMap.set(currentlyEquipped.id, returnSlot);
@@ -143,7 +143,7 @@ export default class Inventory {
             if (this.itemsInInventory >= INVENTORY_SIZE) {
                 return false;
             }
-            const slot = this.emptySlots.values().next().value;
+            const slot = Math.min(...this.emptySlots);
             this.emptySlots.delete(slot);
             this.equipped.set(equipSlot, null);
             this.itemSetForDupeCheckEquipped.delete(item.id);

@@ -1,7 +1,8 @@
 // DEV ONLY — remove this file and its import in main.js before shipping.
+import { Armory } from './Armory';
 
 export function DEVTEST_INVENTORY(inventory) {
-    const testItem = { id: 'sword_01', name: 'Iron Sword', slot: 'weapon' };
+    const testItem = Armory.weapon[2];
 
     inventory.addItemToInventory(testItem);
     console.log('--- added item to inventory ---');
