@@ -11,8 +11,8 @@ const PLAYER_SPAWN_Y = 200;
  * @param {object[]} allItems - Full item catalogue from Armory (all slots combined).
  */
 export function createGameObjects(scene, allItems) {
-    scene.shop      = new Shop(scene, allItems);
     scene.player    = new Player(scene, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
     Player.createAnims(scene);
+    scene.shop      = new Shop(scene, allItems);
     scene.inventory = new Inventory();
 }

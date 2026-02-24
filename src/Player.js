@@ -39,9 +39,11 @@ export default class Player {
     this.isAttacking = false;
 
     // When an attack animation finishes, clear the flag and return to idle.
+    // _syncOverlays is called immediately so overlays switch in the same tick as the body.
     this.sprite.on("animationcomplete", () => {
       this.isAttacking = false;
       this.sprite.play(this.getIdleAnim());
+      this._syncOverlays();
     });
   }
 
