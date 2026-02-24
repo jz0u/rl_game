@@ -1,6 +1,6 @@
-import Player from "./Player";
-import Shop from "./Shop";
-import Inventory from "./Inventory";
+import Player from "../Player";
+import Shop from "../Shop";
+import Inventory from "../Inventory";
 
 const PLAYER_SPAWN_X = 200;
 const PLAYER_SPAWN_Y = 200;
