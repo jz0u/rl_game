@@ -56,11 +56,11 @@ class GameScene extends Phaser.Scene {
     this._createShopUI();
     this._createPlayer();
     this._createInput();
-    this._createInventoryUI();
+    this._createInventory();
   }
   // inventory
-  _createInventoryUI(){
-    this.inventory = new Inventory(this);
+  _createInventory(){
+    this.inventory = new Inventory();
   }
 
   // ── Shop ──
