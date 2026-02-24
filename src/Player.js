@@ -73,22 +73,22 @@ export default class Player {
    * Places an equipment overlay sprite for the given item's slot.
    * If the slot already has an overlay it is destroyed first.
    * The item must have its spritesheets and animations pre-loaded before calling this.
-   * @param {{ slot: string, animPrefix: string }} item
+   * @param {{ slot: string, baseName: string }} item
    */
   equip(item) {
     if (this.overlays[item.slot]) {
       this.overlays[item.slot].destroy();
     }
 
-    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, `${item.animPrefix}_idle`);
-    overlay.animPrefix = item.animPrefix;
+    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, `${item.baseName}_idle`);
+    overlay.baseName = item.baseName;
     this.overlays[item.slot] = overlay;
   }
 
   /**
    * Called every frame to keep all overlay sprites locked to the body sprite.
    * Matches each overlay's position, flip, and animation to the body's current state.
-   * Animation keys follow the pattern `{animPrefix}_{bodyAnimKey}` (e.g. "longsword_walk_sw").
+   * Animation keys follow the pattern `{baseName}_{bodyAnimKey}` (e.g. "Medieval_Warfare_Male_Weapon_Longsword_walk_sw").
    */
   _syncOverlays() {
     const currentAnim = this.sprite.anims.currentAnim?.key;
@@ -103,7 +103,7 @@ export default class Player {
 
       if (!currentAnim) continue;
 
-      const weaponAnim = overlay.animPrefix + "_" + currentAnim;
+      const weaponAnim = overlay.baseName + "_" + currentAnim;
       if (overlay.anims.currentAnim?.key !== weaponAnim) {
         overlay.play(weaponAnim, true);
       }

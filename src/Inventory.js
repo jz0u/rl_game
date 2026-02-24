@@ -1,9 +1,11 @@
+/** Maximum number of items the player can carry at once. */
+const INVENTORY_SIZE = 10;
+
 export default class Inventory {
     constructor() {
         this.itemSetForDupeCheckInventory = new Set();
         this.itemSetForDupeCheckEquipped = new Set();
         this.itemsInInventory = 0;
-        this.INVENTORYSIZE = 10;
 
         this.inventory = new Map();
         this.equipped = new Map();
@@ -21,15 +23,18 @@ export default class Inventory {
 
     /**
      * Adds an item to the first available inventory slot.
-     * Fails silently if the inventory is full or the item is already present.
+     * Fails silently if the inventory is full or the item is already present in inventory or equipped.
      * @param {{ id: string, slot: string }} item - The item to add.
      * @returns {false|undefined} Returns false if the item could not be added.
      */
     addItemToInventory(item) {
-        if (this.itemsInInventory >= this.INVENTORYSIZE) {
+        if (this.itemsInInventory >= INVENTORY_SIZE) {
             return false;
         }
         else if (this.itemSetForDupeCheckInventory.has(item.id)) {
+            return false;
+        }
+        else if (this.itemSetForDupeCheckEquipped.has(item.id)) {
             return false;
         }
         else {
@@ -70,6 +75,8 @@ export default class Inventory {
      * If the target slot is already occupied, the previous item is automatically
      * returned to inventory (itemsInInventory net change is 0 for a swap, -1 for a fresh equip).
      * Fails silently if the inventory is empty or the item is not present.
+     * Note: this method only manages data. Callers must also call player.equip(item)
+     * separately to update the visual overlay on the player sprite.
      * @param {{ id: string, slot: string }} item - The item to equip.
      * @returns {false|undefined} Returns false if the item could not be equipped.
      */
@@ -133,7 +140,7 @@ export default class Inventory {
             return false;
         }
         else {
-            if (this.itemsInInventory >= this.INVENTORYSIZE) {
+            if (this.itemsInInventory >= INVENTORY_SIZE) {
                 return false;
             }
             const slot = this.emptySlots.values().next().value;
