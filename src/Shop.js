@@ -1,7 +1,11 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from "./main";
+import {
+  GAME_WINDOW_WIDTH,
+  GAME_WINDOW_HEIGHT,
+  GAME_WINDOW_CENTER,
+} from "./main";
 
 const CELL_SIZE = 100; // pixel size of each grid slot in the item list
-const ICON_SIZE = 75;  // display size of the item icon within each slot
+const ICON_SIZE = 75; // display size of the item icon within each slot
 /** Shop panel occupies 75% of the window on each axis. */
 const PANEL_SCALE = 0.75;
 /** Width and height of the prev/next navigation arrow buttons. */
@@ -10,12 +14,18 @@ const NAV_BTN_HEIGHT = 167;
 
 // ── Shop color & alpha palette ──────────────────────────────────────
 const SHOP_COLORS = {
-  shopWindow:   { alpha: 0.8 },
-  playerDoll:   { alpha: 1 },
-  leftPaneRect: { fill: 0x1a1a1a, fillAlpha: 0.5, stroke: 0x8B6914, strokeAlpha: 0.8 },
-  previewText:  { color: '#ffffff' },
-  itemSlotRect: { fill: 0x303234, alpha: 0.0 },
-  toggleBtn:    { background: '#333', color: '#fff' },
+  shopWindow: { alpha: 0.8 },
+  playerDoll: { alpha: 1 },
+  leftPaneRect: {
+    fill: 0x1a1a1a,
+    fillAlpha: 0.5,
+    stroke: 0x8b6914,
+    strokeAlpha: 0.8,
+  },
+  previewText: { color: "#ffffff" },
+  itemSlotRect: { fill: 0x1a1a1a, alpha: 0.5 },
+  toggleBtn: { background: "#333", color: "#fff" },
+  border_alpha:{alpha:0.5}
 };
 
 /**
@@ -77,57 +87,83 @@ export default class Shop {
    * then adds them to the shop panel container.
    */
   _buildPreviewPane() {
-    const shopWindow = this.scene.add.image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel')
+    const shopWindow = this.scene.add
+      .image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, "shop_panel")
       .setDisplaySize(this.shopWindowWidth + 100, this.shopWindowHeight + 10)
       .setAlpha(SHOP_COLORS.shopWindow.alpha)
       .setInteractive();
+    this.shopPanel.add(shopWindow);
+
+    const bg = this.scene.add
+      .rectangle(
+        GAME_WINDOW_CENTER.X,
+        GAME_WINDOW_CENTER.Y,
+        this.shopWindowWidth-7,
+        this.shopWindowHeight-7,
+        0xdbc8a8,
+      )
+      .setAlpha(SHOP_COLORS.shopWindow.alpha)
+      .setScrollFactor(0);
+    this.shopPanel.add(bg);
+
 
     const dollSize = Math.min(this.shopWindowWidth / 2, this.shopWindowHeight);
-    const dollX = GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2 + this.shopWindowWidth / 4; // 400 = rect 2 center
+    const dollX =
+      GAME_WINDOW_CENTER.X -
+      this.shopWindowWidth / 2 +
+      this.shopWindowWidth / 4; // 400 = rect 2 center
 
-    this.playerDoll = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
+    this.playerDoll = this.scene.add
+      .image(dollX, GAME_WINDOW_CENTER.Y, "player_paperdoll")
       .setDisplaySize(dollSize, dollSize)
       .setAlpha(SHOP_COLORS.playerDoll.alpha)
       .setInteractive(); // TODO: wire up pointer events or remove .setInteractive()
 
-    this.itemOverlay = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
+    this.itemOverlay = this.scene.add
+      .image(dollX, GAME_WINDOW_CENTER.Y, "player_paperdoll")
       .setDisplaySize(dollSize, dollSize)
       .setVisible(false);
 
-    this.shopPanel.add([shopWindow, this.playerDoll, this.itemOverlay]);
+    this.shopPanel.add([this.playerDoll, this.itemOverlay]);
 
     const leftX = GAME_WINDOW_CENTER.X - this.shopWindowWidth / 2; // 160
     const topY = GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2; // 90
-    const paneW = this.shopWindowWidth / 2;  // 480
-    const paneH = this.shopWindowHeight;     // 540
-    const rectW = paneW / 3;                 // 160
+    const paneW = this.shopWindowWidth / 2; // 480
+    const paneH = this.shopWindowHeight; // 540
+    const rectW = paneW / 3; // 160
 
     for (let i = 0; i < 3; i++) {
       const rect = this.scene.add.graphics();
-      rect.fillStyle(SHOP_COLORS.leftPaneRect.fill, SHOP_COLORS.leftPaneRect.fillAlpha);
+      rect.fillStyle(
+        SHOP_COLORS.leftPaneRect.fill,
+        SHOP_COLORS.leftPaneRect.fillAlpha,
+      );
       rect.fillRect(leftX + i * rectW, topY, rectW, paneH);
-      rect.lineStyle(1, SHOP_COLORS.leftPaneRect.stroke, SHOP_COLORS.leftPaneRect.strokeAlpha);
+      rect.lineStyle(
+        1,
+        SHOP_COLORS.leftPaneRect.stroke,
+        SHOP_COLORS.leftPaneRect.strokeAlpha,
+      );
       rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
       this.shopPanel.add(rect);
     }
 
-    this.generalText = this.scene.add.text(
-      leftX + 10,
-      topY + 10,
-      '',
-      { fontFamily: 'Georgia, serif', fontSize: '14px', color: SHOP_COLORS.previewText.color,
-        wordWrap: { width: rectW - 52 }, lineSpacing: 5,
-        padding: { left: 16, right: 16, top: 12, bottom: 12 } }
-    );
+    this.generalText = this.scene.add.text(leftX + 10, topY + 10, "", {
+      fontFamily: "Georgia, serif",
+      fontSize: "14px",
+      color: SHOP_COLORS.previewText.color,
+      wordWrap: { width: rectW - 52 },
+      lineSpacing: 5,
+      padding: { left: 16, right: 16, top: 12, bottom: 12 },
+    });
 
-    this.statText = this.scene.add.text(
-      leftX + 2 * rectW + 10,
-      topY + 10,
-      '',
-      { fontSize: '13px', color: SHOP_COLORS.previewText.color,
-        wordWrap: { width: rectW - 52 }, lineSpacing: 6,
-        padding: { left: 16, right: 16, top: 12, bottom: 12 } }
-    );
+    this.statText = this.scene.add.text(leftX + 2 * rectW + 10, topY + 10, "", {
+      fontSize: "13px",
+      color: SHOP_COLORS.previewText.color,
+      wordWrap: { width: rectW - 52 },
+      lineSpacing: 6,
+      padding: { left: 16, right: 16, top: 12, bottom: 12 },
+    });
 
     this.shopPanel.add([this.generalText, this.statText]);
   }
@@ -140,54 +176,63 @@ export default class Shop {
     const nextX = GAME_WINDOW_WIDTH - 135;
     const prevX = GAME_WINDOW_WIDTH - 187;
 
-    this.prevBtn = this.scene.add.image(prevX, arrowY, 'prev_btn')
+    this.prevBtn = this.scene.add
+      .image(prevX, arrowY, "prev_btn")
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .on('pointerdown', () => {
+      .on("pointerdown", () => {
         if (this.currentPage > 0) {
           this.currentPage--;
           this._renderPage(this.currentPage);
         }
       });
 
-    this.nextBtn = this.scene.add.image(nextX, arrowY, 'next_btn')
+    this.nextBtn = this.scene.add
+      .image(nextX, arrowY, "next_btn")
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .on('pointerdown', () => {
+      .on("pointerdown", () => {
         if (this.currentPage < this.totalPages - 1) {
           this.currentPage++;
           this._renderPage(this.currentPage);
         }
       });
 
-    const leftPrevX = GAME_WINDOW_WIDTH - prevX - 4;  // 183
-    const leftNextX = GAME_WINDOW_WIDTH - nextX + 1;  // 136
+    const leftPrevX = GAME_WINDOW_WIDTH - prevX - 4; // 183
+    const leftNextX = GAME_WINDOW_WIDTH - nextX + 1; // 136
 
-    this.leftPrevBtn = this.scene.add.image(leftPrevX, arrowY, 'next_btn')
+    this.leftPrevBtn = this.scene.add
+      .image(leftPrevX, arrowY, "next_btn")
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .on('pointerdown', () => {
+      .on("pointerdown", () => {
         if (this.currentPage < this.totalPages - 1) {
           this.currentPage++;
           this._renderPage(this.currentPage);
         }
       });
 
-    this.leftNextBtn = this.scene.add.image(leftNextX, arrowY, 'prev_btn')
+    this.leftNextBtn = this.scene.add
+      .image(leftNextX, arrowY, "prev_btn")
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .on('pointerdown', () => {
+      .on("pointerdown", () => {
         if (this.currentPage > 0) {
           this.currentPage--;
           this._renderPage(this.currentPage);
         }
       });
 
-    this.shopPanel.add([this.prevBtn, this.nextBtn, this.leftPrevBtn, this.leftNextBtn]);
+    this.shopPanel.add([
+      this.prevBtn,
+      this.nextBtn,
+      this.leftPrevBtn,
+      this.leftNextBtn,
+    ]);
   }
 
   /**
@@ -195,17 +240,19 @@ export default class Shop {
    * @param {object} item - An Armory item definition.
    */
   _renderPreview(item) {
-    this.itemOverlay.setTexture(item.id + '_full').setVisible(true);
+    this.itemOverlay.setTexture(item.id + "_full").setVisible(true);
 
     this.generalText.setText(
       `${item.displayName}\n\n` +
-      `${item.slot.toUpperCase()} | ${item.type.toUpperCase()}` +
-      `${item.hands ? ' | ' + item.hands.toUpperCase() : ''}\n\n` +
-      `${item.description}`
+        `${item.slot.toUpperCase()} | ${item.type.toUpperCase()}` +
+        `${item.hands ? " | " + item.hands.toUpperCase() : ""}\n\n` +
+        `${item.description}`,
     );
 
     this.statText.setText(
-      Object.entries(item.stats).map(([k, v]) => `${k}: ${v}`).join('\n')
+      Object.entries(item.stats)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join("\n"),
     );
   }
 
@@ -216,20 +263,23 @@ export default class Shop {
    * @param {number} pageNumber - Zero-based page index.
    */
   _renderPage(pageNumber) {
-    this.onPage.forEach(icon => icon.destroy());
+    this.onPage.forEach((icon) => icon.destroy());
     this.onPage = [];
     // How many columns/rows fit in the right half of the panel.
-    const cols = Math.floor((this.shopWindowWidth / 2) / CELL_SIZE);
+    const cols = Math.floor(this.shopWindowWidth / 2 / CELL_SIZE);
     const rows = Math.floor(this.shopWindowHeight / CELL_SIZE);
     // Center the grid within the available space.
     const paddingX = (this.shopWindowWidth / 2 - cols * CELL_SIZE) / 2;
     const paddingY = (this.shopWindowHeight - rows * CELL_SIZE) / 2;
     // Top-left corner of the grid, starting from the center of the panel.
-    const originX = (GAME_WINDOW_CENTER.X + paddingX);
-    const originY = (GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2) + paddingY;
+    const originX = GAME_WINDOW_CENTER.X + paddingX;
+    const originY = GAME_WINDOW_CENTER.Y - this.shopWindowHeight / 2 + paddingY;
     const itemsPerPage = cols * rows;
     this.totalPages = Math.ceil(this.items.length / itemsPerPage);
-    const pageItems = this.items.slice(pageNumber * itemsPerPage, (pageNumber + 1) * itemsPerPage);
+    const pageItems = this.items.slice(
+      pageNumber * itemsPerPage,
+      (pageNumber + 1) * itemsPerPage,
+    );
 
     pageItems.forEach((item, index) => {
       const col = index % cols;
@@ -238,22 +288,33 @@ export default class Shop {
       const y = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
       const goldRect = this.scene.add.graphics();
-      goldRect.fillStyle(SHOP_COLORS.itemSlotRect.fill, SHOP_COLORS.itemSlotRect.alpha);
-      goldRect.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
+      goldRect.fillStyle(
+        SHOP_COLORS.itemSlotRect.fill,
+        SHOP_COLORS.itemSlotRect.alpha,
+      );
+      goldRect.fillRect(
+        x - CELL_SIZE / 2,
+        y - CELL_SIZE / 2,
+        CELL_SIZE,
+        CELL_SIZE,
+      );
       this.onPage.push(goldRect);
       this.shopPanel.add(goldRect);
 
-      const bg = this.scene.add.image(x, y, 'iconborder')
-        .setDisplaySize(CELL_SIZE, CELL_SIZE);
+      const bg = this.scene.add
+        .image(x, y, "icon_bg_blue")
+        .setDisplaySize(CELL_SIZE, CELL_SIZE)
+        .setAlpha(SHOP_COLORS.border_alpha.alpha);
       this.onPage.push(bg);
       this.shopPanel.add(bg);
 
       const src = this.scene.textures.get(item.id).getSourceImage();
       const scale = Math.min(ICON_SIZE / src.width, ICON_SIZE / src.height);
-      const icon = this.scene.add.image(x, y, item.id)
+      const icon = this.scene.add
+        .image(x, y, item.id)
         .setDisplaySize(src.width * scale, src.height * scale)
         .setInteractive();
-      icon.on('pointerdown', () => this._renderPreview(item));
+      icon.on("pointerdown", () => this._renderPreview(item));
       this.onPage.push(icon);
       this.shopPanel.add(icon);
     });
@@ -269,13 +330,15 @@ export default class Shop {
   /** Shows the panel and resets the preview so no stale item is displayed. */
   show() {
     this.itemOverlay.setVisible(false);
-    this.generalText.setText('');
-    this.statText.setText('');
+    this.generalText.setText("");
+    this.statText.setText("");
     this.shopPanel.setVisible(true);
   }
 
   /** Hides the entire shop panel. */
-  hide() { this.shopPanel.setVisible(false); }
+  hide() {
+    this.shopPanel.setVisible(false);
+  }
 
   /** Toggles the panel open/closed. */
   toggle() {

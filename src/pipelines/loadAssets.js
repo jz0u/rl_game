@@ -20,4 +20,5 @@ export function loadAssets(scene){
     scene.load.image('prev_btn', 'assets/ui/shop_arrow_left.png');
     scene.load.image('next_btn', 'assets/ui/shop_arrow_right.png');
     scene.load.image('iconborder', 'assets/ui/background.png');
+    scene.load.image('icon_bg_blue','assets/ui/itemiconbackground.png');
 }
