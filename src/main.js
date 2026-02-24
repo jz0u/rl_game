@@ -12,9 +12,9 @@
 import Phaser from "phaser";
 import { Armory } from "./Armory";
 import { DEVTEST_INVENTORY } from "./DEVTEST";
-import { loadAssets } from "./loadAssetsPipeline";
-import { createGameObjects } from "./createGameObjectPipeline";
-import { setupInput } from "./inputPipeline";
+import { loadAssets } from "./pipelines/loadAssetsPipeline";
+import { createGameObjects } from "./pipelines/createGameObjectPipeline";
+import { setupInput } from "./pipelines/inputPipeline";
 
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();

@@ -86,6 +86,18 @@ export default class Player {
   }
 
   /**
+   * Removes the equipment overlay for the given slot, if one exists.
+   * Call this after inventory.removeItemFromEquipped() to sync the visual.
+   * @param {string} slot - Equipment slot key (e.g. 'weapon', 'head').
+   */
+  unequip(slot) {
+    if (this.overlays[slot]) {
+      this.overlays[slot].destroy();
+      this.overlays[slot] = null;
+    }
+  }
+
+  /**
    * Called every frame to keep all overlay sprites locked to the body sprite.
    * Matches each overlay's position, flip, and animation to the body's current state.
    * Animation keys follow the pattern `{baseName}_{bodyAnimKey}` (e.g. "Medieval_Warfare_Male_Weapon_Longsword_walk_sw").
