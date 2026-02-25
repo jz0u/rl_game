@@ -15,6 +15,7 @@ import { DEVTEST_INVENTORY } from "./DEVTEST";
 import { loadAssets } from "./pipelines/loadAssets";
 import { createGameObjects } from "./pipelines/createGameObjects";
 import { setupInput } from "./pipelines/input";
+import { setupKeybinds } from "./pipelines/keybinds";
 
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();
@@ -38,6 +39,7 @@ class GameScene extends Phaser.Scene {
   create() {
     createGameObjects(this, allItems);
     setupInput(this);
+    setupKeybinds(this);
     //DEVTEST_INVENTORY(this.inventory); // DEV ONLY
   }
 
