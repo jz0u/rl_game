@@ -29,4 +29,22 @@ export function loadAssets(scene){
     scene.load.image('red_selected1',      'assets/ui/red_selected1.png');
     scene.load.image('red_selected2',      'assets/ui/red_selected2.png');
     scene.load.image('red_selected3',      'assets/ui/red_selected3.png');
+
+    // Tilemap and tilesets
+    scene.load.tilemapTiledJSON('map1', 'assets/maps/map1..tmj');
+    const tilesetNames = [
+        'Medieval_Underdeep_Tiles_1',
+        'Medieval_Underdeep_Tiles_2',
+        'Medieval_Underdeep_Tiles_4',
+        'Medieval_Underdeep_Tiles_6',
+        'Medieval_Underdeep_Tiles_7',
+        'Medieval_Underdeep_Tiles_8',
+        'Medieval_Underdeep_Tiles_9',
+        'Medieval_Underdeep_Tiles_10',
+        'Medieval_Underdeep_Tiles_11',
+        'Medieval_Underdeep_Tiles_13',
+    ];
+    tilesetNames.forEach(name => {
+        scene.load.image(name, `assets/tiles/${name}.png`);
+    });
 }

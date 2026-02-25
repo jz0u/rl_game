@@ -32,7 +32,7 @@
          "width":20,
          "x":0,
          "y":0
-        }, 
+        },
         {
          "data":[2483, 2484, 2531, 2531, 2532, 2531, 2531, 2532, 2533, 2534, 2531, 2532, 2531, 2532, 2531, 2532, 2533, 2485, 2486, 2470,
             2499, 2467, 2307, 2308, 2309, 2307, 2308, 2307, 2308, 2307, 2308, 2307, 2308, 2307, 2308, 2309, 2310, 2311, 2485, 2486,
@@ -63,7 +63,7 @@
          "width":20,
          "x":0,
          "y":0
-        }, 
+        },
         {
          "data":[1281, 1282, 1283, 1284, 1285, 1285, 1286, 1287, 1284, 1285, 1286, 1287, 1284, 1285, 1286, 1286, 1287, 1288, 1289, 1290,
             1297, 1298, 1299, 1300, 1301, 1301, 1302, 1303, 1300, 1301, 1302, 1303, 1300, 1301, 1302, 1302, 1303, 1304, 1305, 1306,
@@ -105,7 +105,7 @@
         {
          "columns":16,
          "firstgid":1,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_9.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_9.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -114,11 +114,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":257,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_8.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_8.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -127,11 +127,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":513,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_1.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_1.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -140,11 +140,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":769,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_4.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_4.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -153,11 +153,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":1025,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_6.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_6.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -166,11 +166,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":1281,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_7.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_7.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -179,11 +179,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":1537,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_10.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_10.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -192,11 +192,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":1793,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_11.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_11.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -205,11 +205,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":2049,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_13.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_13.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -218,11 +218,11 @@
          "tilecount":256,
          "tileheight":48,
          "tilewidth":48
-        }, 
+        },
         {
          "columns":16,
          "firstgid":2305,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles_2.png",
+         "image":"assets/tiles/Medieval_Underdeep_Tiles_2.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
