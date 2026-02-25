@@ -15,7 +15,7 @@ const NAV_BTN_HEIGHT = 167;
 
 // ── Shop color & alpha palette ──────────────────────────────────────
 const SHOP_COLORS = {
-  shopWindow: { alpha: 0.8 },
+  shopWindow: { alpha: 0.5 },
   playerDoll: { alpha: 1 },
   leftPaneRect: {
     fill: 0x1a1a1a,
@@ -91,14 +91,7 @@ export default class Shop {
    * then adds them to the shop panel container.
    */
   _buildPreviewPane() {
-    const shopWindow = this.scene.add
-      .image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, "shop_panel")
-      .setDisplaySize(this.shopWindowWidth + 100, this.shopWindowHeight + 10)
-      .setAlpha(SHOP_COLORS.shopWindow.alpha)
-      .setInteractive();
-    this.shopPanel.add(shopWindow);
-
-    const bg = this.scene.add
+        const bg = this.scene.add
       .rectangle(
         GAME_WINDOW_CENTER.X,
         GAME_WINDOW_CENTER.Y,
@@ -106,9 +99,17 @@ export default class Shop {
         this.shopWindowHeight-7,
         0xdbc8a8,
       )
-      .setAlpha(SHOP_COLORS.shopWindow.alpha)
+      .setAlpha(0.7)
       .setScrollFactor(0);
     this.shopPanel.add(bg);
+    const shopWindow = this.scene.add
+      .image(GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, "shop_panel")
+      .setDisplaySize(this.shopWindowWidth + 100, this.shopWindowHeight + 10)
+      .setAlpha(SHOP_COLORS.shopWindow.alpha)
+      .setInteractive();
+    this.shopPanel.add(shopWindow);
+
+
 
 
     const dollSize = Math.min(this.shopWindowWidth / 2, this.shopWindowHeight);
@@ -149,6 +150,7 @@ export default class Shop {
         SHOP_COLORS.leftPaneRect.strokeAlpha,
       );
       rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
+      rect.setAlpha(0); // DEV BOUNDS — hidden, keep for layout reference
       this.shopPanel.add(rect);
     }
 

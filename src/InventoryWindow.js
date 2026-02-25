@@ -93,9 +93,9 @@ export default class InventoryWindow {
       GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y,
       this.invWindowWidth - 7, this.invWindowHeight - 7,
       0xdbc8a8
-    ).setAlpha(0.8);
+    ).setAlpha(0.1);
 
-    this.invPanel.add([shopWindow, bgRect]);
+    this.invPanel.add([bgRect,shopWindow]);
 
     // ── Step 2: Left pane decorative rects ──
     const leftX = GAME_WINDOW_CENTER.X - this.invWindowWidth / 2;
@@ -110,6 +110,7 @@ export default class InventoryWindow {
       rect.fillRect(leftX + i * rectW, topY, rectW, paneH);
       rect.lineStyle(1, INV_COLORS.leftPaneRect.stroke, INV_COLORS.leftPaneRect.strokeAlpha);
       rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
+      rect.setAlpha(0); // DEV BOUNDS — hidden, keep for layout reference
       this.invPanel.add(rect);
     }
 
@@ -154,7 +155,7 @@ export default class InventoryWindow {
       // Blue background square
       const bg = this.scene.add.image(x, y, 'icon_bg_blue')
         .setDisplaySize(SLOT_BOX_SIZE, SLOT_BOX_SIZE)
-        .setAlpha(0.5);
+        .setAlpha(.7);
       this.invPanel.add(bg);
 
       // Placeholder icon for the equipped item
