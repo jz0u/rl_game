@@ -403,6 +403,7 @@ export default class Shop {
     if (this.shopPanel.visible) {
       this.hide();
     } else {
+      this.scene.inventoryWindow?.hide();
       this.show();
     }
   }

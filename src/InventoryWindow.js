@@ -5,7 +5,7 @@ const ICON_SIZE = 75;
 const PANEL_SCALE = 0.75;
 const NAV_BTN_WIDTH = 46;
 const NAV_BTN_HEIGHT = 167;
-const INVENTORY_SIZE = 10;
+const INVENTORY_SIZE = 20;
 
 const INV_COLORS = {
   shopWindow:   { alpha: 0.8 },
@@ -221,7 +221,7 @@ export default class InventoryWindow {
 
     // Part B — Update inventory slot icons
     const items = [];
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 20; i++) {
       items.push(this.inventory.inventory.get(i) || null);
     }
 
@@ -260,7 +260,7 @@ export default class InventoryWindow {
    */
   _showItemPopup(inventoryIndex, iconX, iconY) {
     const items = [];
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 20; i++) {
       items.push(this.inventory.inventory.get(i) || null);
     }
     const item = items[inventoryIndex];
@@ -361,6 +361,7 @@ export default class InventoryWindow {
     if (this.invPanel.visible) {
       this.hide();
     } else {
+      this.scene.shop?.hide();
       this.show();
     }
   }
