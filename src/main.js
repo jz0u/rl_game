@@ -53,7 +53,7 @@ new Phaser.Game({
   type: Phaser.AUTO,
   width: GAME_WINDOW_WIDTH,
   height: GAME_WINDOW_HEIGHT,
-  backgroundColor: "#fff999",
+  backgroundColor: "#000000",
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

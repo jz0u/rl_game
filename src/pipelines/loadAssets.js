@@ -31,7 +31,7 @@ export function loadAssets(scene){
     scene.load.image('red_selected3',      'assets/ui/red_selected3.png');
 
     // Tilemap and tilesets
-    scene.load.tilemapTiledJSON('map1', 'assets/maps/map1..tmj');
+    scene.load.tilemapTiledJSON('map1', 'assets/maps/map1.tmj');
     const tilesetNames = [
         'Medieval_Underdeep_Tiles_1',
         'Medieval_Underdeep_Tiles_2',
