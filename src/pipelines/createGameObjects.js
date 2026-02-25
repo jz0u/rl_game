@@ -4,8 +4,6 @@ import Inventory from "../Inventory";
 import InventoryWindow from "../InventoryWindow";
 import WindowManager from "../WindowManager";
 
-const PLAYER_SPAWN_X = 200;
-const PLAYER_SPAWN_Y = 200;
 
 /**
  * Instantiates the core game objects and attaches them to the scene.
@@ -33,8 +31,10 @@ export function createGameObjects(scene, allItems) {
     scene.wallLayer   = map.createLayer('wall',   tilesets, 0, 0);
     scene.wallLayer.setCollisionByExclusion([-1]);
 
-    scene.player          = new Player(scene, PLAYER_SPAWN_X, PLAYER_SPAWN_Y);
+    scene.player          = new Player(scene, map.widthInPixels / 2, map.heightInPixels / 2);
     Player.createAnims(scene);
+    scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    scene.cameras.main.startFollow(scene.player.sprite);
     scene.shop            = new Shop(scene, allItems);
     scene.inventory       = new Inventory();
     scene.inventoryWindow = new InventoryWindow(scene, scene.inventory, scene.player, allItems);
