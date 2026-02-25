@@ -11,6 +11,7 @@ export default class SelectionBorder {
    * @param {Phaser.GameObjects.Container} container - Panel container to add the border to.
    */
   constructor(scene, container) {
+    this.scene          = scene;
     this.selectedItem   = null;
     this.selectedClicks = 0;
     this.border = scene.add.image(0, 0, 'border_selected1')
@@ -45,7 +46,7 @@ export default class SelectionBorder {
       } else if (this.selectedClicks >= 3) {
         this.border.setTexture('border_selected3');
         onConfirm();
-        this.reset();
+        this.scene.time.delayedCall(500, () => this.reset());
       }
     }
   }
