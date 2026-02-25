@@ -47,7 +47,9 @@ export default class InventoryWindow {
     this.invWindowHeight = GAME_WINDOW_HEIGHT * PANEL_SCALE;
 
     this.equipSlotIcons = {};
-    this.popupGroup = null;
+    this.selectedItem = null;
+    this.selectedClicks = 0;
+    this.selectedBorder = null;
 
     // ── Toggle button ──
     this.invBtn = this.scene.add
@@ -116,6 +118,16 @@ export default class InventoryWindow {
       .setDisplaySize(dollSize, dollSize);
     this.invPanel.add(this.playerDoll);
 
+    this.itemOverlays = {};
+    const overlaySlots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
+    for (const slotName of overlaySlots) {
+      const overlay = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
+        .setDisplaySize(dollSize, dollSize)
+        .setVisible(false);
+      this.itemOverlays[slotName] = overlay;
+      this.invPanel.add(overlay);
+    }
+
     // ── Step 4: Equipment slot boxes ──
     const SLOT_BOX_SIZE = 90;
     const SLOT_SPACING  = 120;
@@ -151,10 +163,10 @@ export default class InventoryWindow {
       this.equipSlotIcons[name] = icon;
       this.invPanel.add(icon);
 
-      icon.setInteractive();
-      icon.on('pointerdown', () => this._showSlotInfo(name));
       bg.setInteractive();
-      bg.on('pointerdown', () => this._showSlotInfo(name));
+      bg.on('pointerdown', (pointer) => this._handleEquippedSlotClick(name, pointer, x, y));
+      icon.setInteractive();
+      icon.on('pointerdown', (pointer) => this._handleEquippedSlotClick(name, pointer, x, y));
     }
 
     // ── Step 6: Right side inventory grid (10 fixed slots) ──
@@ -185,16 +197,81 @@ export default class InventoryWindow {
         .setDisplaySize(CELL_SIZE, CELL_SIZE)
         .setAlpha(0.5);
       this.invPanel.add(slotBg);
+      slotBg.setInteractive();
+      slotBg.on('pointerdown', (pointer) => {
+        if (pointer.rightButtonDown()) {
+          // Right-click — drop progression
+          const items = [];
+          for (let i = 1; i <= 20; i++) { items.push(this.inventory.inventory.get(i) || null); }
+          const item = items[index];
+          if (!item) return;
+
+          if (this.selectedItem !== item) {
+            this.selectedItem = item;
+            this.selectedClicks = 1;
+            this.selectedBorder
+              .setTexture('border_selected1')
+              .setPosition(x, y)
+              .setVisible(true);
+          } else {
+            this.selectedClicks++;
+            if (this.selectedClicks === 2) {
+              this.selectedBorder.setTexture('border_selected2');
+            } else if (this.selectedClicks >= 3) {
+              this.selectedBorder.setTexture('border_selected3');
+              this.inventory.removeItemFromInventory(item);
+              this.selectedItem = null;
+              this.selectedClicks = 0;
+              this.selectedBorder.setVisible(false);
+              this._refresh();
+            }
+          }
+        } else {
+          // Left-click — equip progression
+          const items = [];
+          for (let i = 1; i <= 20; i++) { items.push(this.inventory.inventory.get(i) || null); }
+          const item = items[index];
+          if (!item) return;
+
+          if (this.selectedItem !== item) {
+            this.selectedItem = item;
+            this.selectedClicks = 1;
+            this.selectedBorder
+              .setTexture('border_selected1')
+              .setPosition(x, y)
+              .setVisible(true);
+          } else {
+            this.selectedClicks++;
+            if (this.selectedClicks === 2) {
+              this.selectedBorder.setTexture('border_selected2');
+            } else if (this.selectedClicks >= 3) {
+              this.selectedBorder.setTexture('border_selected3');
+              this.inventory.equipItemFromInventory(item);
+              this.player.equip(item);
+              this._ensureOverlayLoaded(item);
+              this.selectedItem = null;
+              this.selectedClicks = 0;
+              this.selectedBorder.setVisible(false);
+              this._refresh();
+            }
+          }
+        }
+      });
 
       // Item icon placeholder
       const iconImg = this.scene.add.image(x, y, 'icon_bg_blue')
         .setDisplaySize(ICON_SIZE, ICON_SIZE)
-        .setVisible(false)
-        .setInteractive();
-      iconImg.on('pointerdown', () => this._showItemPopup(index, x, y));
+        .setVisible(false);
       this.invSlotIcons.push(iconImg);
       this.invPanel.add(iconImg);
     }
+
+    this.selectedBorder = this.scene.add.image(0, 0, 'border_selected1')
+      .setDisplaySize(CELL_SIZE, CELL_SIZE)
+      .setVisible(false)
+      .setScrollFactor(0);
+    this.invPanel.add(this.selectedBorder);
+    this.invPanel.bringToTop(this.selectedBorder);
   }
 
   /**
@@ -219,6 +296,17 @@ export default class InventoryWindow {
       }
     }
 
+    const overlaySlots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
+    for (const slotName of overlaySlots) {
+      const equippedItem = this.inventory.equipped.get(slotName);
+      const overlay = this.itemOverlays[slotName];
+      if (equippedItem !== null) {
+        overlay.setTexture(equippedItem.id + '_full').setVisible(true);
+      } else {
+        overlay.setVisible(false);
+      }
+    }
+
     // Part B — Update inventory slot icons
     const items = [];
     for (let i = 1; i <= 20; i++) {
@@ -238,6 +326,8 @@ export default class InventoryWindow {
         iconImg.setVisible(false);
       }
     }
+
+    if (this.selectedBorder) this.invPanel.bringToTop(this.selectedBorder);
   }
 
   /**
@@ -252,82 +342,39 @@ export default class InventoryWindow {
   }
 
   /**
-   * Shows an EQUIP / DROP popup above the clicked inventory slot.
-   * Clicking outside the popup dismisses it.
-   * @param {number} inventoryIndex - Zero-based index into the 10-slot inventory display.
-   * @param {number} iconX - World X of the slot center (used to position the popup).
-   * @param {number} iconY - World Y of the slot center (used to position the popup).
+   * Handles pointer clicks on an equipped slot box with right-click unequip progression.
+   * @param {string} slotName - One of head, body, bottom, feet, weapon, offhand.
+   * @param {Phaser.Input.Pointer} pointer
+   * @param {number} x - World X of the slot center.
+   * @param {number} y - World Y of the slot center.
    */
-  _showItemPopup(inventoryIndex, iconX, iconY) {
-    const items = [];
-    for (let i = 1; i <= 20; i++) {
-      items.push(this.inventory.inventory.get(i) || null);
-    }
-    const item = items[inventoryIndex];
+  _handleEquippedSlotClick(slotName, pointer, x, y) {
+    const item = this.inventory.equipped.get(slotName);
     if (!item) return;
 
-    if (this.popupGroup) {
-      this.popupGroup.destroy(true);
-      this.popupGroup = null;
-    }
-
-    this.popupGroup = this.scene.add.container(0, 0).setScrollFactor(0).setDepth(20);
-    this.invPanel.add(this.popupGroup);
-
-    const popupX = iconX;
-    const popupY = iconY - CELL_SIZE * 0.6;
-
-    // Background rect
-    const popupBg = this.scene.add.graphics();
-    popupBg.fillStyle(0x1a1a1a, 0.95);
-    popupBg.fillRoundedRect(popupX - 60, popupY - 30, 120, 70, 6);
-    popupBg.lineStyle(1, 0x8b6914, 0.9);
-    popupBg.strokeRoundedRect(popupX - 60, popupY - 30, 120, 70, 6);
-    this.popupGroup.add(popupBg);
-
-    // EQUIP button
-    const equipBtn = this.scene.add.text(popupX, popupY - 10, 'EQUIP', {
-      fontSize: '14px', color: '#ffd700',
-      backgroundColor: '#2a2a2a', padding: { x: 8, y: 4 },
-    }).setOrigin(0.5).setInteractive();
-    equipBtn.on('pointerdown', () => {
-      this.inventory.equipItemFromInventory(item);
-      this.player.equip(item);
-      this._ensureOverlayLoaded(item);
-      this._destroyPopup();
-      this._refresh();
-    });
-    this.popupGroup.add(equipBtn);
-
-    // DROP button
-    const dropBtn = this.scene.add.text(popupX, popupY + 20, 'DROP', {
-      fontSize: '14px', color: '#ff6666',
-      backgroundColor: '#2a2a2a', padding: { x: 8, y: 4 },
-    }).setOrigin(0.5).setInteractive();
-    dropBtn.on('pointerdown', () => {
-      this.inventory.removeItemFromInventory(item);
-      this._destroyPopup();
-      this._refresh();
-    });
-    this.popupGroup.add(dropBtn);
-
-    // Transparent dismiss overlay behind the popup
-    const dismissOverlay = this.scene.add.rectangle(
-      GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y,
-      GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT,
-      0x000000, 0
-    ).setInteractive();
-    dismissOverlay.on('pointerdown', () => this._destroyPopup());
-    this.popupGroup.addAt(dismissOverlay, 0);
-  }
-
-  /**
-   * Destroys the currently visible popup, if any.
-   */
-  _destroyPopup() {
-    if (this.popupGroup) {
-      this.popupGroup.destroy(true);
-      this.popupGroup = null;
+    if (pointer.rightButtonDown()) {
+      // Right-click — unequip progression
+      if (this.selectedItem !== item) {
+        this.selectedItem = item;
+        this.selectedClicks = 1;
+        this.selectedBorder
+          .setTexture('border_selected1')
+          .setPosition(x, y)
+          .setVisible(true);
+      } else {
+        this.selectedClicks++;
+        if (this.selectedClicks === 2) {
+          this.selectedBorder.setTexture('border_selected2');
+        } else if (this.selectedClicks >= 3) {
+          this.selectedBorder.setTexture('border_selected3');
+          this.inventory.removeItemFromEquipped(item);
+          this.player.unequip(slotName);
+          this.selectedItem = null;
+          this.selectedClicks = 0;
+          this.selectedBorder.setVisible(false);
+          this._refresh();
+        }
+      }
     }
   }
 
@@ -345,14 +392,15 @@ export default class InventoryWindow {
 
   /** Shows the panel and refreshes all icons. */
   show() {
-    this._destroyPopup();
+    this.selectedItem = null;
+    this.selectedClicks = 0;
+    if (this.selectedBorder) this.selectedBorder.setVisible(false);
     this._refresh();
     this.invPanel.setVisible(true);
   }
 
   /** Hides the entire inventory panel. */
   hide() {
-    this._destroyPopup();
     this.invPanel.setVisible(false);
   }
 
