@@ -1,4 +1,5 @@
 import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from "./main";
+import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
 
 const CELL_SIZE = 100;
 const ICON_SIZE = 75;
@@ -384,10 +385,7 @@ export default class InventoryWindow {
    * @param {object} item - The item being equipped.
    */
   _ensureOverlayLoaded(item) {
-    console.warn(
-      'InventoryWindow: overlay assets not loaded for', item.baseName,
-      '— equip overlay will not display until scene implements dynamic asset loading.'
-    );
+    loadEquipmentAssets(this.scene, item);
   }
 
   /** Shows the panel and refreshes all icons. */

@@ -3,6 +3,7 @@ import {
   GAME_WINDOW_HEIGHT,
   GAME_WINDOW_CENTER,
 } from "./main";
+import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
 
 const CELL_SIZE = 100; // pixel size of each grid slot in the item list
 const ICON_SIZE = 75; // display size of the item icon within each slot
@@ -390,6 +391,7 @@ export default class Shop {
     }
 
     player.balance -= item.value;
+    loadEquipmentAssets(this.scene, item);
     console.log('Bought', item.displayName, '| Balance:', player.balance);
   }
 
