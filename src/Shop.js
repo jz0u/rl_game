@@ -15,7 +15,7 @@ const NAV_BTN_HEIGHT = 167;
 
 // ── Shop color & alpha palette ──────────────────────────────────────
 const SHOP_COLORS = {
-  shopWindow: { alpha: 0.5 },
+  shopWindow: { alpha: 0.8 },
   playerDoll: { alpha: 1 },
   leftPaneRect: {
     fill: 0x1a1a1a,
@@ -99,7 +99,7 @@ export default class Shop {
         this.shopWindowHeight-7,
         0xdbc8a8,
       )
-      .setAlpha(0.5)
+      .setAlpha(0.1)
       .setScrollFactor(0);
     this.shopPanel.add(bg);
     const shopWindow = this.scene.add
