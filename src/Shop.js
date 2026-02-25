@@ -51,6 +51,7 @@ export default class Shop {
     this.currentPage = 0;
     /** Icons currently rendered on this page; destroyed and rebuilt on page change. */
     this.onPage = [];
+    this.selectedBorder = null;
     this.shopWindowWidth = GAME_WINDOW_WIDTH * PANEL_SCALE;
     this.shopWindowHeight = GAME_WINDOW_HEIGHT * PANEL_SCALE;
 
@@ -166,6 +167,12 @@ export default class Shop {
     });
 
     this.shopPanel.add([this.generalText, this.statText]);
+
+    this.selectedBorder = this.scene.add.image(0, 0, 'border_selected')
+      .setDisplaySize(CELL_SIZE, CELL_SIZE)
+      .setVisible(false)
+      .setScrollFactor(0);
+    this.shopPanel.add(this.selectedBorder);
   }
 
   /**
@@ -265,6 +272,7 @@ export default class Shop {
   _renderPage(pageNumber) {
     this.onPage.forEach((icon) => icon.destroy());
     this.onPage = [];
+    this.selectedBorder.setVisible(false);
     // How many columns/rows fit in the right half of the panel.
     const cols = Math.floor(this.shopWindowWidth / 2 / CELL_SIZE);
     const rows = Math.floor(this.shopWindowHeight / CELL_SIZE);
@@ -324,6 +332,10 @@ export default class Shop {
           // Single click — preview
           this._renderPreview(item);
           icon._lastClickTime = now;
+          // Move selected border to this icon
+          if (this.selectedBorder) {
+            this.selectedBorder.setPosition(x, y).setVisible(true);
+          }
         }
       });
       this.onPage.push(icon);

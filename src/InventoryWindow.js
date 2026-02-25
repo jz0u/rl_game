@@ -117,8 +117,8 @@ export default class InventoryWindow {
     this.invPanel.add(this.playerDoll);
 
     // ── Step 4: Equipment slot boxes ──
-    const SLOT_BOX_SIZE = 70;
-    const SLOT_SPACING  = 85;
+    const SLOT_BOX_SIZE = 90;
+    const SLOT_SPACING  = 120;
 
     const leftColX  = dollX - dollSize * 0.32;
     const rightColX = dollX + dollSize * 0.32;
@@ -156,18 +156,6 @@ export default class InventoryWindow {
       bg.setInteractive();
       bg.on('pointerdown', () => this._showSlotInfo(name));
     }
-
-    // ── Step 5: Info text below doll ──
-    this.slotInfoText = this.scene.add.text(
-      leftX + 10,
-      topY + paneH - 90,
-      '',
-      {
-        fontFamily: 'Georgia, serif', fontSize: '12px', color: '#ffffff',
-        wordWrap: { width: paneW - 20 }, lineSpacing: 4,
-      }
-    );
-    this.invPanel.add(this.slotInfoText);
 
     // ── Step 6: Right side inventory grid (10 fixed slots) ──
     const cols = Math.floor((this.invWindowWidth / 2) / CELL_SIZE);
@@ -214,7 +202,7 @@ export default class InventoryWindow {
    * Called every time show() runs.
    */
   _refresh() {
-    const SLOT_BOX_SIZE = 70;
+    const SLOT_BOX_SIZE = 90;
 
     // Part A — Update equipped slot icons
     const slots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
@@ -259,17 +247,8 @@ export default class InventoryWindow {
   _showSlotInfo(slotName) {
     const item = this.inventory.equipped.get(slotName);
     if (!item) {
-      this.slotInfoText.setText(slotName.toUpperCase() + '\n(empty)');
       return;
     }
-
-    this.slotInfoText.setText(
-      item.displayName + '\n' +
-      item.slot.toUpperCase() + ' | ' + item.type.toUpperCase() +
-      (item.hands ? ' | ' + item.hands.toUpperCase() : '') + '\n\n' +
-      item.description + '\n\n' +
-      Object.entries(item.stats).map(([k, v]) => k + ': ' + v).join('\n')
-    );
   }
 
   /**
@@ -364,10 +343,9 @@ export default class InventoryWindow {
     );
   }
 
-  /** Shows the panel, clears stale info text, refreshes all icons. */
+  /** Shows the panel and refreshes all icons. */
   show() {
     this._destroyPopup();
-    this.slotInfoText.setText('');
     this._refresh();
     this.invPanel.setVisible(true);
   }
