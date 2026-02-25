@@ -99,7 +99,7 @@ export default class Shop {
         this.shopWindowHeight-7,
         0xdbc8a8,
       )
-      .setAlpha(0.7)
+      .setAlpha(0.5)
       .setScrollFactor(0);
     this.shopPanel.add(bg);
     const shopWindow = this.scene.add
