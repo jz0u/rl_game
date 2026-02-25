@@ -21,5 +21,7 @@ export function loadAssets(scene){
     scene.load.image('next_btn', 'assets/ui/shop_arrow_right.png');
     scene.load.image('iconborder', 'assets/ui/background.png');
     scene.load.image('icon_bg_blue','assets/ui/itemiconbackground.png');
-    scene.load.image('border_selected', 'assets/ui/border_selected.png');
+    scene.load.image('border_selected1', 'assets/ui/border_selected1.png');
+    scene.load.image('border_selected2', 'assets/ui/border_selected2.png');
+    scene.load.image('border_selected3', 'assets/ui/border_selected3.png');
 }

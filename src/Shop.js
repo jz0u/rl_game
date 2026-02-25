@@ -52,6 +52,8 @@ export default class Shop {
     /** Icons currently rendered on this page; destroyed and rebuilt on page change. */
     this.onPage = [];
     this.selectedBorder = null;
+    this.selectedItem = null;
+    this.selectedClicks = 0;
     this.shopWindowWidth = GAME_WINDOW_WIDTH * PANEL_SCALE;
     this.shopWindowHeight = GAME_WINDOW_HEIGHT * PANEL_SCALE;
 
@@ -168,7 +170,7 @@ export default class Shop {
 
     this.shopPanel.add([this.generalText, this.statText]);
 
-    this.selectedBorder = this.scene.add.image(0, 0, 'border_selected')
+    this.selectedBorder = this.scene.add.image(0, 0, 'border_selected1')
       .setDisplaySize(CELL_SIZE, CELL_SIZE)
       .setVisible(false)
       .setScrollFactor(0);
@@ -273,6 +275,8 @@ export default class Shop {
     this.onPage.forEach((icon) => icon.destroy());
     this.onPage = [];
     this.selectedBorder.setVisible(false);
+    this.selectedItem = null;
+    this.selectedClicks = 0;
     // How many columns/rows fit in the right half of the panel.
     const cols = Math.floor(this.shopWindowWidth / 2 / CELL_SIZE);
     const rows = Math.floor(this.shopWindowHeight / CELL_SIZE);
@@ -315,32 +319,39 @@ export default class Shop {
         .setAlpha(SHOP_COLORS.border_alpha.alpha);
       this.onPage.push(bg);
       this.shopPanel.add(bg);
+      bg.setInteractive();
+      bg.on("pointerdown", () => {
+        if (this.selectedItem !== item) {
+          // Switching to a new item — reset to click 1
+          this.selectedItem = item;
+          this.selectedClicks = 1;
+          this.selectedBorder
+            .setTexture('border_selected1')
+            .setPosition(x, y)
+            .setVisible(true);
+          this._renderPreview(item);
+        } else {
+          // Same item — advance click count
+          this.selectedClicks++;
+          if (this.selectedClicks === 2) {
+            this.selectedBorder.setTexture('border_selected2');
+          } else if (this.selectedClicks >= 3) {
+            this.selectedBorder.setTexture('border_selected3');
+            this._buyItem(item);
+          }
+        }
+      });
 
       const src = this.scene.textures.get(item.id).getSourceImage();
       const scale = Math.min(ICON_SIZE / src.width, ICON_SIZE / src.height);
       const icon = this.scene.add
         .image(x, y, item.id)
-        .setDisplaySize(src.width * scale, src.height * scale)
-        .setInteractive();
-      icon.on("pointerdown", (pointer) => {
-        const now = this.scene.time.now;
-        if (icon._lastClickTime && (now - icon._lastClickTime) < 300) {
-          // Double click — attempt to buy
-          this._buyItem(item);
-          icon._lastClickTime = 0;
-        } else {
-          // Single click — preview
-          this._renderPreview(item);
-          icon._lastClickTime = now;
-          // Move selected border to this icon
-          if (this.selectedBorder) {
-            this.selectedBorder.setPosition(x, y).setVisible(true);
-          }
-        }
-      });
+        .setDisplaySize(src.width * scale, src.height * scale);
       this.onPage.push(icon);
       this.shopPanel.add(icon);
     });
+
+    this.shopPanel.bringToTop(this.selectedBorder);
 
     if (this.prevBtn) {
       this.shopPanel.bringToTop(this.prevBtn);
