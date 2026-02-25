@@ -18,7 +18,7 @@ export function createGameObjects(scene, allItems) {
     scene.shop            = new Shop(scene, allItems);
     scene.inventory       = new Inventory();
     scene.inventoryWindow = new InventoryWindow(scene, scene.inventory, scene.player, allItems);
-    scene.windowManager   = new WindowManager();
+    scene.windowManager   = new WindowManager(scene);
     scene.windowManager.addWindow(scene.shop);
     scene.windowManager.addWindow(scene.inventoryWindow);
 }

@@ -1,0 +1,10 @@
+export const GAME_WINDOW_WIDTH  = 1280;
+export const GAME_WINDOW_HEIGHT = 720;
+export const GAME_WINDOW_CENTER = { X: GAME_WINDOW_WIDTH / 2, Y: GAME_WINDOW_HEIGHT / 2 };
+export const PANEL_SCALE    = 0.75;
+export const CELL_SIZE      = 100;
+export const ICON_SIZE      = 75;
+export const NAV_BTN_WIDTH  = 46;
+export const NAV_BTN_HEIGHT = 167;
+export const SLOT_BOX_SIZE  = 90;
+export const SLOT_SPACING   = 120;

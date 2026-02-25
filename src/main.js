@@ -20,9 +20,8 @@ import { setupInput } from "./pipelines/input";
 const allItems = Object.values(Armory).flat();
 
 /** Logical canvas dimensions — used by UI elements to position themselves. */
-export const GAME_WINDOW_WIDTH = 1280;
-export const GAME_WINDOW_HEIGHT = 720;
-export const GAME_WINDOW_CENTER = { X: GAME_WINDOW_WIDTH / 2, Y: GAME_WINDOW_HEIGHT / 2 };
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from './constants';
+export { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER };
 
 
 class GameScene extends Phaser.Scene {

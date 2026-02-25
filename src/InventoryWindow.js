@@ -1,20 +1,11 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from "./main";
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING } from './constants';
+import BaseWindow from './BaseWindow';
+import SelectionBorder from './SelectionBorder';
+import { scaleIcon } from './utils';
 import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
 import { INVENTORY_SIZE } from './Inventory';
 
-const CELL_SIZE = 100;
-const ICON_SIZE = 75;
-const PANEL_SCALE = 0.75;
-const NAV_BTN_WIDTH = 46;
-const NAV_BTN_HEIGHT = 167;
-const SLOT_BOX_SIZE = 90;
-const SLOT_SPACING  = 120;
-
 const INV_COLORS = {
-  shopWindow:   { alpha: 0.8 },
-  playerDoll:   { alpha: 1 },
-  leftPaneRect: { fill: 0x1a1a1a, fillAlpha: 0.5, stroke: 0x8b6914, strokeAlpha: 0.8 },
-  previewText:  { color: '#ffffff' },
   itemSlotRect: { fill: 0x1a1a1a, alpha: 0.5 },
   toggleBtn:    { background: '#333', color: '#fff' },
   border_alpha: { alpha: 0.5 },
@@ -31,7 +22,7 @@ const INV_COLORS = {
  * Clicking an equipment slot shows that slot's item info in the text area.
  * The panel is toggled via the "BAG" button.
  */
-export default class InventoryWindow {
+export default class InventoryWindow extends BaseWindow {
   /**
    * Builds and adds all InventoryWindow UI elements to the scene.
    * The panel starts hidden; call show() to open.
@@ -41,18 +32,13 @@ export default class InventoryWindow {
    * @param {object[]} allItems - Full item catalogue from Armory.
    */
   constructor(scene, inventory, player, allItems) {
-    this.scene = scene;
+    super(scene);
     this.inventory = inventory;
-    this.player = player;
-    this.allItems = allItems;
-
-    this.invWindowWidth  = GAME_WINDOW_WIDTH  * PANEL_SCALE;
-    this.invWindowHeight = GAME_WINDOW_HEIGHT * PANEL_SCALE;
+    this.player    = player;
+    this.allItems  = allItems;
 
     this.equipSlotIcons = {};
-    this.selectedItem = null;
-    this.selectedClicks = 0;
-    this.selectedBorder = null;
+    this.currentPage = 0;
 
     // ── Toggle button ──
     this.invBtn = this.scene.add
@@ -66,7 +52,7 @@ export default class InventoryWindow {
       .setScrollFactor(0);
 
     // ── Inventory panel container ──
-    this.invPanel = this.scene.add.container(0, 0).setScrollFactor(0);
+    this.invPanel = this._buildContainer();
 
     this._buildPanel();
     this.invPanel.setDepth(10);
@@ -82,45 +68,13 @@ export default class InventoryWindow {
    */
   _buildPanel() {
     // ── Step 1: Background layers ──
-    const shopWindow = this.scene.add.image(
-      GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel'
-    )
-      .setDisplaySize(this.invWindowWidth + 100, this.invWindowHeight + 10)
-      .setAlpha(INV_COLORS.shopWindow.alpha)
-      .setInteractive();
-
-    const bgRect = this.scene.add.rectangle(
-      GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y,
-      this.invWindowWidth - 7, this.invWindowHeight - 7,
-      0xdbc8a8
-    ).setAlpha(0.1);
-
-    this.invPanel.add([bgRect,shopWindow]);
+    this._buildBackground(this.invPanel);
 
     // ── Step 2: Left pane decorative rects ──
-    const leftX = GAME_WINDOW_CENTER.X - this.invWindowWidth / 2;
-    const topY  = GAME_WINDOW_CENTER.Y - this.invWindowHeight / 2;
-    const paneW = this.invWindowWidth / 2;
-    const paneH = this.invWindowHeight;
-    const rectW = paneW / 3;
-
-    for (let i = 0; i < 3; i++) {
-      const rect = this.scene.add.graphics();
-      rect.fillStyle(INV_COLORS.leftPaneRect.fill, INV_COLORS.leftPaneRect.fillAlpha);
-      rect.fillRect(leftX + i * rectW, topY, rectW, paneH);
-      rect.lineStyle(1, INV_COLORS.leftPaneRect.stroke, INV_COLORS.leftPaneRect.strokeAlpha);
-      rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
-      rect.setAlpha(0); // DEV BOUNDS — hidden, keep for layout reference
-      this.invPanel.add(rect);
-    }
+    this._buildLeftPaneRects(this.invPanel);
 
     // ── Step 3: Paperdoll ──
-    const dollSize = Math.min(this.invWindowWidth / 2, this.invWindowHeight);
-    const dollX = GAME_WINDOW_CENTER.X - this.invWindowWidth / 2 + this.invWindowWidth / 4;
-
-    this.playerDoll = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
-      .setDisplaySize(dollSize, dollSize);
-    this.invPanel.add(this.playerDoll);
+    const { dollX, dollSize } = this._buildPaperdoll(this.invPanel);
 
     this.itemOverlays = {};
     const overlaySlots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
@@ -133,7 +87,6 @@ export default class InventoryWindow {
     }
 
     // ── Step 4: Equipment slot boxes ──
-
     const leftColX  = dollX - dollSize * 0.32;
     const rightColX = dollX + dollSize * 0.32;
 
@@ -171,22 +124,23 @@ export default class InventoryWindow {
       icon.on('pointerdown', (pointer) => this._handleEquippedSlotClick(name, pointer, x, y));
     }
 
-    // ── Step 6: Right side inventory grid (10 fixed slots) ──
-    const cols = Math.floor((this.invWindowWidth / 2) / CELL_SIZE);
-    const rows = Math.floor(this.invWindowHeight / CELL_SIZE);
+    // ── Step 6: Right side inventory grid ──
+    const cols = Math.floor((this.windowWidth / 2) / CELL_SIZE);
+    const rows = Math.floor(this.windowHeight / CELL_SIZE);
+    this.itemsPerPage = cols * rows;
 
-    const paddingX = (this.invWindowWidth / 2 - cols * CELL_SIZE) / 2;
-    const paddingY = (this.invWindowHeight  - rows * CELL_SIZE) / 2;
+    const paddingX = (this.windowWidth / 2 - cols * CELL_SIZE) / 2;
+    const paddingY = (this.windowHeight  - rows * CELL_SIZE) / 2;
     const originX  = GAME_WINDOW_CENTER.X + paddingX;
-    const originY  = GAME_WINDOW_CENTER.Y - this.invWindowHeight / 2 + paddingY;
+    const originY  = GAME_WINDOW_CENTER.Y - this.windowHeight / 2 + paddingY;
 
     this.invSlotIcons = [];
 
-    for (let index = 0; index < INVENTORY_SIZE; index++) {
+    for (let index = 0; index < this.itemsPerPage; index++) {
       const col = index % cols;
       const row = Math.floor(index / cols);
-      const x = originX + col * CELL_SIZE + CELL_SIZE / 2;
-      const y = originY + row * CELL_SIZE + CELL_SIZE / 2;
+      const x   = originX + col * CELL_SIZE + CELL_SIZE / 2;
+      const y   = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
       // Dark fill background rect
       const fillRect = this.scene.add.graphics();
@@ -197,66 +151,29 @@ export default class InventoryWindow {
       // Blue border image
       const slotBg = this.scene.add.image(x, y, 'icon_bg_blue')
         .setDisplaySize(CELL_SIZE, CELL_SIZE)
-        .setAlpha(0.5);
+        .setAlpha(INV_COLORS.border_alpha.alpha);
       this.invPanel.add(slotBg);
       slotBg.setInteractive();
       slotBg.on('pointerdown', (pointer) => {
+        const items = [];
+        for (let i = 1; i <= INVENTORY_SIZE; i++) { items.push(this.inventory.inventory.get(i) || null); }
+        const item = items[this.currentPage * this.itemsPerPage + index];
+        if (!item) return;
+
         if (pointer.rightButtonDown()) {
           // Right-click — drop progression
-          const items = [];
-          for (let i = 1; i <= INVENTORY_SIZE; i++) { items.push(this.inventory.inventory.get(i) || null); }
-          const item = items[index];
-          if (!item) return;
-
-          if (this.selectedItem !== item) {
-            this.selectedItem = item;
-            this.selectedClicks = 1;
-            this.selectedBorder
-              .setTexture('border_selected1')
-              .setPosition(x, y)
-              .setVisible(true);
-          } else {
-            this.selectedClicks++;
-            if (this.selectedClicks === 2) {
-              this.selectedBorder.setTexture('border_selected2');
-            } else if (this.selectedClicks >= 3) {
-              this.selectedBorder.setTexture('border_selected3');
-              this.inventory.removeItemFromInventory(item);
-              this.selectedItem = null;
-              this.selectedClicks = 0;
-              this.selectedBorder.setVisible(false);
-              this._refresh();
-            }
-          }
+          this.selectionBorder.advance(item, x, y, () => {
+            this.inventory.removeItemFromInventory(item);
+            this._refresh();
+          });
         } else {
           // Left-click — equip progression
-          const items = [];
-          for (let i = 1; i <= INVENTORY_SIZE; i++) { items.push(this.inventory.inventory.get(i) || null); }
-          const item = items[index];
-          if (!item) return;
-
-          if (this.selectedItem !== item) {
-            this.selectedItem = item;
-            this.selectedClicks = 1;
-            this.selectedBorder
-              .setTexture('border_selected1')
-              .setPosition(x, y)
-              .setVisible(true);
-          } else {
-            this.selectedClicks++;
-            if (this.selectedClicks === 2) {
-              this.selectedBorder.setTexture('border_selected2');
-            } else if (this.selectedClicks >= 3) {
-              this.selectedBorder.setTexture('border_selected3');
-              this.inventory.equipItemFromInventory(item);
-              this.player.equip(item);
-              this._ensureOverlayLoaded(item);
-              this.selectedItem = null;
-              this.selectedClicks = 0;
-              this.selectedBorder.setVisible(false);
-              this._refresh();
-            }
-          }
+          this.selectionBorder.advance(item, x, y, () => {
+            this.inventory.equipItemFromInventory(item);
+            this.player.equip(item);
+            this._ensureOverlayLoaded(item);
+            this._refresh();
+          });
         }
       });
 
@@ -268,12 +185,39 @@ export default class InventoryWindow {
       this.invPanel.add(iconImg);
     }
 
-    this.selectedBorder = this.scene.add.image(0, 0, 'border_selected1')
-      .setDisplaySize(CELL_SIZE, CELL_SIZE)
-      .setVisible(false)
-      .setScrollFactor(0);
-    this.invPanel.add(this.selectedBorder);
-    this.invPanel.bringToTop(this.selectedBorder);
+    this.selectionBorder = new SelectionBorder(this.scene, this.invPanel);
+
+    const arrowY = GAME_WINDOW_CENTER.Y;
+    const nextX  = GAME_WINDOW_WIDTH - 135;
+    const prevX  = GAME_WINDOW_WIDTH - 187;
+
+    this.prevBtn = this.scene.add
+      .image(prevX, arrowY, 'prev_btn')
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setInteractive()
+      .setScrollFactor(0)
+      .setDepth(20)
+      .on('pointerdown', () => {
+        this.currentPage = Math.max(0, this.currentPage - 1);
+        this._refresh();
+      });
+
+    this.nextBtn = this.scene.add
+      .image(nextX, arrowY, 'next_btn')
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setInteractive()
+      .setScrollFactor(0)
+      .setDepth(20)
+      .on('pointerdown', () => {
+        const totalPages = Math.ceil(INVENTORY_SIZE / this.itemsPerPage);
+        this.currentPage = Math.min(totalPages - 1, this.currentPage + 1);
+        this._refresh();
+      });
+
+    this.invPanel.add([this.prevBtn, this.nextBtn]);
+    this.invPanel.bringToTop(this.selectionBorder.border);
+    this.invPanel.bringToTop(this.prevBtn);
+    this.invPanel.bringToTop(this.nextBtn);
   }
 
   /**
@@ -285,11 +229,11 @@ export default class InventoryWindow {
     const slots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
     for (const slotName of slots) {
       const equippedItem = this.inventory.equipped.get(slotName);
-      const iconImg = this.equipSlotIcons[slotName];
+      const iconImg      = this.equipSlotIcons[slotName];
       if (equippedItem !== null) {
         iconImg.setTexture(equippedItem.id).setVisible(true);
-        const src = this.scene.textures.get(equippedItem.id).getSourceImage();
-        const scale = Math.min((SLOT_BOX_SIZE - 10) / src.width, (SLOT_BOX_SIZE - 10) / src.height);
+        const src   = this.scene.textures.get(equippedItem.id).getSourceImage();
+        const scale = scaleIcon(src, SLOT_BOX_SIZE - 10);
         iconImg.setDisplaySize(src.width * scale, src.height * scale);
       } else {
         iconImg.setVisible(false);
@@ -298,7 +242,7 @@ export default class InventoryWindow {
 
     for (const slotName of slots) {
       const equippedItem = this.inventory.equipped.get(slotName);
-      const overlay = this.itemOverlays[slotName];
+      const overlay      = this.itemOverlays[slotName];
       if (equippedItem !== null) {
         overlay.setTexture(equippedItem.id + '_full').setVisible(true);
       } else {
@@ -312,13 +256,17 @@ export default class InventoryWindow {
       items.push(this.inventory.inventory.get(i) || null);
     }
 
-    for (let index = 0; index < INVENTORY_SIZE; index++) {
-      const item = items[index];
+    const totalPages = Math.max(1, Math.ceil(INVENTORY_SIZE / this.itemsPerPage));
+    if (this.currentPage >= totalPages) this.currentPage = totalPages - 1;
+    const pageItems = items.slice(this.currentPage * this.itemsPerPage, (this.currentPage + 1) * this.itemsPerPage);
+
+    for (let index = 0; index < this.itemsPerPage; index++) {
+      const item    = pageItems[index] || null;
       const iconImg = this.invSlotIcons[index];
       if (item !== null) {
         iconImg.setTexture(item.id);
-        const src = this.scene.textures.get(item.id).getSourceImage();
-        const scale = Math.min(ICON_SIZE / src.width, ICON_SIZE / src.height);
+        const src   = this.scene.textures.get(item.id).getSourceImage();
+        const scale = scaleIcon(src, ICON_SIZE);
         iconImg.setDisplaySize(src.width * scale, src.height * scale);
         iconImg.setVisible(true);
       } else {
@@ -326,7 +274,9 @@ export default class InventoryWindow {
       }
     }
 
-    if (this.selectedBorder) this.invPanel.bringToTop(this.selectedBorder);
+    this.prevBtn.setVisible(totalPages > 1);
+    this.nextBtn.setVisible(totalPages > 1);
+    if (this.selectionBorder) this.invPanel.bringToTop(this.selectionBorder.border);
   }
 
   /**
@@ -342,27 +292,11 @@ export default class InventoryWindow {
 
     if (pointer.rightButtonDown()) {
       // Right-click — unequip progression
-      if (this.selectedItem !== item) {
-        this.selectedItem = item;
-        this.selectedClicks = 1;
-        this.selectedBorder
-          .setTexture('border_selected1')
-          .setPosition(x, y)
-          .setVisible(true);
-      } else {
-        this.selectedClicks++;
-        if (this.selectedClicks === 2) {
-          this.selectedBorder.setTexture('border_selected2');
-        } else if (this.selectedClicks >= 3) {
-          this.selectedBorder.setTexture('border_selected3');
-          this.inventory.removeItemFromEquipped(item);
-          this.player.unequip(slotName);
-          this.selectedItem = null;
-          this.selectedClicks = 0;
-          this.selectedBorder.setVisible(false);
-          this._refresh();
-        }
-      }
+      this.selectionBorder.advance(item, x, y, () => {
+        this.inventory.removeItemFromEquipped(item);
+        this.player.unequip(slotName);
+        this._refresh();
+      });
     }
   }
 
@@ -377,9 +311,7 @@ export default class InventoryWindow {
 
   /** Shows the panel and refreshes all icons. */
   show() {
-    this.selectedItem = null;
-    this.selectedClicks = 0;
-    if (this.selectedBorder) this.selectedBorder.setVisible(false);
+    this.selectionBorder.reset();
     this._refresh();
     this.invPanel.setVisible(true);
   }

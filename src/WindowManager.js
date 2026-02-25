@@ -1,28 +1,48 @@
+import { GAME_WINDOW_CENTER, NAV_BTN_WIDTH, NAV_BTN_HEIGHT } from './constants';
+
 class WindowNode {
   constructor(windowInstance) {
     this.window = windowInstance;
-    this.next = null;
-    this.prev = null;
+    this.next   = null;
+    this.prev   = null;
   }
 }
 
 export default class WindowManager {
-  constructor() {
-    this.head = null;
+  /** @param {Phaser.Scene} scene */
+  constructor(scene) {
+    this.scene       = scene;
+    this.head        = null;
     this.currentNode = null;
+
+    this.leftPrevBtn = scene.add.image(183, GAME_WINDOW_CENTER.Y, 'next_btn')
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setInteractive()
+      .setScrollFactor(0)
+      .setDepth(20)
+      .setVisible(false)
+      .on('pointerdown', () => this.prev());
+
+    this.leftNextBtn = scene.add.image(136, GAME_WINDOW_CENTER.Y, 'prev_btn')
+      .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setInteractive()
+      .setScrollFactor(0)
+      .setDepth(20)
+      .setVisible(false)
+      .on('pointerdown', () => this.next());
   }
 
   addWindow(windowInstance) {
     const node = new WindowNode(windowInstance);
     if (!this.head) {
-      this.head = node;
-      node.next = node;
-      node.prev = node;
+      this.head  = node;
+      node.next  = node;
+      node.prev  = node;
     } else {
-      const tail = this.head.prev;
-      tail.next = node;
-      node.prev = tail;
-      node.next = this.head;
+      const tail  = this.head.prev;
+      tail.next   = node;
+      node.prev   = tail;
+      node.next   = this.head;
       this.head.prev = node;
     }
   }
@@ -32,6 +52,7 @@ export default class WindowManager {
     this.currentNode.window.hide();
     this.currentNode = this.currentNode.next;
     this.currentNode.window.show();
+    this._showArrows();
   }
 
   prev() {
@@ -39,6 +60,7 @@ export default class WindowManager {
     this.currentNode.window.hide();
     this.currentNode = this.currentNode.prev;
     this.currentNode.window.show();
+    this._showArrows();
   }
 
   open(windowInstance) {
@@ -53,6 +75,7 @@ export default class WindowManager {
     if (this.currentNode) this.currentNode.window.hide();
     this.currentNode = node;
     this.currentNode.window.show();
+    this._showArrows();
   }
 
   closeAll() {
@@ -60,5 +83,16 @@ export default class WindowManager {
       this.currentNode.window.hide();
       this.currentNode = null;
     }
+    this._hideArrows();
+  }
+
+  _showArrows() {
+    this.leftPrevBtn.setVisible(true);
+    this.leftNextBtn.setVisible(true);
+  }
+
+  _hideArrows() {
+    this.leftPrevBtn.setVisible(false);
+    this.leftNextBtn.setVisible(false);
   }
 }

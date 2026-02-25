@@ -1,5 +1,5 @@
 /** Maximum number of items the player can carry at once. */
-export const INVENTORY_SIZE = 20;
+export const INVENTORY_SIZE = 24;
 
 export default class Inventory {
     constructor() {
@@ -18,7 +18,7 @@ export default class Inventory {
         this.equipped.set('offhand', null);
 
         this.revertedInventoryMap = new Map();
-        this.emptySlots = new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
+        this.emptySlots = new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]);
     }
 
     /**
