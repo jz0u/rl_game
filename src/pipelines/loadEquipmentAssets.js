@@ -15,37 +15,60 @@ export function loadEquipmentAssets(scene, item) {
   const attack1Key = base + '_MVsv_alt_attack1';
   const attack2Key = base + '_MVsv_alt_attack2';
 
-  // If already loaded, just ensure anims exist and return
+  console.log('[loadEquipmentAssets] called for', base);
+  console.log('[loadEquipmentAssets] textures.exists(idleKey):', scene.textures.exists(idleKey));
+
+  // If already loaded, just ensure anims exist and fix up any overlay, then return
   if (scene.textures.exists(idleKey)) {
     _registerAnims(scene, base);
+    _refreshOverlay(scene, base, idleKey);
     return;
   }
 
-  // Load all 4 spritesheets
+  // Build paths
   const folder = _slotFolder(item.slot);
-  scene.load.spritesheet(idleKey,
-    `assets/armory/${folder}/${folder}_idle/${base}_idle1_diag.png`,
-    { frameWidth: 128, frameHeight: 128 }
-  );
-  scene.load.spritesheet(walkKey,
-    `assets/armory/${folder}/${folder}_walking/${base}_walking_diag.png`,
-    { frameWidth: 128, frameHeight: 128 }
-  );
-  scene.load.spritesheet(attack1Key,
-    `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack1.png`,
-    { frameWidth: 128, frameHeight: 128 }
-  );
-  scene.load.spritesheet(attack2Key,
-    `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack2.png`,
-    { frameWidth: 128, frameHeight: 128 }
-  );
+  const idlePath    = `assets/armory/${folder}/${folder}_idle/${base}_idle1_diag.png`;
+  const walkPath    = `assets/armory/${folder}/${folder}_walking/${base}_walking_diag.png`;
+  const attack1Path = `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack1.png`;
+  const attack2Path = `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack2.png`;
 
-  // Once loaded, register all animations
+  console.log('[loadEquipmentAssets] loading paths:');
+  console.log('  idle   :', idlePath);
+  console.log('  walk   :', walkPath);
+  console.log('  attack1:', attack1Path);
+  console.log('  attack2:', attack2Path);
+
+  // Load all 4 spritesheets
+  scene.load.spritesheet(idleKey,    idlePath,    { frameWidth: 128, frameHeight: 128 });
+  scene.load.spritesheet(walkKey,    walkPath,    { frameWidth: 128, frameHeight: 128 });
+  scene.load.spritesheet(attack1Key, attack1Path, { frameWidth: 128, frameHeight: 128 });
+  scene.load.spritesheet(attack2Key, attack2Path, { frameWidth: 128, frameHeight: 128 });
+
+  // Once loaded, register animations and fix up the overlay sprite's texture
   scene.load.once('complete', () => {
+    console.error('[loadEquipmentAssets] load.once complete fired for', base);
     _registerAnims(scene, base);
+    _refreshOverlay(scene, base, idleKey);
   });
 
   scene.load.start();
+}
+
+/**
+ * After loading completes, updates any existing player overlay sprite for this item
+ * to the correct texture. Needed because player.equip() may be called before the
+ * async load finishes.
+ * @param {Phaser.Scene} scene
+ * @param {string} base - The item's baseName.
+ * @param {string} idleKey - The loaded idle spritesheet texture key.
+ */
+function _refreshOverlay(scene, base, idleKey) {
+  for (const slot in scene.player.overlays) {
+    const overlay = scene.player.overlays[slot];
+    if (overlay && overlay.baseName === base) {
+      overlay.setTexture(idleKey);
+    }
+  }
 }
 
 /**

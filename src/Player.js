@@ -81,7 +81,7 @@ export default class Player {
       this.overlays[item.slot].destroy();
     }
 
-    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, `${item.baseName}_idle`);
+    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, `${item.baseName}_idle1_diag`);
     overlay.baseName = item.baseName;
     this.overlays[item.slot] = overlay;
   }
