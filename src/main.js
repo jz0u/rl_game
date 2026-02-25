@@ -39,7 +39,7 @@ class GameScene extends Phaser.Scene {
   create() {
     createGameObjects(this, allItems);
     setupInput(this);
-    DEVTEST_INVENTORY(this.inventory); // DEV ONLY
+    //DEVTEST_INVENTORY(this.inventory); // DEV ONLY
   }
 
   /** Called every frame by Phaser. */

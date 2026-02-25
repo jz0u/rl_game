@@ -314,7 +314,18 @@ export default class Shop {
         .image(x, y, item.id)
         .setDisplaySize(src.width * scale, src.height * scale)
         .setInteractive();
-      icon.on("pointerdown", () => this._renderPreview(item));
+      icon.on("pointerdown", (pointer) => {
+        const now = this.scene.time.now;
+        if (icon._lastClickTime && (now - icon._lastClickTime) < 300) {
+          // Double click — attempt to buy
+          this._buyItem(item);
+          icon._lastClickTime = 0;
+        } else {
+          // Single click — preview
+          this._renderPreview(item);
+          icon._lastClickTime = now;
+        }
+      });
       this.onPage.push(icon);
       this.shopPanel.add(icon);
     });
@@ -333,6 +344,30 @@ export default class Shop {
     this.generalText.setText("");
     this.statText.setText("");
     this.shopPanel.setVisible(true);
+  }
+
+  /**
+   * Attempts to purchase an item and add it to the player's inventory.
+   * Fails silently with a console warning if the player cannot afford it or inventory is full.
+   * @param {object} item - An Armory item definition.
+   */
+  _buyItem(item) {
+    const player = this.scene.player;
+    const inventory = this.scene.inventory;
+
+    if (player.balance < item.value) {
+      console.warn('Not enough gold to buy', item.displayName);
+      return;
+    }
+
+    const result = inventory.addItemToInventory(item);
+    if (result === false) {
+      console.warn('Inventory full — cannot buy', item.displayName);
+      return;
+    }
+
+    player.balance -= item.value;
+    console.log('Bought', item.displayName, '| Balance:', player.balance);
   }
 
   /** Hides the entire shop panel. */
