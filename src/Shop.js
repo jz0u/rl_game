@@ -211,7 +211,7 @@ export default class Shop extends BaseWindow {
       bg.setInteractive();
       bg.on('pointerdown', () => {
         const wasNew = this.selectionBorder.selectedItem !== item;
-        this.selectionBorder.advance(item, x, y, () => this._buyItem(item));
+        this.selectionBorder.advance(item, x, y, () => this._buyItem(item), 'buy');
         if (wasNew) this._renderPreview(item);
       });
 
@@ -248,10 +248,10 @@ export default class Shop extends BaseWindow {
     const player    = this.scene.player;
     const inventory = this.scene.inventory;
 
-    if (player.balance < item.value) return;
+    if (player.balance < item.value) return false;
 
     const result = inventory.addItemToInventory(item);
-    if (result === false) return;
+    if (result === false) return false;
 
     player.balance -= item.value;
     loadEquipmentAssets(this.scene, item);

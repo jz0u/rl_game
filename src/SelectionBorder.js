@@ -1,5 +1,11 @@
 import { CELL_SIZE } from './constants';
 
+const THEMES = {
+  buy:   ['border_selected1', 'border_selected2', 'border_selected3'],
+  equip: ['blue_selected1',   'blue_selected2',   'blue_selected3'],
+  drop:  ['red_selected1',    'red_selected2',    'red_selected3'],
+};
+
 /**
  * Owns the triple-click selection border progression used by Shop and InventoryWindow.
  * Tracks which item is selected and how many times it has been clicked.
@@ -29,24 +35,32 @@ export default class SelectionBorder {
    * @param {object} item
    * @param {number} x
    * @param {number} y
-   * @param {Function} onConfirm
+   * @param {Function} onConfirm - Return false to signal failure (shows error texture).
+   * @param {'buy'|'equip'|'drop'} theme
    */
-  advance(item, x, y, onConfirm) {
+  advance(item, x, y, onConfirm, theme = 'buy') {
+    const [t1, t2, t3] = THEMES[theme] ?? THEMES.buy;
+
     if (this.selectedItem !== item) {
       this.selectedItem   = item;
       this.selectedClicks = 1;
       this.border
-        .setTexture('border_selected1')
+        .setTexture(t1)
         .setPosition(x, y)
         .setVisible(true);
     } else {
       this.selectedClicks++;
       if (this.selectedClicks === 2) {
-        this.border.setTexture('border_selected2');
+        this.border.setTexture(t2);
       } else if (this.selectedClicks >= 3) {
-        this.border.setTexture('border_selected3');
-        onConfirm();
-        this.scene.time.delayedCall(500, () => this.reset());
+        const result = onConfirm();
+        if (result === false) {
+          this.border.setTexture('border_selected_err');
+          this.scene.time.delayedCall(600, () => this.reset());
+        } else {
+          this.border.setTexture(t3);
+          this.scene.time.delayedCall(300, () => this.reset());
+        }
       }
     }
   }

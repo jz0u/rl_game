@@ -19,7 +19,14 @@ export function loadAssets(scene){
     scene.load.image('iconborder', 'assets/ui/background.png');
     scene.load.image('icon_bg_blue','assets/ui/itemiconbackground.png');
     scene.load.image('slot_box','assets/ui/Asset 9 - 1080p.png');
-    scene.load.image('border_selected1', 'assets/ui/buy_selected1.png');
-    scene.load.image('border_selected2', 'assets/ui/buy_selected2.png');
-    scene.load.image('border_selected3', 'assets/ui/buy_selected3.png');
+    scene.load.image('border_selected1',   'assets/ui/buy_selected1.png');
+    scene.load.image('border_selected2',   'assets/ui/buy_selected2.png');
+    scene.load.image('border_selected3',   'assets/ui/buy_selected3.png');
+    scene.load.image('border_selected_err','assets/ui/buy_selected_err.png');
+    scene.load.image('blue_selected1',     'assets/ui/blue_selected1.png');
+    scene.load.image('blue_selected2',     'assets/ui/blue_selected2.png');
+    scene.load.image('blue_selected3',     'assets/ui/blue_selected3.png');
+    scene.load.image('red_selected1',      'assets/ui/red_selected1.png');
+    scene.load.image('red_selected2',      'assets/ui/red_selected2.png');
+    scene.load.image('red_selected3',      'assets/ui/red_selected3.png');
 }

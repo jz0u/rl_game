@@ -165,7 +165,7 @@ export default class InventoryWindow extends BaseWindow {
           this.selectionBorder.advance(item, x, y, () => {
             this.inventory.removeItemFromInventory(item);
             this._refresh();
-          });
+          }, 'drop');
         } else {
           // Left-click — equip progression
           this.selectionBorder.advance(item, x, y, () => {
@@ -173,7 +173,7 @@ export default class InventoryWindow extends BaseWindow {
             this.player.equip(item);
             this._ensureOverlayLoaded(item);
             this._refresh();
-          });
+          }, 'equip');
         }
       });
 
@@ -296,7 +296,7 @@ export default class InventoryWindow extends BaseWindow {
         this.inventory.removeItemFromEquipped(item);
         this.player.unequip(slotName);
         this._refresh();
-      });
+      }, 'drop');
     }
   }
 
