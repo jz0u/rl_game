@@ -15,9 +15,6 @@ export function loadEquipmentAssets(scene, item) {
   const attack1Key = base + '_MVsv_alt_attack1';
   const attack2Key = base + '_MVsv_alt_attack2';
 
-  console.log('[loadEquipmentAssets] called for', base);
-  console.log('[loadEquipmentAssets] textures.exists(idleKey):', scene.textures.exists(idleKey));
-
   // If already loaded, just ensure anims exist and fix up any overlay, then return
   if (scene.textures.exists(idleKey)) {
     _registerAnims(scene, base);
@@ -32,12 +29,6 @@ export function loadEquipmentAssets(scene, item) {
   const attack1Path = `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack1.png`;
   const attack2Path = `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack2.png`;
 
-  console.log('[loadEquipmentAssets] loading paths:');
-  console.log('  idle   :', idlePath);
-  console.log('  walk   :', walkPath);
-  console.log('  attack1:', attack1Path);
-  console.log('  attack2:', attack2Path);
-
   // Load all 4 spritesheets
   scene.load.spritesheet(idleKey,    idlePath,    { frameWidth: 128, frameHeight: 128 });
   scene.load.spritesheet(walkKey,    walkPath,    { frameWidth: 128, frameHeight: 128 });
@@ -46,7 +37,6 @@ export function loadEquipmentAssets(scene, item) {
 
   // Once loaded, register animations and fix up the overlay sprite's texture
   scene.load.once('complete', () => {
-    console.error('[loadEquipmentAssets] load.once complete fired for', base);
     _registerAnims(scene, base);
     _refreshOverlay(scene, base, idleKey);
   });

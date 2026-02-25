@@ -1,5 +1,5 @@
 /** Maximum number of items the player can carry at once. */
-const INVENTORY_SIZE = 20;
+export const INVENTORY_SIZE = 20;
 
 export default class Inventory {
     constructor() {

@@ -380,19 +380,16 @@ export default class Shop {
     const inventory = this.scene.inventory;
 
     if (player.balance < item.value) {
-      console.warn('Not enough gold to buy', item.displayName);
       return;
     }
 
     const result = inventory.addItemToInventory(item);
     if (result === false) {
-      console.warn('Inventory full — cannot buy', item.displayName);
       return;
     }
 
     player.balance -= item.value;
     loadEquipmentAssets(this.scene, item);
-    console.log('Bought', item.displayName, '| Balance:', player.balance);
   }
 
   /** Hides the entire shop panel. */

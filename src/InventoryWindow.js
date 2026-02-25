@@ -1,12 +1,14 @@
 import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from "./main";
 import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
+import { INVENTORY_SIZE } from './Inventory';
 
 const CELL_SIZE = 100;
 const ICON_SIZE = 75;
 const PANEL_SCALE = 0.75;
 const NAV_BTN_WIDTH = 46;
 const NAV_BTN_HEIGHT = 167;
-const INVENTORY_SIZE = 20;
+const SLOT_BOX_SIZE = 90;
+const SLOT_SPACING  = 120;
 
 const INV_COLORS = {
   shopWindow:   { alpha: 0.8 },
@@ -130,8 +132,6 @@ export default class InventoryWindow {
     }
 
     // ── Step 4: Equipment slot boxes ──
-    const SLOT_BOX_SIZE = 90;
-    const SLOT_SPACING  = 120;
 
     const leftColX  = dollX - dollSize * 0.32;
     const rightColX = dollX + dollSize * 0.32;
@@ -203,7 +203,7 @@ export default class InventoryWindow {
         if (pointer.rightButtonDown()) {
           // Right-click — drop progression
           const items = [];
-          for (let i = 1; i <= 20; i++) { items.push(this.inventory.inventory.get(i) || null); }
+          for (let i = 1; i <= INVENTORY_SIZE; i++) { items.push(this.inventory.inventory.get(i) || null); }
           const item = items[index];
           if (!item) return;
 
@@ -230,7 +230,7 @@ export default class InventoryWindow {
         } else {
           // Left-click — equip progression
           const items = [];
-          for (let i = 1; i <= 20; i++) { items.push(this.inventory.inventory.get(i) || null); }
+          for (let i = 1; i <= INVENTORY_SIZE; i++) { items.push(this.inventory.inventory.get(i) || null); }
           const item = items[index];
           if (!item) return;
 
@@ -280,8 +280,6 @@ export default class InventoryWindow {
    * Called every time show() runs.
    */
   _refresh() {
-    const SLOT_BOX_SIZE = 90;
-
     // Part A — Update equipped slot icons
     const slots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
     for (const slotName of slots) {
@@ -297,8 +295,7 @@ export default class InventoryWindow {
       }
     }
 
-    const overlaySlots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
-    for (const slotName of overlaySlots) {
+    for (const slotName of slots) {
       const equippedItem = this.inventory.equipped.get(slotName);
       const overlay = this.itemOverlays[slotName];
       if (equippedItem !== null) {
@@ -310,7 +307,7 @@ export default class InventoryWindow {
 
     // Part B — Update inventory slot icons
     const items = [];
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= INVENTORY_SIZE; i++) {
       items.push(this.inventory.inventory.get(i) || null);
     }
 
@@ -329,17 +326,6 @@ export default class InventoryWindow {
     }
 
     if (this.selectedBorder) this.invPanel.bringToTop(this.selectedBorder);
-  }
-
-  /**
-   * Shows info for the equipped item in the given slot, or "(empty)" if nothing is equipped.
-   * @param {string} slotName - One of head, body, bottom, feet, weapon, offhand.
-   */
-  _showSlotInfo(slotName) {
-    const item = this.inventory.equipped.get(slotName);
-    if (!item) {
-      return;
-    }
   }
 
   /**
@@ -380,8 +366,8 @@ export default class InventoryWindow {
   }
 
   /**
-   * Stub: warns that overlay spritesheets for this item are not dynamically loaded.
-   * Full implementation requires scene-level dynamic asset loading.
+   * Ensures the equipment overlay spritesheets and animations for the given item
+   * are loaded into the scene, then refreshes the player overlay sprite's texture.
    * @param {object} item - The item being equipped.
    */
   _ensureOverlayLoaded(item) {
