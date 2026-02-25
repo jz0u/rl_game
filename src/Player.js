@@ -198,6 +198,7 @@ export default class Player {
       this.destination.x, this.destination.y,
     );
 
+    this.sprite.flipX = false;
     const dir = this.getDirectionAnim(angle);
     if (this.sprite.anims.currentAnim?.key !== dir) {
       this.sprite.play(dir);
