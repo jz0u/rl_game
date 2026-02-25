@@ -45,6 +45,9 @@ export function loadAssets(scene){
         'Medieval_Underdeep_Tiles_13',
     ];
     tilesetNames.forEach(name => {
-        scene.load.image(name, `assets/tiles/${name}.png`);
+        const path = name === 'Medieval_Underdeep_Tiles_2'
+            ? `assets/tiles/${name}.png`
+            : `assets/tiles/Medieval_Underdeep_Tiles/${name}.png`;
+        scene.load.image(name, path);
     });
 }
