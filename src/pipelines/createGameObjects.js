@@ -2,6 +2,7 @@ import Player from "../Player";
 import Shop from "../Shop";
 import Inventory from "../Inventory";
 import InventoryWindow from "../InventoryWindow";
+import WindowManager from "../WindowManager";
 
 const PLAYER_SPAWN_X = 200;
 const PLAYER_SPAWN_Y = 200;
@@ -17,4 +18,7 @@ export function createGameObjects(scene, allItems) {
     scene.shop            = new Shop(scene, allItems);
     scene.inventory       = new Inventory();
     scene.inventoryWindow = new InventoryWindow(scene, scene.inventory, scene.player, allItems);
+    scene.windowManager   = new WindowManager();
+    scene.windowManager.addWindow(scene.shop);
+    scene.windowManager.addWindow(scene.inventoryWindow);
 }

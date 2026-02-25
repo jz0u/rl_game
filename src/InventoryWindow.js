@@ -71,7 +71,7 @@ export default class InventoryWindow {
     this._buildPanel();
     this.invPanel.setDepth(10);
 
-    this.invBtn.on('pointerdown', () => this.toggle());
+    this.invBtn.on('pointerdown', () => this.scene.windowManager.open(this));
     this.hide();
   }
 
@@ -153,13 +153,13 @@ export default class InventoryWindow {
 
     for (const { name, x, y } of slotLayout) {
       // Blue background square
-      const bg = this.scene.add.image(x, y, 'icon_bg_blue')
+      const bg = this.scene.add.image(x, y, 'slot_box')
         .setDisplaySize(SLOT_BOX_SIZE, SLOT_BOX_SIZE)
         .setAlpha(.7);
       this.invPanel.add(bg);
 
       // Placeholder icon for the equipped item
-      const icon = this.scene.add.image(x, y, 'icon_bg_blue')
+      const icon = this.scene.add.image(x, y, 'slot_box')
         .setDisplaySize(SLOT_BOX_SIZE - 10, SLOT_BOX_SIZE - 10)
         .setVisible(false);
       this.equipSlotIcons[name] = icon;
@@ -394,7 +394,6 @@ export default class InventoryWindow {
     if (this.invPanel.visible) {
       this.hide();
     } else {
-      this.scene.shop?.hide();
       this.show();
     }
   }

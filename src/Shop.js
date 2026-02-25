@@ -82,7 +82,7 @@ export default class Shop {
 
     this.shopPanel.setDepth(10);
 
-    this.shopBtn.on("pointerdown", () => this.toggle());
+    this.shopBtn.on("pointerdown", () => this.scene.windowManager.open(this));
     this.hide();
   }
 
@@ -220,24 +220,14 @@ export default class Shop {
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .on("pointerdown", () => {
-        if (this.currentPage < this.totalPages - 1) {
-          this.currentPage++;
-          this._renderPage(this.currentPage);
-        }
-      });
+      .on("pointerdown", () => { this.scene.windowManager.prev(); });
 
     this.leftNextBtn = this.scene.add
       .image(leftNextX, arrowY, "prev_btn")
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .on("pointerdown", () => {
-        if (this.currentPage > 0) {
-          this.currentPage--;
-          this._renderPage(this.currentPage);
-        }
-      });
+      .on("pointerdown", () => { this.scene.windowManager.next(); });
 
     this.shopPanel.add([
       this.prevBtn,
@@ -404,7 +394,6 @@ export default class Shop {
     if (this.shopPanel.visible) {
       this.hide();
     } else {
-      this.scene.inventoryWindow?.hide();
       this.show();
     }
   }
