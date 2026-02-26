@@ -1,5 +1,7 @@
 import Player from "../entities/Player";
 import { Armory } from "../data/Armory";
+import MapManager from "../maps/MapManager";
+import { map1 } from "../maps/map1";
 
 /**
  * Loads all game assets into the Phaser loader. Call from scene.preload().
@@ -30,24 +32,5 @@ export function loadAssets(scene){
     scene.load.image('red_selected2',      'assets/ui/red_selected2.png');
     scene.load.image('red_selected3',      'assets/ui/red_selected3.png');
 
-    // Tilemap and tilesets
-    scene.load.tilemapTiledJSON('map1', 'assets/maps/map1.tmj');
-    const tilesetNames = [
-        'Medieval_Underdeep_Tiles_1',
-        'Medieval_Underdeep_Tiles_2',
-        'Medieval_Underdeep_Tiles_4',
-        'Medieval_Underdeep_Tiles_6',
-        'Medieval_Underdeep_Tiles_7',
-        'Medieval_Underdeep_Tiles_8',
-        'Medieval_Underdeep_Tiles_9',
-        'Medieval_Underdeep_Tiles_10',
-        'Medieval_Underdeep_Tiles_11',
-        'Medieval_Underdeep_Tiles_13',
-    ];
-    tilesetNames.forEach(name => {
-        const path = name === 'Medieval_Underdeep_Tiles_2'
-            ? `assets/tiles/${name}.png`
-            : `assets/tiles/Medieval_Underdeep_Tiles/${name}.png`;
-        scene.load.image(name, path);
-    });
+    MapManager.load(scene, map1);
 }

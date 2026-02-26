@@ -1,4 +1,6 @@
 import Player from "../entities/Player";
+import MapManager from "../maps/MapManager";
+import { map1 } from "../maps/map1";
 import Shop from "../systems/Shop";
 import ShopPanel from "../ui/ShopPanel";
 import Inventory from "../systems/Inventory";
@@ -12,25 +14,7 @@ import WindowManager from "../ui/WindowManager";
  * @param {object[]} allItems - Full item catalogue from Armory (all slots combined).
  */
 export function createGameObjects(scene, allItems) {
-    // Build tilemap layers before the player so they render behind it
-    const map = scene.make.tilemap({ key: 'map1' });
-    const tilesetNames = [
-        'Medieval_Underdeep_Tiles_1',
-        'Medieval_Underdeep_Tiles_2',
-        'Medieval_Underdeep_Tiles_4',
-        'Medieval_Underdeep_Tiles_6',
-        'Medieval_Underdeep_Tiles_7',
-        'Medieval_Underdeep_Tiles_8',
-        'Medieval_Underdeep_Tiles_9',
-        'Medieval_Underdeep_Tiles_10',
-        'Medieval_Underdeep_Tiles_11',
-        'Medieval_Underdeep_Tiles_13',
-    ];
-    const tilesets = tilesetNames.map(name => map.addTilesetImage(name, name));
-    scene.bgLayer     = map.createLayer('bg',     tilesets, 0, 0);
-    scene.groundLayer = map.createLayer('ground', tilesets, 0, 0);
-    scene.wallLayer   = map.createLayer('wall',   tilesets, 0, 0);
-    scene.wallLayer.setCollisionByExclusion([-1]);
+    const map = MapManager.create(scene, map1);
 
     scene.player          = new Player(scene, map.widthInPixels / 2, map.heightInPixels / 2);
     Player.createAnims(scene);
