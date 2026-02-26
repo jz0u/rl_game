@@ -11,13 +11,6 @@ import SelectionBorder from './SelectionBorder';
 import { scaleIcon } from './utils';
 import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
 
-const SHOP_COLORS = {
-  previewText:  { color: '#ffffff' },
-  itemSlotRect: { fill: 0x1a1a1a, alpha: 0.5 },
-  toggleBtn:    { background: '#333', color: '#fff' },
-  border_alpha: { alpha: 0.5 },
-};
-
 /**
  * Shop — the in-game item browsing UI.
  *
@@ -46,9 +39,9 @@ export default class Shop extends BaseWindow {
     this.shopBtn = this.scene.add
       .text(20, 20, 'ITEMS', {
         fontSize: '16px',
-        backgroundColor: SHOP_COLORS.toggleBtn.background,
+        backgroundColor: '#333',
         padding: { x: 10, y: 6 },
-        color: SHOP_COLORS.toggleBtn.color,
+        color: '#fff',
       })
       .setInteractive()
       .setScrollFactor(0);
@@ -92,7 +85,7 @@ export default class Shop extends BaseWindow {
     this.generalText = this.scene.add.text(leftX + 10, topY + 10, '', {
       fontFamily: 'Georgia, serif',
       fontSize: '14px',
-      color: SHOP_COLORS.previewText.color,
+      color: '#ffffff',
       wordWrap: { width: rectW - 52 },
       lineSpacing: 5,
       padding: { left: 16, right: 16, top: 12, bottom: 12 },
@@ -100,7 +93,7 @@ export default class Shop extends BaseWindow {
 
     this.statText = this.scene.add.text(leftX + 2 * rectW + 10, topY + 10, '', {
       fontSize: '13px',
-      color: SHOP_COLORS.previewText.color,
+      color: '#ffffff',
       wordWrap: { width: rectW - 52 },
       lineSpacing: 6,
       padding: { left: 16, right: 16, top: 12, bottom: 12 },
@@ -197,7 +190,7 @@ export default class Shop extends BaseWindow {
       const y   = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
       const goldRect = this.scene.add.graphics();
-      goldRect.fillStyle(SHOP_COLORS.itemSlotRect.fill, SHOP_COLORS.itemSlotRect.alpha);
+      goldRect.fillStyle(0x1a1a1a, 0.5);
       goldRect.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
       this.onPage.push(goldRect);
       this.shopPanel.add(goldRect);
@@ -205,7 +198,7 @@ export default class Shop extends BaseWindow {
       const bg = this.scene.add
         .image(x, y, 'icon_bg_blue')
         .setDisplaySize(CELL_SIZE, CELL_SIZE)
-        .setAlpha(SHOP_COLORS.border_alpha.alpha);
+        .setAlpha(0.5);
       this.onPage.push(bg);
       this.shopPanel.add(bg);
       bg.setInteractive();

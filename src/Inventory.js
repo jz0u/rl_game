@@ -17,7 +17,7 @@ export default class Inventory {
         this.equipped.set('weapon', null);
         this.equipped.set('offhand', null);
 
-        this.revertedInventoryMap = new Map();
+        this.itemSlotMap = new Map();
         this.emptySlots = new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]);
     }
 
@@ -41,7 +41,7 @@ export default class Inventory {
             const slot = Math.min(...this.emptySlots);
             this.emptySlots.delete(slot);
             this.inventory.set(slot, item);
-            this.revertedInventoryMap.set(item.id, slot);
+            this.itemSlotMap.set(item.id, slot);
             this.itemSetForDupeCheckInventory.add(item.id);
             this.itemsInInventory++;
         }
@@ -61,9 +61,9 @@ export default class Inventory {
             return false;
         }
         else {
-            const slot = this.revertedInventoryMap.get(item.id);
+            const slot = this.itemSlotMap.get(item.id);
             this.inventory.delete(slot);
-            this.revertedInventoryMap.delete(item.id);
+            this.itemSlotMap.delete(item.id);
             this.itemSetForDupeCheckInventory.delete(item.id);
             this.emptySlots.add(slot);
             this.itemsInInventory--;
@@ -89,14 +89,14 @@ export default class Inventory {
             return false;
         }
         else {
-            const incomingSlot = this.revertedInventoryMap.get(item.id);
+            const incomingSlot = this.itemSlotMap.get(item.id);
             const currentlyEquipped = this.equipped.get(equipSlot);
 
             if (currentlyEquipped !== null) {
                 // Free the incoming item's inventory slot first so there is always
                 // a home for the displaced item, even when the inventory is otherwise full.
                 this.inventory.delete(incomingSlot);
-                this.revertedInventoryMap.delete(item.id);
+                this.itemSlotMap.delete(item.id);
                 this.itemSetForDupeCheckInventory.delete(item.id);
                 this.emptySlots.add(incomingSlot);
 
@@ -104,7 +104,7 @@ export default class Inventory {
                 const returnSlot = Math.min(...this.emptySlots);
                 this.emptySlots.delete(returnSlot);
                 this.inventory.set(returnSlot, currentlyEquipped);
-                this.revertedInventoryMap.set(currentlyEquipped.id, returnSlot);
+                this.itemSlotMap.set(currentlyEquipped.id, returnSlot);
                 this.itemSetForDupeCheckInventory.add(currentlyEquipped.id);
                 this.itemSetForDupeCheckEquipped.delete(currentlyEquipped.id);
 
@@ -117,7 +117,7 @@ export default class Inventory {
                 this.itemSetForDupeCheckEquipped.add(item.id);
                 this.itemSetForDupeCheckInventory.delete(item.id);
                 this.inventory.delete(incomingSlot);
-                this.revertedInventoryMap.delete(item.id);
+                this.itemSlotMap.delete(item.id);
                 this.emptySlots.add(incomingSlot);
                 this.itemsInInventory--;
             }
@@ -148,7 +148,7 @@ export default class Inventory {
             this.equipped.set(equipSlot, null);
             this.itemSetForDupeCheckEquipped.delete(item.id);
             this.inventory.set(slot, item);
-            this.revertedInventoryMap.set(item.id, slot);
+            this.itemSlotMap.set(item.id, slot);
             this.itemSetForDupeCheckInventory.add(item.id);
             this.itemsInInventory++;
         }

@@ -11,7 +11,6 @@
  */
 import Phaser from "phaser";
 import { Armory } from "./Armory";
-import { DEVTEST_INVENTORY } from "./DEVTEST";
 import { loadAssets } from "./pipelines/loadAssets";
 import { createGameObjects } from "./pipelines/createGameObjects";
 import { setupInput } from "./pipelines/input";
@@ -20,10 +19,7 @@ import { setupKeybinds } from "./pipelines/keybinds";
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();
 
-/** Logical canvas dimensions — used by UI elements to position themselves. */
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER } from './constants';
-export { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER };
-
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './constants';
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -40,7 +36,6 @@ class GameScene extends Phaser.Scene {
     createGameObjects(this, allItems);
     setupInput(this);
     setupKeybinds(this);
-    //DEVTEST_INVENTORY(this.inventory); // DEV ONLY
   }
 
   /** Called every frame by Phaser. */

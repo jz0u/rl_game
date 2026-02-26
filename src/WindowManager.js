@@ -15,7 +15,7 @@ export default class WindowManager {
     this.head        = null;
     this.currentNode = null;
 
-    this.leftPrevBtn = scene.add.image(183, GAME_WINDOW_CENTER.Y, 'next_btn')
+    this.leftPrevBtn = scene.add.image(183, GAME_WINDOW_CENTER.Y, 'prev_btn')
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
@@ -23,7 +23,7 @@ export default class WindowManager {
       .setVisible(false)
       .on('pointerdown', () => this.prev());
 
-    this.leftNextBtn = scene.add.image(136, GAME_WINDOW_CENTER.Y, 'prev_btn')
+    this.leftNextBtn = scene.add.image(136, GAME_WINDOW_CENTER.Y, 'next_btn')
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)

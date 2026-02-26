@@ -1,10 +1,5 @@
 import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER, PANEL_SCALE } from './constants';
 
-const WINDOW_COLORS = {
-  shopWindow:   { alpha: 0.8 },
-  leftPaneRect: { fill: 0x1a1a1a, fillAlpha: 0.5, stroke: 0x8b6914, strokeAlpha: 0.8 },
-};
-
 /**
  * Base class for full-screen game windows (Shop, InventoryWindow, …).
  * Provides shared layout helpers for the panel container, background layers,
@@ -38,7 +33,7 @@ export default class BaseWindow {
       GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y, 'shop_panel',
     )
       .setDisplaySize(this.windowWidth + 100, this.windowHeight + 10)
-      .setAlpha(WINDOW_COLORS.shopWindow.alpha)
+      .setAlpha(0.8)
       .setInteractive();
 
     container.add([bgRect, shopWindow]);
@@ -57,9 +52,9 @@ export default class BaseWindow {
 
     for (let i = 0; i < 3; i++) {
       const rect = this.scene.add.graphics();
-      rect.fillStyle(WINDOW_COLORS.leftPaneRect.fill, WINDOW_COLORS.leftPaneRect.fillAlpha);
+      rect.fillStyle(0x1a1a1a, 0.5);
       rect.fillRect(leftX + i * rectW, topY, rectW, paneH);
-      rect.lineStyle(1, WINDOW_COLORS.leftPaneRect.stroke, WINDOW_COLORS.leftPaneRect.strokeAlpha);
+      rect.lineStyle(1, 0x8b6914, 0.8);
       rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
       rect.setAlpha(0); // DEV BOUNDS — hidden, keep for layout reference
       container.add(rect);

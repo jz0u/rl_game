@@ -23,7 +23,7 @@ export function loadEquipmentAssets(scene, item) {
   }
 
   // Build paths
-  const folder = _slotFolder(item.slot);
+  const folder = item.slot;
   const idlePath    = `assets/armory/${folder}/${folder}_idle/${base}_idle1_diag.png`;
   const walkPath    = `assets/armory/${folder}/${folder}_walking/${base}_walking_diag.png`;
   const attack1Path = `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack1.png`;
@@ -59,23 +59,6 @@ function _refreshOverlay(scene, base, idleKey) {
       overlay.setTexture(idleKey);
     }
   }
-}
-
-/**
- * Maps an item slot name to its armory subfolder name.
- * @param {string} slot
- * @returns {string}
- */
-function _slotFolder(slot) {
-  const map = {
-    head:    'head',
-    body:    'body',
-    bottom:  'bottom',
-    feet:    'feet',
-    weapon:  'weapon',
-    offhand: 'offhand',
-  };
-  return map[slot] || slot;
 }
 
 /**

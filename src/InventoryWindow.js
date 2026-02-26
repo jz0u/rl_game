@@ -5,12 +5,6 @@ import { scaleIcon } from './utils';
 import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
 import { INVENTORY_SIZE } from './Inventory';
 
-const INV_COLORS = {
-  itemSlotRect: { fill: 0x1a1a1a, alpha: 0.5 },
-  toggleBtn:    { background: '#333', color: '#fff' },
-  border_alpha: { alpha: 0.5 },
-};
-
 /**
  * InventoryWindow — the in-game inventory and equipment UI.
  *
@@ -44,9 +38,9 @@ export default class InventoryWindow extends BaseWindow {
     this.invBtn = this.scene.add
       .text(20, 56, 'BAG', {
         fontSize: '16px',
-        backgroundColor: INV_COLORS.toggleBtn.background,
+        backgroundColor: '#333',
         padding: { x: 10, y: 6 },
-        color: INV_COLORS.toggleBtn.color,
+        color: '#fff',
       })
       .setInteractive()
       .setScrollFactor(0);
@@ -144,14 +138,14 @@ export default class InventoryWindow extends BaseWindow {
 
       // Dark fill background rect
       const fillRect = this.scene.add.graphics();
-      fillRect.fillStyle(INV_COLORS.itemSlotRect.fill, INV_COLORS.itemSlotRect.alpha);
+      fillRect.fillStyle(0x1a1a1a, 0.5);
       fillRect.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
       this.invPanel.add(fillRect);
 
       // Blue border image
       const slotBg = this.scene.add.image(x, y, 'icon_bg_blue')
         .setDisplaySize(CELL_SIZE, CELL_SIZE)
-        .setAlpha(INV_COLORS.border_alpha.alpha);
+        .setAlpha(0.5);
       this.invPanel.add(slotBg);
       slotBg.setInteractive();
       slotBg.on('pointerdown', (pointer) => {
