@@ -2,9 +2,9 @@ import { INVENTORY_SIZE } from '../config/constants';
 
 export default class Inventory {
     constructor() {
-        this.itemSetForDupeCheckInventory = new Set();
-        this.itemSetForDupeCheckEquipped = new Set();
-        this.itemsInInventory = 0;
+        this.inventoryItemIds = new Set();
+        this.equippedItemIds = new Set();
+        this.inventoryCount = 0;
 
         this.inventory = new Map();
         this.equipped = new Map();
@@ -27,13 +27,13 @@ export default class Inventory {
      * @returns {false|undefined} Returns false if the item could not be added.
      */
     addItemToInventory(item) {
-        if (this.itemsInInventory >= INVENTORY_SIZE) {
+        if (this.inventoryCount >= INVENTORY_SIZE) {
             return false;
         }
-        else if (this.itemSetForDupeCheckInventory.has(item.id)) {
+        else if (this.inventoryItemIds.has(item.id)) {
             return false;
         }
-        else if (this.itemSetForDupeCheckEquipped.has(item.id)) {
+        else if (this.equippedItemIds.has(item.id)) {
             return false;
         }
         else {
@@ -41,8 +41,8 @@ export default class Inventory {
             this.emptySlots.delete(slot);
             this.inventory.set(slot, item);
             this.itemSlotMap.set(item.id, slot);
-            this.itemSetForDupeCheckInventory.add(item.id);
-            this.itemsInInventory++;
+            this.inventoryItemIds.add(item.id);
+            this.inventoryCount++;
         }
     }
 
@@ -53,26 +53,26 @@ export default class Inventory {
      * @returns {false|undefined} Returns false if the item could not be removed.
      */
     removeItemFromInventory(item) {
-        if (this.itemsInInventory === 0) {
+        if (this.inventoryCount === 0) {
             return false;
         }
-        else if (!this.itemSetForDupeCheckInventory.has(item.id)) {
+        else if (!this.inventoryItemIds.has(item.id)) {
             return false;
         }
         else {
             const slot = this.itemSlotMap.get(item.id);
             this.inventory.delete(slot);
             this.itemSlotMap.delete(item.id);
-            this.itemSetForDupeCheckInventory.delete(item.id);
+            this.inventoryItemIds.delete(item.id);
             this.emptySlots.add(slot);
-            this.itemsInInventory--;
+            this.inventoryCount--;
         }
     }
 
     /**
      * Moves an item from the inventory into its corresponding equipment slot.
      * If the target slot is already occupied, the previous item is automatically
-     * returned to inventory (itemsInInventory net change is 0 for a swap, -1 for a fresh equip).
+     * returned to inventory (inventoryCount net change is 0 for a swap, -1 for a fresh equip).
      * Fails silently if the inventory is empty or the item is not present.
      * Note: this method only manages data. Callers must also call player.equip(item)
      * separately to update the visual overlay on the player sprite.
@@ -81,10 +81,10 @@ export default class Inventory {
      */
     equipItemFromInventory(item) {
         const equipSlot = item.slot;
-        if (this.itemsInInventory === 0) {
+        if (this.inventoryCount === 0) {
             return false;
         }
-        else if (!this.itemSetForDupeCheckInventory.has(item.id)) {
+        else if (!this.inventoryItemIds.has(item.id)) {
             return false;
         }
         else {
@@ -96,7 +96,7 @@ export default class Inventory {
                 // a home for the displaced item, even when the inventory is otherwise full.
                 this.inventory.delete(incomingSlot);
                 this.itemSlotMap.delete(item.id);
-                this.itemSetForDupeCheckInventory.delete(item.id);
+                this.inventoryItemIds.delete(item.id);
                 this.emptySlots.add(incomingSlot);
 
                 // Move the previously equipped item back into inventory.
@@ -104,21 +104,21 @@ export default class Inventory {
                 this.emptySlots.delete(returnSlot);
                 this.inventory.set(returnSlot, currentlyEquipped);
                 this.itemSlotMap.set(currentlyEquipped.id, returnSlot);
-                this.itemSetForDupeCheckInventory.add(currentlyEquipped.id);
-                this.itemSetForDupeCheckEquipped.delete(currentlyEquipped.id);
+                this.inventoryItemIds.add(currentlyEquipped.id);
+                this.equippedItemIds.delete(currentlyEquipped.id);
 
-                // itemsInInventory: one item left (-1), one returned (+1) — net 0.
+                // inventoryCount: one item left (-1), one returned (+1) — net 0.
                 this.equipped.set(equipSlot, item);
-                this.itemSetForDupeCheckEquipped.add(item.id);
+                this.equippedItemIds.add(item.id);
             } else {
                 // Slot was empty — standard equip, inventory shrinks by one.
                 this.equipped.set(equipSlot, item);
-                this.itemSetForDupeCheckEquipped.add(item.id);
-                this.itemSetForDupeCheckInventory.delete(item.id);
+                this.equippedItemIds.add(item.id);
+                this.inventoryItemIds.delete(item.id);
                 this.inventory.delete(incomingSlot);
                 this.itemSlotMap.delete(item.id);
                 this.emptySlots.add(incomingSlot);
-                this.itemsInInventory--;
+                this.inventoryCount--;
             }
         }
     }
@@ -132,24 +132,24 @@ export default class Inventory {
      */
     removeItemFromEquipped(item) {
         const equipSlot = item.slot;
-        if (this.itemSetForDupeCheckEquipped.size === 0) {
+        if (this.equippedItemIds.size === 0) {
             return false;
         }
-        else if (!this.itemSetForDupeCheckEquipped.has(item.id)) {
+        else if (!this.equippedItemIds.has(item.id)) {
             return false;
         }
         else {
-            if (this.itemsInInventory >= INVENTORY_SIZE) {
+            if (this.inventoryCount >= INVENTORY_SIZE) {
                 return false;
             }
             const slot = Math.min(...this.emptySlots);
             this.emptySlots.delete(slot);
             this.equipped.set(equipSlot, null);
-            this.itemSetForDupeCheckEquipped.delete(item.id);
+            this.equippedItemIds.delete(item.id);
             this.inventory.set(slot, item);
             this.itemSlotMap.set(item.id, slot);
-            this.itemSetForDupeCheckInventory.add(item.id);
-            this.itemsInInventory++;
+            this.inventoryItemIds.add(item.id);
+            this.inventoryCount++;
         }
     }
 }

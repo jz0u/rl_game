@@ -34,15 +34,15 @@ export default class Player {
     };
 
     /** World-space target the player is walking toward; null when idle. */
-    this.destination = null;
+    this.moveTarget = null;
     this.stats = { moveSpeed: 3 };
     /** True while an attack animation is playing — blocks movement and re-triggering. */
-    this.isAttacking = false;
+    this.attackInProgress = false;
 
     // When an attack animation finishes, clear the flag and return to idle.
     // _syncOverlays is called immediately so overlays switch in the same tick as the body.
     this.sprite.on("animationcomplete", () => {
-      this.isAttacking = false;
+      this.attackInProgress = false;
       this.sprite.play(this.getIdleAnim());
       this._syncOverlays();
     });
@@ -131,7 +131,7 @@ export default class Player {
    * @param {number} y
    */
   moveTo(x, y) {
-    this.destination = { x, y };
+    this.moveTarget = { x, y };
   }
 
   /**
@@ -171,10 +171,10 @@ export default class Player {
    * @param {number} pointerX - World X of the click, used to determine facing direction.
    */
   attack(pointerX) {
-    if (this.isAttacking) return;
+    if (this.attackInProgress) return;
 
-    this.isAttacking = true;
-    this.destination = null;
+    this.attackInProgress = true;
+    this.moveTarget = null;
     this.sprite.flipX = pointerX > this.sprite.x;
 
     this.sprite.play(this.overlays.weapon ? "attack1" : "attack2");
@@ -183,19 +183,19 @@ export default class Player {
   // ── Game loop ──
 
   /**
-   * Called every frame. Handles movement toward the current destination and
+   * Called every frame. Handles movement toward the current moveTarget and
    * stops when within one step (avoiding oscillation at the target).
    * Overlays are synced first so they track the sprite even when idle.
    */
   update() {
     this._syncOverlays();
-    if (this.isAttacking) return;
+    if (this.attackInProgress) return;
 
-    if (!this.destination) return;
+    if (!this.moveTarget) return;
 
     const angle = Phaser.Math.Angle.Between(
       this.sprite.x, this.sprite.y,
-      this.destination.x, this.destination.y,
+      this.moveTarget.x, this.moveTarget.y,
     );
 
     this.sprite.flipX = false;
@@ -209,11 +209,11 @@ export default class Player {
 
     const distance = Phaser.Math.Distance.Between(
       this.sprite.x, this.sprite.y,
-      this.destination.x, this.destination.y,
+      this.moveTarget.x, this.moveTarget.y,
     );
 
     if (distance < this.stats.moveSpeed) {
-      this.destination = null;
+      this.moveTarget = null;
       this.sprite.play(this.getIdleAnim());
     }
   }
