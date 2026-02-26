@@ -34,6 +34,7 @@ export default class Player {
       feet: null,
       primary: null,
       secondary: null,
+      amulet: null,
     };
 
     /** World-space target the player is walking toward; null when idle. */

@@ -6,5 +6,6 @@ export default class Shop {
         if (result === false) return false;
 
         player.balance -= item.value;
+        return true;
     }
 }

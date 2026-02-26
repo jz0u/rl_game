@@ -5,7 +5,7 @@
  * @typedef {object} Item
  * @property {string} id            - Unique key used as the Phaser texture key for the shop icon.
  * @property {string} displayName   - Human-readable name shown in the shop UI.
- * @property {string} slot          - Equipment slot: 'head' | 'shoulder' | 'hands' | 'body_inner' | 'body_outer' | 'legs' | 'feet' | 'primary' | 'secondary'.
+ * @property {string} slot          - Equipment slot: 'head' | 'amulet' | 'shoulder' | 'hands' | 'body_inner' | 'body_outer' | 'legs' | 'feet' | 'primary' | 'secondary'.
  * @property {string} type          - Armour class: 'light' | 'medium' | 'heavy' | 'melee' | 'ranged'.
  * @property {string} [hands]       - For primary weapons only: 'one-handed' | 'two-handed'.
  * @property {string} baseName      - Sprite filename prefix used to build animation asset paths.
@@ -1419,6 +1419,20 @@ export const Armory = {
       stats: { armorValue: 2, blockChance: 1 },
       value: 0,
       description: 'A large Templar kite shield offering maximum coverage on horseback.',
+    },
+  ],
+
+  amulet: [
+    {
+      id: 'amulet_1',
+      displayName: 'Silver Medallion',
+      slot: 'amulet',
+      type: 'light',
+      baseName: 'Medieval_PB_Male_Accessory_2',
+      iconPath: iconPath('amulet', 'Medieval_PB_Male_Accessory_2'),
+      stats: { magicResist: 1 },
+      value: 0,
+      description: 'A polished silver medallion worn close to the chest.',
     },
   ],
 };

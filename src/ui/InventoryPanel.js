@@ -68,7 +68,7 @@ export default class InventoryPanel extends BasePanel {
     const { dollX, dollSize } = this._buildPaperdoll(this.invPanel);
 
     this.itemOverlays = {};
-    const overlaySlots = ['head', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
+    const overlaySlots = ['head', 'amulet', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
     for (const slotName of overlaySlots) {
       const overlay = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
         .setDisplaySize(dollSize, dollSize)
@@ -78,29 +78,34 @@ export default class InventoryPanel extends BasePanel {
     }
 
     // ── Step 4: Equipment slot boxes ──
-    const leftColX  = dollX - dollSize * 0.32;
-    const rightColX = dollX + dollSize * 0.32;
+    const eqSize    = 72;
+    const eqSpacing = 80;
+    const sideX     = 160;
+    this.eqSize = eqSize;
 
-    const rowY = [
-      GAME_WINDOW_CENTER.Y - SLOT_SPACING * 1.5,
-      GAME_WINDOW_CENTER.Y - SLOT_SPACING * 0.5,
-      GAME_WINDOW_CENTER.Y + SLOT_SPACING * 0.5,
-      GAME_WINDOW_CENTER.Y + SLOT_SPACING * 1.5,
-      GAME_WINDOW_CENTER.Y + SLOT_SPACING * 2.5,
-    ];
+    const topY = GAME_WINDOW_CENTER.Y - eqSpacing * 1.5;
+    const row1 = GAME_WINDOW_CENTER.Y - eqSpacing * 0.5;
+    const row2 = GAME_WINDOW_CENTER.Y + eqSpacing * 0.5;
+    const botY = GAME_WINDOW_CENTER.Y + eqSpacing * 1.5;
 
-    const leftColSlots  = ['head', 'shoulder', 'body_inner', 'primary', 'secondary'];
-    const rightColSlots = ['hands', 'body_outer', 'legs', 'feet'];
-
+    // Diablo-style layout: helm+amulet top, weapon+chest+shield mid, gloves+belt+boots lower, shoulder+legs bottom
     const slotLayout = [
-      ...leftColSlots.map((name, i)  => ({ name, x: leftColX,  y: rowY[i] })),
-      ...rightColSlots.map((name, i) => ({ name, x: rightColX, y: rowY[i] })),
+      { name: 'head',       x: dollX,          y: topY },
+      { name: 'amulet',     x: dollX + sideX,  y: topY },
+      { name: 'primary',    x: dollX - sideX,  y: row1 },
+      { name: 'body_outer', x: dollX,          y: row1 },
+      { name: 'secondary',  x: dollX + sideX,  y: row1 },
+      { name: 'hands',      x: dollX - sideX,  y: row2 },
+      { name: 'body_inner', x: dollX,          y: row2 },
+      { name: 'feet',       x: dollX + sideX,  y: row2 },
+      { name: 'shoulder',   x: dollX - sideX,  y: botY },
+      { name: 'legs',       x: dollX,          y: botY },
     ];
 
     for (const { name, x, y } of slotLayout) {
       // Blue background square
       const bg = this.scene.add.image(x, y, 'slot_box')
-        .setDisplaySize(SLOT_BOX_SIZE, SLOT_BOX_SIZE)
+        .setDisplaySize(eqSize, eqSize)
         .setAlpha(.7)
         .setScrollFactor(0);
       this.equipSlotBgs[name] = bg;
@@ -108,7 +113,7 @@ export default class InventoryPanel extends BasePanel {
 
       // Placeholder icon for the equipped item
       const icon = this.scene.add.image(x, y, 'slot_box')
-        .setDisplaySize(SLOT_BOX_SIZE - 10, SLOT_BOX_SIZE - 10)
+        .setDisplaySize(eqSize - 10, eqSize - 10)
         .setVisible(false)
         .setScrollFactor(0);
       this.equipSlotIcons[name] = icon;
@@ -224,7 +229,7 @@ export default class InventoryPanel extends BasePanel {
    */
   _refresh() {
     // Part A — Update equipped slot icons
-    const slots = ['head', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
+    const slots = ['head', 'amulet', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
     const weaponItem  = this.inventory.equipped.get('primary');
     const isTwoHanded = weaponItem !== null && weaponItem.hands === 'two-handed';
 
@@ -237,13 +242,13 @@ export default class InventoryPanel extends BasePanel {
         // Mirror the two-handed weapon icon into the secondary slot and dim both.
         iconImg.setTexture(weaponItem.id).setVisible(true).setAlpha(0.35);
         const src   = this.scene.textures.get(weaponItem.id).getSourceImage();
-        const scale = scaleIcon(src, SLOT_BOX_SIZE - 10);
+        const scale = scaleIcon(src, this.eqSize - 10);
         iconImg.setDisplaySize(src.width * scale, src.height * scale);
         bgImg.setTint(0x444444);
       } else if (equippedItem !== null) {
         iconImg.setTexture(equippedItem.id).setVisible(true).setAlpha(1);
         const src   = this.scene.textures.get(equippedItem.id).getSourceImage();
-        const scale = scaleIcon(src, SLOT_BOX_SIZE - 10);
+        const scale = scaleIcon(src, this.eqSize - 10);
         iconImg.setDisplaySize(src.width * scale, src.height * scale);
         bgImg.clearTint();
       } else {
