@@ -1429,6 +1429,7 @@ export const Armory = {
       slot: 'amulet',
       type: 'light',
       baseName: 'Medieval_PB_Male_Accessory_2',
+      staticOverlay: true,
       iconPath: iconPath('amulet', 'Medieval_PB_Male_Accessory_2'),
       stats: { magicResist: 1 },
       value: 0,

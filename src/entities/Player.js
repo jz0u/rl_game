@@ -86,9 +86,10 @@ export default class Player {
       this.overlays[item.slot].destroy();
     }
 
-    // item.baseName spritesheets and animations must be loaded before calling this or the overlay will break.
-    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, `${item.baseName}_idle1_diag`);
+    const textureKey = item.staticOverlay ? item.id : `${item.baseName}_idle1_diag`;
+    const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, textureKey);
     overlay.baseName = item.baseName;
+    overlay.isStatic = !!item.staticOverlay;
     this.overlays[item.slot] = overlay;
   }
 
@@ -137,7 +138,7 @@ export default class Player {
       overlay.y = this.sprite.y;
       overlay.flipX = this.sprite.flipX;
 
-      if (!currentAnim) continue;
+      if (!currentAnim || overlay.isStatic) continue;
 
       const weaponAnim = overlay.baseName + "_" + currentAnim;
       if (overlay.anims.currentAnim?.key !== weaponAnim) {

@@ -17,6 +17,12 @@ function folderFor(slot) { return SLOT_FOLDER[slot] ?? slot; }
  * @param {object} item - An Armory item definition with baseName and slot properties.
  */
 export function loadEquipmentAssets(scene, item) {
+  if (item.staticOverlay) {
+    // Paperdoll icon already loaded at startup under item.id — no spritesheets needed.
+    _refreshOverlay(scene, item.baseName, item.id);
+    return;
+  }
+
   const { baseName, slot } = item;
   // The actual animation file name prefix inside the subdirectory. Resolution order:
   //   animFileName → fileName → baseName
