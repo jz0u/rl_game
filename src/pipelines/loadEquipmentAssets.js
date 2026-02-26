@@ -78,6 +78,8 @@ function _registerAnims(scene, baseName) {
   const attack1Key = baseName + '_MVsv_alt_attack1';
   const attack2Key = baseName + '_MVsv_alt_attack2';
 
+  // Assumed layout: walk is 8 frames per row across 4 rows, idle is 3 frames per row across 4 rows,
+  // attack is 3 frames in a single row. If the spritesheet layout changes these frame numbers must be updated.
   const anims = [
     // Walk — 8 frames per row, 4 rows
     { key: baseName + '_walk_sw', texture: walkKey,    start: 0,  end: 7,  frameRate: 8, repeat: -1 },

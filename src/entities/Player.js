@@ -81,6 +81,7 @@ export default class Player {
       this.overlays[item.slot].destroy();
     }
 
+    // item.baseName spritesheets and animations must be loaded before calling this or the overlay will break.
     const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, `${item.baseName}_idle1_diag`);
     overlay.baseName = item.baseName;
     this.overlays[item.slot] = overlay;
