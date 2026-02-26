@@ -5,6 +5,7 @@ import {
   ICON_SIZE,
   NAV_BTN_WIDTH,
   NAV_BTN_HEIGHT,
+  DEPTH_UI,
 } from './constants';
 import BaseWindow from './BaseWindow';
 import SelectionBorder from './SelectionBorder';
@@ -47,7 +48,7 @@ export default class ShopWindow extends BaseWindow {
     this.shopPanel.bringToTop(this.prevBtn);
     this.shopPanel.bringToTop(this.nextBtn);
 
-    this.shopPanel.setDepth(10);
+    this.shopPanel.setDepth(DEPTH_UI);
 
     this.shopBtn.on('pointerdown', () => this.scene.windowManager.open(this));
     this.hide();

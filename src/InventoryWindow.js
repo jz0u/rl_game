@@ -1,9 +1,8 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING } from './constants';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING, INVENTORY_SIZE, DEPTH_UI, DEPTH_UI_TOP } from './constants';
 import BaseWindow from './BaseWindow';
 import SelectionBorder from './SelectionBorder';
 import { scaleIcon } from './utils';
 import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
-import { INVENTORY_SIZE } from './Inventory';
 
 /**
  * InventoryWindow — the in-game inventory and equipment UI.
@@ -49,7 +48,7 @@ export default class InventoryWindow extends BaseWindow {
     this.invPanel = this._buildContainer();
 
     this._buildPanel();
-    this.invPanel.setDepth(10);
+    this.invPanel.setDepth(DEPTH_UI);
 
     this.invBtn.on('pointerdown', () => this.scene.windowManager.open(this));
     this.hide();
@@ -190,7 +189,7 @@ export default class InventoryWindow extends BaseWindow {
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .setDepth(20)
+      .setDepth(DEPTH_UI_TOP)
       .on('pointerdown', () => {
         this.currentPage = Math.max(0, this.currentPage - 1);
         this._refresh();
@@ -201,7 +200,7 @@ export default class InventoryWindow extends BaseWindow {
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .setDepth(20)
+      .setDepth(DEPTH_UI_TOP)
       .on('pointerdown', () => {
         const totalPages = Math.ceil(INVENTORY_SIZE / this.itemsPerPage);
         this.currentPage = Math.min(totalPages - 1, this.currentPage + 1);

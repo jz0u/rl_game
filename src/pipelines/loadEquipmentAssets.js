@@ -1,3 +1,6 @@
+// matches player sprite frame size
+const SPRITE_FRAME_SIZE = 128;
+
 /**
  * Dynamically loads spritesheets and registers animations for a single equipment item.
  * Safe to call multiple times — skips loading if the texture is already cached.
@@ -30,10 +33,10 @@ export function loadEquipmentAssets(scene, item) {
   const attack2Path = `assets/armory/${folder}/${folder}_attacking/${base}_MVsv_alt_attack2.png`;
 
   // Load all 4 spritesheets
-  scene.load.spritesheet(idleKey,    idlePath,    { frameWidth: 128, frameHeight: 128 });
-  scene.load.spritesheet(walkKey,    walkPath,    { frameWidth: 128, frameHeight: 128 });
-  scene.load.spritesheet(attack1Key, attack1Path, { frameWidth: 128, frameHeight: 128 });
-  scene.load.spritesheet(attack2Key, attack2Path, { frameWidth: 128, frameHeight: 128 });
+  scene.load.spritesheet(idleKey,    idlePath,    { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  scene.load.spritesheet(walkKey,    walkPath,    { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  scene.load.spritesheet(attack1Key, attack1Path, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  scene.load.spritesheet(attack2Key, attack2Path, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
 
   // Once loaded, register animations and fix up the overlay sprite's texture
   scene.load.once('complete', () => {

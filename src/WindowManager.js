@@ -1,4 +1,4 @@
-import { GAME_WINDOW_CENTER, NAV_BTN_WIDTH, NAV_BTN_HEIGHT } from './constants';
+import { GAME_WINDOW_CENTER, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, DEPTH_UI_TOP } from './constants';
 
 class WindowNode {
   constructor(windowInstance) {
@@ -19,7 +19,7 @@ export default class WindowManager {
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .setDepth(20)
+      .setDepth(DEPTH_UI_TOP)
       .setVisible(false)
       .on('pointerdown', () => this.prev());
 
@@ -27,7 +27,7 @@ export default class WindowManager {
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
-      .setDepth(20)
+      .setDepth(DEPTH_UI_TOP)
       .setVisible(false)
       .on('pointerdown', () => this.next());
   }

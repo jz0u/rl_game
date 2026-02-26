@@ -8,3 +8,6 @@ export const NAV_BTN_WIDTH  = 46;
 export const NAV_BTN_HEIGHT = 167;
 export const SLOT_BOX_SIZE  = 90;
 export const SLOT_SPACING   = 120;
+export const INVENTORY_SIZE = 24;
+export const DEPTH_UI       = 10;
+export const DEPTH_UI_TOP   = 20;
