@@ -10,7 +10,7 @@ import { map1 } from "../maps/map1";
 export function loadAssets(scene){
     const allItems = Object.values(Armory).flat();
     Player.preload(scene);
-    scene.load.image('player_paperdoll', 'assets/icons/uncropped/Medieval_Warfare_Male_1_Paperdoll.png');
+    scene.load.image('player_paperdoll', 'assets/player/player_paperdoll.png');
     allItems.forEach(item => {
       scene.load.image(item.id, item.iconPath);
     });
