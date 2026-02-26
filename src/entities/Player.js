@@ -88,6 +88,22 @@ export default class Player {
   }
 
   /**
+   * Syncs all player overlay sprites to match the given equipped Map.
+   * This is the only entry-point for updating visuals from equipment changes;
+   * it is called by the EquipmentManager 'equipmentChanged' event listener.
+   * @param {Map<string, object|null>} equippedMap - slot → item|null
+   */
+  syncEquipment(equippedMap) {
+    for (const [slot, item] of equippedMap) {
+      if (item !== null) {
+        this.equip(item);
+      } else {
+        this.unequip(slot);
+      }
+    }
+  }
+
+  /**
    * Removes the equipment overlay for the given slot, if one exists.
    * Call this after inventory.removeItemFromEquipped() to sync the visual.
    * @param {string} slot - Equipment slot key (e.g. 'weapon', 'head').

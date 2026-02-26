@@ -2,7 +2,6 @@ import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WI
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
 import { scaleIcon } from '../config/utils';
-import { loadEquipmentAssets } from '../pipelines/loadEquipmentAssets';
 
 /**
  * InventoryPanel — the in-game inventory and equipment UI.
@@ -21,13 +20,11 @@ export default class InventoryPanel extends BasePanel {
    * The panel starts hidden; call show() to open.
    * @param {Phaser.Scene} scene
    * @param {Inventory} inventory - The player's Inventory instance.
-   * @param {Player} player - The player object (for equip overlay updates).
    * @param {object[]} allItems - Full item catalogue from Armory.
    */
-  constructor(scene, inventory, player, allItems) {
+  constructor(scene, inventory, allItems) {
     super(scene);
     this.inventory = inventory;
-    this.player    = player;
     this.allItems  = allItems;
 
     this.equipSlotIcons = {};
@@ -162,10 +159,7 @@ export default class InventoryPanel extends BasePanel {
         } else {
           // Left-click — equip progression
           this.selectionBorder.advance(item, x, y, () => {
-            this.inventory.equipItemFromInventory(item);
-            this.player.equip(item);
-            this._ensureOverlayLoaded(item);
-            this._refresh();
+            return this.scene.equipmentManager.equip(item);
           }, 'equip');
         }
       });
@@ -286,22 +280,9 @@ export default class InventoryPanel extends BasePanel {
     if (pointer.rightButtonDown()) {
       // Right-click — unequip progression
       this.selectionBorder.advance(item, x, y, () => {
-        this.inventory.removeItemFromEquipped(item);
-        const result = this.inventory.removeItemFromEquipped(item);
-        if (result === false) return false;
-        this.player.unequip(slotName);
-        this._refresh();
+        return this.scene.equipmentManager.unequip(slotName);
       }, 'drop');
     }
-  }
-
-  /**
-   * Ensures the equipment overlay spritesheets and animations for the given item
-   * are loaded into the scene, then refreshes the player overlay sprite's texture.
-   * @param {object} item - The item being equipped.
-   */
-  _ensureOverlayLoaded(item) {
-    loadEquipmentAssets(this.scene, item);
   }
 
   /** Shows the panel and refreshes all icons. */

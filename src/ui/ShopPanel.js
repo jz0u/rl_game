@@ -10,7 +10,6 @@ import {
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
 import { scaleIcon } from '../config/utils';
-import { loadEquipmentAssets } from '../pipelines/loadEquipmentAssets';
 import Shop from '../systems/Shop';
 
 export default class ShopPanel extends BasePanel {
@@ -227,14 +226,12 @@ export default class ShopPanel extends BasePanel {
 
   /**
    * Attempts to purchase an item and add it to the player's inventory.
-   * Fails silently with a console warning if the player cannot afford it or inventory is full.
+   * Delegates entirely to EquipmentManager.buy() which handles the shop call
+   * and asset loading atomically.
    * @param {object} item - An Armory item definition.
    */
   _buyItem(item) {
-    const player    = this.scene.player;
-    const inventory = this.scene.inventory;
-    if (this.shop.buy(item, player, inventory) === false) return false;
-    loadEquipmentAssets(this.scene, item);
+    return this.scene.equipmentManager.buy(item);
   }
 
   /** Hides the entire shop panel. */

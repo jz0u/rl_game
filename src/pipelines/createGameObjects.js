@@ -6,6 +6,7 @@ import ShopPanel from "../ui/ShopPanel";
 import Inventory from "../systems/Inventory";
 import InventoryPanel from "../ui/InventoryPanel";
 import WindowManager from "../ui/WindowManager";
+import EquipmentManager from "../systems/EquipmentManager";
 
 
 /**
@@ -20,11 +21,19 @@ export function createGameObjects(scene, allItems) {
     Player.createAnims(scene);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite);
-    scene.shop            = new Shop();
-    scene.shopPanel       = new ShopPanel(scene, allItems);
-    scene.inventory       = new Inventory();
-    scene.inventoryPanel  = new InventoryPanel(scene, scene.inventory, scene.player, allItems);
-    scene.windowManager   = new WindowManager(scene);
+    scene.shop             = new Shop();
+    scene.shopPanel        = new ShopPanel(scene, allItems);
+    scene.inventory        = new Inventory();
+    scene.equipmentManager = new EquipmentManager(scene.inventory, scene.player, scene);
+    scene.inventoryPanel   = new InventoryPanel(scene, scene.inventory, allItems);
+    scene.windowManager    = new WindowManager(scene);
+
+    scene.equipmentManager.on('equipmentChanged', (equippedMap) => {
+      scene.player.syncEquipment(equippedMap);
+      if (scene.inventoryPanel.invPanel.visible) {
+        scene.inventoryPanel._refresh();
+      }
+    });
     scene.windowManager.addWindow(scene.shopPanel);
     scene.windowManager.addWindow(scene.inventoryPanel);
 }
