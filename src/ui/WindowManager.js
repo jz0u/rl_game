@@ -17,6 +17,7 @@ export default class WindowManager {
 
     this.leftPrevBtn = scene.add.image(183, GAME_WINDOW_CENTER.Y, 'prev_btn')
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setFlipX(true)
       .setInteractive()
       .setScrollFactor(0)
       .setDepth(DEPTH_UI_TOP)
@@ -25,6 +26,7 @@ export default class WindowManager {
 
     this.leftNextBtn = scene.add.image(136, GAME_WINDOW_CENTER.Y, 'next_btn')
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
+      .setFlipX(true)
       .setInteractive()
       .setScrollFactor(0)
       .setDepth(DEPTH_UI_TOP)
