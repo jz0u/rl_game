@@ -26,11 +26,14 @@ export default class Player {
      */
     this.overlays = {
       head: null,
-      body: null,
-      bottom: null,
+      shoulder: null,
+      hands: null,
+      body_inner: null,
+      body_outer: null,
+      legs: null,
       feet: null,
-      weapon: null,
-      offhand: null,
+      primary: null,
+      secondary: null,
     };
 
     /** World-space target the player is walking toward; null when idle. */
@@ -102,7 +105,7 @@ export default class Player {
         this.unequip(slot);
       }
     }
-    this.hasWeapon = equippedMap.get('weapon') !== null;
+    this.hasWeapon = equippedMap.get('primary') !== null;
   }
 
   /**

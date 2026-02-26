@@ -1,18 +1,31 @@
 // matches player sprite frame size
 const SPRITE_FRAME_SIZE = 128;
 
+const SLOT_FOLDER = {
+  primary:   'primary_weapon',
+  secondary: 'secondary_weapon',
+  feet:      'feets',
+};
+function folderFor(slot) { return SLOT_FOLDER[slot] ?? slot; }
+
 /**
  * Dynamically loads spritesheets and registers animations for a single equipment item.
  * Safe to call multiple times — skips loading if the texture is already cached.
  * Call this before player.equip(item) to ensure overlay animations are available.
  *
  * @param {Phaser.Scene} scene
- * @param {object} item - An Armory item definition with a baseName property.
+ * @param {object} item - An Armory item definition with baseName and slot properties.
  */
 export function loadEquipmentAssets(scene, item) {
-  const baseName = item.baseName;
+  const { baseName, slot } = item;
+  // The actual animation file name prefix inside the subdirectory. Resolution order:
+  //   animFileName → fileName → baseName
+  // animFileName: Paperdoll matches baseName but animation files use a different prefix (e.g. T&C→TC).
+  // fileName: both Paperdoll and animations use a different prefix from baseName (e.g. _Main_/_Off_ weapons).
+  const fileName = item.animFileName ?? item.fileName ?? baseName;
+  const folder = folderFor(slot);
 
-  // Keys for the 4 spritesheets this item needs
+  // Texture keys use baseName (unique per item, even when files share a name across folders)
   const idleKey    = baseName + '_idle1_diag';
   const walkKey    = baseName + '_walking_diag';
   const attack1Key = baseName + '_MVsv_alt_attack1';
@@ -25,18 +38,11 @@ export function loadEquipmentAssets(scene, item) {
     return;
   }
 
-  // Build paths
-  const folder = item.slot;
-  const idlePath    = `assets/armory/${folder}/${folder}_idle/${baseName}_idle1_diag.png`;
-  const walkPath    = `assets/armory/${folder}/${folder}_walking/${baseName}_walking_diag.png`;
-  const attack1Path = `assets/armory/${folder}/${folder}_attacking/${baseName}_MVsv_alt_attack1.png`;
-  const attack2Path = `assets/armory/${folder}/${folder}_attacking/${baseName}_MVsv_alt_attack2.png`;
-
-  // Load all 4 spritesheets
-  scene.load.spritesheet(idleKey,    idlePath,    { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
-  scene.load.spritesheet(walkKey,    walkPath,    { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
-  scene.load.spritesheet(attack1Key, attack1Path, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
-  scene.load.spritesheet(attack2Key, attack2Path, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  // Build paths: assets/armory/{folder}/{baseName}/{fileName}_anim.png
+  scene.load.spritesheet(idleKey,    `assets/armory/${folder}/${baseName}/${fileName}_idle1_diag.png`,    { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  scene.load.spritesheet(walkKey,    `assets/armory/${folder}/${baseName}/${fileName}_walking_diag.png`,  { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  scene.load.spritesheet(attack1Key, `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_attack1.png`, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  scene.load.spritesheet(attack2Key, `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_attack2.png`, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
 
   // Once loaded, register animations and fix up the overlay sprite's texture
   scene.load.once('complete', () => {

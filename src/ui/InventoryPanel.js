@@ -68,7 +68,7 @@ export default class InventoryPanel extends BasePanel {
     const { dollX, dollSize } = this._buildPaperdoll(this.invPanel);
 
     this.itemOverlays = {};
-    const overlaySlots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
+    const overlaySlots = ['head', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
     for (const slotName of overlaySlots) {
       const overlay = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
         .setDisplaySize(dollSize, dollSize)
@@ -82,13 +82,15 @@ export default class InventoryPanel extends BasePanel {
     const rightColX = dollX + dollSize * 0.32;
 
     const rowY = [
-      GAME_WINDOW_CENTER.Y - SLOT_SPACING,
-      GAME_WINDOW_CENTER.Y,
-      GAME_WINDOW_CENTER.Y + SLOT_SPACING,
+      GAME_WINDOW_CENTER.Y - SLOT_SPACING * 1.5,
+      GAME_WINDOW_CENTER.Y - SLOT_SPACING * 0.5,
+      GAME_WINDOW_CENTER.Y + SLOT_SPACING * 0.5,
+      GAME_WINDOW_CENTER.Y + SLOT_SPACING * 1.5,
+      GAME_WINDOW_CENTER.Y + SLOT_SPACING * 2.5,
     ];
 
-    const leftColSlots  = ['head', 'body', 'weapon'];
-    const rightColSlots = ['bottom', 'feet', 'offhand'];
+    const leftColSlots  = ['head', 'shoulder', 'body_inner', 'primary', 'secondary'];
+    const rightColSlots = ['hands', 'body_outer', 'legs', 'feet'];
 
     const slotLayout = [
       ...leftColSlots.map((name, i)  => ({ name, x: leftColX,  y: rowY[i] })),
@@ -222,8 +224,8 @@ export default class InventoryPanel extends BasePanel {
    */
   _refresh() {
     // Part A — Update equipped slot icons
-    const slots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
-    const weaponItem  = this.inventory.equipped.get('weapon');
+    const slots = ['head', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
+    const weaponItem  = this.inventory.equipped.get('primary');
     const isTwoHanded = weaponItem !== null && weaponItem.hands === 'two-handed';
 
     for (const slotName of slots) {
@@ -231,8 +233,8 @@ export default class InventoryPanel extends BasePanel {
       const iconImg      = this.equipSlotIcons[slotName];
       const bgImg        = this.equipSlotBgs[slotName];
 
-      if (slotName === 'offhand' && isTwoHanded) {
-        // Mirror the two-handed weapon icon into the offhand slot and dim both.
+      if (slotName === 'secondary' && isTwoHanded) {
+        // Mirror the two-handed weapon icon into the secondary slot and dim both.
         iconImg.setTexture(weaponItem.id).setVisible(true).setAlpha(0.35);
         const src   = this.scene.textures.get(weaponItem.id).getSourceImage();
         const scale = scaleIcon(src, SLOT_BOX_SIZE - 10);
@@ -254,7 +256,7 @@ export default class InventoryPanel extends BasePanel {
       const equippedItem = this.inventory.equipped.get(slotName);
       const overlay      = this.itemOverlays[slotName];
       if (equippedItem !== null) {
-        overlay.setTexture(equippedItem.id + '_full').setVisible(true);
+        overlay.setTexture(equippedItem.id).setVisible(true);
       } else {
         overlay.setVisible(false);
       }

@@ -136,7 +136,7 @@ export default class ShopPanel extends BasePanel {
    * @param {object} item - An Armory item definition.
    */
   _renderPreview(item) {
-    this.itemOverlay.setTexture(item.id + '_full').setVisible(true);
+    this.itemOverlay.setTexture(item.id).setVisible(true);
 
     this.generalText.setText(
       `${item.displayName}\n\n` +

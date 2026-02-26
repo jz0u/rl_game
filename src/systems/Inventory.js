@@ -10,11 +10,14 @@ export default class Inventory {
         this.equipped = new Map();
 
         this.equipped.set('head', null);
-        this.equipped.set('body', null);
-        this.equipped.set('bottom', null);
+        this.equipped.set('shoulder', null);
+        this.equipped.set('hands', null);
+        this.equipped.set('body_inner', null);
+        this.equipped.set('body_outer', null);
+        this.equipped.set('legs', null);
         this.equipped.set('feet', null);
-        this.equipped.set('weapon', null);
-        this.equipped.set('offhand', null);
+        this.equipped.set('primary', null);
+        this.equipped.set('secondary', null);
 
         this.itemSlotMap = new Map();
         this.emptySlots = new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]);
@@ -88,9 +91,9 @@ export default class Inventory {
             return false;
         }
         else {
-            // Block equipping an offhand while a two-handed weapon is in the weapon slot.
-            if (item.slot === 'offhand') {
-                const currentWeapon = this.equipped.get('weapon');
+            // Block equipping a secondary while a two-handed weapon is in the primary slot.
+            if (item.slot === 'secondary') {
+                const currentWeapon = this.equipped.get('primary');
                 if (currentWeapon !== null && currentWeapon.hands === 'two-handed') {
                     return false;
                 }
@@ -129,17 +132,17 @@ export default class Inventory {
                 this.inventoryCount--;
             }
 
-            // After equipping a two-handed weapon, evict any offhand back to inventory.
-            if (item.slot === 'weapon' && item.hands === 'two-handed') {
-                const offhandItem = this.equipped.get('offhand');
-                if (offhandItem !== null) {
+            // After equipping a two-handed weapon, evict any secondary back to inventory.
+            if (item.slot === 'primary' && item.hands === 'two-handed') {
+                const secondaryItem = this.equipped.get('secondary');
+                if (secondaryItem !== null) {
                     const returnSlot = Math.min(...this.emptySlots);
                     this.emptySlots.delete(returnSlot);
-                    this.equipped.set('offhand', null);
-                    this.equippedItemIds.delete(offhandItem.id);
-                    this.inventory.set(returnSlot, offhandItem);
-                    this.itemSlotMap.set(offhandItem.id, returnSlot);
-                    this.inventoryItemIds.add(offhandItem.id);
+                    this.equipped.set('secondary', null);
+                    this.equippedItemIds.delete(secondaryItem.id);
+                    this.inventory.set(returnSlot, secondaryItem);
+                    this.itemSlotMap.set(secondaryItem.id, returnSlot);
+                    this.inventoryItemIds.add(secondaryItem.id);
                     this.inventoryCount++;
                 }
             }
