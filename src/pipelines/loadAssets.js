@@ -1,5 +1,5 @@
-import Player from "../Player";
-import { Armory } from "../Armory";
+import Player from "../entities/Player";
+import { Armory } from "../data/Armory";
 
 /**
  * Loads all game assets into the Phaser loader. Call from scene.preload().

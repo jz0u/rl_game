@@ -10,7 +10,7 @@
  *   update()  → called every frame; delegates to Player.update()
  */
 import Phaser from "phaser";
-import { Armory } from "./Armory";
+import { Armory } from "./data/Armory";
 import { loadAssets } from "./pipelines/loadAssets";
 import { createGameObjects } from "./pipelines/createGameObjects";
 import { setupInput } from "./pipelines/input";
@@ -19,7 +19,7 @@ import { setupKeybinds } from "./pipelines/keybinds";
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();
 
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './constants';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './config/constants';
 
 class GameScene extends Phaser.Scene {
   constructor() {

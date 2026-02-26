@@ -1,7 +1,7 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING, INVENTORY_SIZE, DEPTH_UI, DEPTH_UI_TOP } from '../constants';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING, INVENTORY_SIZE, DEPTH_UI, DEPTH_UI_TOP } from '../config/constants';
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
-import { scaleIcon } from '../utils';
+import { scaleIcon } from '../config/utils';
 import { loadEquipmentAssets } from '../pipelines/loadEquipmentAssets';
 
 /**

@@ -1,4 +1,4 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER, PANEL_SCALE } from '../constants';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER, PANEL_SCALE } from '../config/constants';
 
 /**
  * Base class for full-screen game windows (Shop, InventoryWindow, …).

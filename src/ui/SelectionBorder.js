@@ -1,4 +1,4 @@
-import { CELL_SIZE } from '../constants';
+import { CELL_SIZE } from '../config/constants';
 
 const THEMES = {
   buy:   ['border_selected1', 'border_selected2', 'border_selected3'],

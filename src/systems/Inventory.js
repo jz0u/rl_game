@@ -1,4 +1,4 @@
-import { INVENTORY_SIZE } from './constants';
+import { INVENTORY_SIZE } from '../config/constants';
 
 export default class Inventory {
     constructor() {

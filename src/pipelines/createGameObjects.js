@@ -1,7 +1,7 @@
-import Player from "../Player";
-import Shop from "../Shop";
+import Player from "../entities/Player";
+import Shop from "../systems/Shop";
 import ShopPanel from "../ui/ShopPanel";
-import Inventory from "../Inventory";
+import Inventory from "../systems/Inventory";
 import InventoryPanel from "../ui/InventoryPanel";
 import WindowManager from "../ui/WindowManager";
 

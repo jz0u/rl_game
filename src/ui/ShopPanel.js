@@ -6,12 +6,12 @@ import {
   NAV_BTN_WIDTH,
   NAV_BTN_HEIGHT,
   DEPTH_UI,
-} from '../constants';
+} from '../config/constants';
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
-import { scaleIcon } from '../utils';
+import { scaleIcon } from '../config/utils';
 import { loadEquipmentAssets } from '../pipelines/loadEquipmentAssets';
-import Shop from '../Shop';
+import Shop from '../systems/Shop';
 
 export default class ShopPanel extends BasePanel {
   /**
