@@ -1,4 +1,4 @@
-import { GAME_WINDOW_CENTER, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, DEPTH_UI_TOP } from './constants';
+import { GAME_WINDOW_CENTER, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, DEPTH_UI_TOP } from '../constants';
 
 class WindowNode {
   constructor(windowInstance) {

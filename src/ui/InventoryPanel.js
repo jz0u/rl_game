@@ -1,11 +1,11 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING, INVENTORY_SIZE, DEPTH_UI, DEPTH_UI_TOP } from './constants';
-import BaseWindow from './BaseWindow';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING, INVENTORY_SIZE, DEPTH_UI, DEPTH_UI_TOP } from '../constants';
+import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
-import { scaleIcon } from './utils';
-import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
+import { scaleIcon } from '../utils';
+import { loadEquipmentAssets } from '../pipelines/loadEquipmentAssets';
 
 /**
- * InventoryWindow — the in-game inventory and equipment UI.
+ * InventoryPanel — the in-game inventory and equipment UI.
  *
  * Layout: the panel occupies 75% of the window.
  *   Left half  → paperdoll with equipment slot boxes + slot info text.
@@ -15,9 +15,9 @@ import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
  * Clicking an equipment slot shows that slot's item info in the text area.
  * The panel is toggled via the "BAG" button.
  */
-export default class InventoryWindow extends BaseWindow {
+export default class InventoryPanel extends BasePanel {
   /**
-   * Builds and adds all InventoryWindow UI elements to the scene.
+   * Builds and adds all InventoryPanel UI elements to the scene.
    * The panel starts hidden; call show() to open.
    * @param {Phaser.Scene} scene
    * @param {Inventory} inventory - The player's Inventory instance.

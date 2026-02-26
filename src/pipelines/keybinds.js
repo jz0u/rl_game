@@ -11,10 +11,10 @@ export function setupKeybinds(scene) {
     });
 
     scene.input.keyboard.on('keydown-I', () => {
-        scene.windowManager.open(scene.inventoryWindow);
+        scene.windowManager.open(scene.inventoryPanel);
     });
 
     scene.input.keyboard.on('keydown-P', () => {
-        scene.windowManager.open(scene.shopWindow);
+        scene.windowManager.open(scene.shopPanel);
     });
 }

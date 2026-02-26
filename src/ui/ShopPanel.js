@@ -6,14 +6,14 @@ import {
   NAV_BTN_WIDTH,
   NAV_BTN_HEIGHT,
   DEPTH_UI,
-} from './constants';
-import BaseWindow from './BaseWindow';
+} from '../constants';
+import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
-import { scaleIcon } from './utils';
-import { loadEquipmentAssets } from './pipelines/loadEquipmentAssets';
-import Shop from './Shop';
+import { scaleIcon } from '../utils';
+import { loadEquipmentAssets } from '../pipelines/loadEquipmentAssets';
+import Shop from '../Shop';
 
-export default class ShopWindow extends BaseWindow {
+export default class ShopPanel extends BasePanel {
   /**
    * Builds and adds all Shop UI elements to the scene.
    * The panel starts hidden; call show() to open.

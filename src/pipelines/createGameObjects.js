@@ -1,9 +1,9 @@
 import Player from "../Player";
 import Shop from "../Shop";
-import ShopWindow from "../ShopWindow";
+import ShopPanel from "../ui/ShopPanel";
 import Inventory from "../Inventory";
-import InventoryWindow from "../InventoryWindow";
-import WindowManager from "../WindowManager";
+import InventoryPanel from "../ui/InventoryPanel";
+import WindowManager from "../ui/WindowManager";
 
 
 /**
@@ -37,10 +37,10 @@ export function createGameObjects(scene, allItems) {
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite);
     scene.shop            = new Shop();
-    scene.shopWindow      = new ShopWindow(scene, allItems);
+    scene.shopPanel       = new ShopPanel(scene, allItems);
     scene.inventory       = new Inventory();
-    scene.inventoryWindow = new InventoryWindow(scene, scene.inventory, scene.player, allItems);
+    scene.inventoryPanel  = new InventoryPanel(scene, scene.inventory, scene.player, allItems);
     scene.windowManager   = new WindowManager(scene);
-    scene.windowManager.addWindow(scene.shopWindow);
-    scene.windowManager.addWindow(scene.inventoryWindow);
+    scene.windowManager.addWindow(scene.shopPanel);
+    scene.windowManager.addWindow(scene.inventoryPanel);
 }

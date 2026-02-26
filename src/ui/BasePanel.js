@@ -1,11 +1,11 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER, PANEL_SCALE } from './constants';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER, PANEL_SCALE } from '../constants';
 
 /**
  * Base class for full-screen game windows (Shop, InventoryWindow, …).
  * Provides shared layout helpers for the panel container, background layers,
  * decorative left-pane rects, and the paperdoll image.
  */
-export default class BaseWindow {
+export default class BasePanel {
   /** @param {Phaser.Scene} scene */
   constructor(scene) {
     this.scene        = scene;
