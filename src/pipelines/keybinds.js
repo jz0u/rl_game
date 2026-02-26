@@ -15,6 +15,6 @@ export function setupKeybinds(scene) {
     });
 
     scene.input.keyboard.on('keydown-P', () => {
-        scene.windowManager.open(scene.shop);
+        scene.windowManager.open(scene.shopWindow);
     });
 }

@@ -11,7 +11,7 @@ export function setupInput(scene) {
     scene.input.on("pointerdown", (pointer, currentlyOver) => {
         // Suppress gameplay input when any UI panel is open or a UI element is hovered
         if (currentlyOver.length > 0) return;
-        if (scene.shop.shopPanel.visible) return;
+        if (scene.shopWindow.shopPanel.visible) return;
         if (scene.inventoryWindow.invPanel.visible) return;
 
         if (pointer.rightButtonDown()) {

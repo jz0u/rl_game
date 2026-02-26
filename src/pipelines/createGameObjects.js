@@ -1,5 +1,6 @@
 import Player from "../Player";
 import Shop from "../Shop";
+import ShopWindow from "../ShopWindow";
 import Inventory from "../Inventory";
 import InventoryWindow from "../InventoryWindow";
 import WindowManager from "../WindowManager";
@@ -35,10 +36,11 @@ export function createGameObjects(scene, allItems) {
     Player.createAnims(scene);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite);
-    scene.shop            = new Shop(scene, allItems);
+    scene.shop            = new Shop();
+    scene.shopWindow      = new ShopWindow(scene, allItems);
     scene.inventory       = new Inventory();
     scene.inventoryWindow = new InventoryWindow(scene, scene.inventory, scene.player, allItems);
     scene.windowManager   = new WindowManager(scene);
-    scene.windowManager.addWindow(scene.shop);
+    scene.windowManager.addWindow(scene.shopWindow);
     scene.windowManager.addWindow(scene.inventoryWindow);
 }
