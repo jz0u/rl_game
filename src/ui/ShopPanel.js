@@ -190,21 +190,26 @@ export default class ShopPanel extends BasePanel {
       const bg = this.scene.add
         .image(x, y, 'icon_bg_blue')
         .setDisplaySize(CELL_SIZE, CELL_SIZE)
-        .setAlpha(0.5);
+        .setAlpha(0.5)
+        .setScrollFactor(0);
       this.onPage.push(bg);
       this.shopPanel.add(bg);
-      bg.setInteractive();
-      bg.on('pointerdown', () => {
+      const handleSelect = (pointer) => {
         const wasNew = this.selectionBorder.selectedItem !== item;
         this.selectionBorder.advance(item, x, y, () => this._buyItem(item), 'buy');
         if (wasNew) this._renderPreview(item);
-      });
+      };
+      bg.setInteractive();
+      bg.on('pointerdown', handleSelect);
 
       const src   = this.scene.textures.get(item.id).getSourceImage();
       const scale = scaleIcon(src, ICON_SIZE);
       const icon  = this.scene.add
         .image(x, y, item.id)
-        .setDisplaySize(src.width * scale, src.height * scale);
+        .setDisplaySize(src.width * scale, src.height * scale)
+        .setScrollFactor(0)
+        .setInteractive();
+      icon.on('pointerdown', handleSelect);
       this.onPage.push(icon);
       this.shopPanel.add(icon);
     });

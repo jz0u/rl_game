@@ -98,13 +98,15 @@ export default class InventoryPanel extends BasePanel {
       // Blue background square
       const bg = this.scene.add.image(x, y, 'slot_box')
         .setDisplaySize(SLOT_BOX_SIZE, SLOT_BOX_SIZE)
-        .setAlpha(.7);
+        .setAlpha(.7)
+        .setScrollFactor(0);
       this.invPanel.add(bg);
 
       // Placeholder icon for the equipped item
       const icon = this.scene.add.image(x, y, 'slot_box')
         .setDisplaySize(SLOT_BOX_SIZE - 10, SLOT_BOX_SIZE - 10)
-        .setVisible(false);
+        .setVisible(false)
+        .setScrollFactor(0);
       this.equipSlotIcons[name] = icon;
       this.invPanel.add(icon);
 
@@ -141,10 +143,10 @@ export default class InventoryPanel extends BasePanel {
       // Blue border image
       const slotBg = this.scene.add.image(x, y, 'icon_bg_blue')
         .setDisplaySize(CELL_SIZE, CELL_SIZE)
-        .setAlpha(0.5);
+        .setAlpha(0.5)
+        .setScrollFactor(0);
       this.invPanel.add(slotBg);
-      slotBg.setInteractive();
-      slotBg.on('pointerdown', (pointer) => {
+      const handleSlotClick = (pointer) => {
         const items = [];
         for (let i = 1; i <= INVENTORY_SIZE; i++) { items.push(this.inventory.inventory.get(i) || null); }
         const item = items[this.currentPage * this.itemsPerPage + index];
@@ -162,12 +164,17 @@ export default class InventoryPanel extends BasePanel {
             return this.scene.equipmentManager.equip(item);
           }, 'equip');
         }
-      });
+      };
+      slotBg.setInteractive();
+      slotBg.on('pointerdown', handleSlotClick);
 
       // Item icon placeholder
       const iconImg = this.scene.add.image(x, y, 'icon_bg_blue')
         .setDisplaySize(ICON_SIZE, ICON_SIZE)
-        .setVisible(false);
+        .setVisible(false)
+        .setScrollFactor(0)
+        .setInteractive();
+      iconImg.on('pointerdown', handleSlotClick);
       this.invSlotIcons.push(iconImg);
       this.invPanel.add(iconImg);
     }
