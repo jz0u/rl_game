@@ -36,6 +36,7 @@ export default class Player {
     /** World-space target the player is walking toward; null when idle. */
     this.moveTarget = null;
     this.stats = { moveSpeed: 3 };
+    this.hasWeapon = false;
     /** True while an attack animation is playing — blocks movement and re-triggering. */
     this.attackInProgress = false;
 
@@ -101,6 +102,7 @@ export default class Player {
         this.unequip(slot);
       }
     }
+    this.hasWeapon = equippedMap.get('weapon') !== null;
   }
 
   /**
@@ -194,7 +196,7 @@ export default class Player {
     this.moveTarget = null;
     this.sprite.flipX = pointerX > this.sprite.x;
 
-    this.sprite.play(this.overlays.weapon ? "attack1" : "attack2");
+    this.sprite.play(this.hasWeapon ? "attack1" : "attack2");
   }
 
   // ── Game loop ──

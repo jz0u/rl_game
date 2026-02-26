@@ -88,6 +88,14 @@ export default class Inventory {
             return false;
         }
         else {
+            // Block equipping an offhand while a two-handed weapon is in the weapon slot.
+            if (item.slot === 'offhand') {
+                const currentWeapon = this.equipped.get('weapon');
+                if (currentWeapon !== null && currentWeapon.hands === 'two-handed') {
+                    return false;
+                }
+            }
+
             const incomingSlot = this.itemSlotMap.get(item.id);
             const currentlyEquipped = this.equipped.get(equipSlot);
 
@@ -119,6 +127,21 @@ export default class Inventory {
                 this.itemSlotMap.delete(item.id);
                 this.emptySlots.add(incomingSlot);
                 this.inventoryCount--;
+            }
+
+            // After equipping a two-handed weapon, evict any offhand back to inventory.
+            if (item.slot === 'weapon' && item.hands === 'two-handed') {
+                const offhandItem = this.equipped.get('offhand');
+                if (offhandItem !== null) {
+                    const returnSlot = Math.min(...this.emptySlots);
+                    this.emptySlots.delete(returnSlot);
+                    this.equipped.set('offhand', null);
+                    this.equippedItemIds.delete(offhandItem.id);
+                    this.inventory.set(returnSlot, offhandItem);
+                    this.itemSlotMap.set(offhandItem.id, returnSlot);
+                    this.inventoryItemIds.add(offhandItem.id);
+                    this.inventoryCount++;
+                }
             }
         }
     }

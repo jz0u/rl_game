@@ -28,6 +28,7 @@ export default class InventoryPanel extends BasePanel {
     this.allItems  = allItems;
 
     this.equipSlotIcons = {};
+    this.equipSlotBgs   = {};
     this.currentPage = 0;
 
     // ── Toggle button ──
@@ -100,6 +101,7 @@ export default class InventoryPanel extends BasePanel {
         .setDisplaySize(SLOT_BOX_SIZE, SLOT_BOX_SIZE)
         .setAlpha(.7)
         .setScrollFactor(0);
+      this.equipSlotBgs[name] = bg;
       this.invPanel.add(bg);
 
       // Placeholder icon for the equipped item
@@ -221,16 +223,30 @@ export default class InventoryPanel extends BasePanel {
   _refresh() {
     // Part A — Update equipped slot icons
     const slots = ['head', 'body', 'bottom', 'feet', 'weapon', 'offhand'];
+    const weaponItem  = this.inventory.equipped.get('weapon');
+    const isTwoHanded = weaponItem !== null && weaponItem.hands === 'two-handed';
+
     for (const slotName of slots) {
       const equippedItem = this.inventory.equipped.get(slotName);
       const iconImg      = this.equipSlotIcons[slotName];
-      if (equippedItem !== null) {
-        iconImg.setTexture(equippedItem.id).setVisible(true);
+      const bgImg        = this.equipSlotBgs[slotName];
+
+      if (slotName === 'offhand' && isTwoHanded) {
+        // Mirror the two-handed weapon icon into the offhand slot and dim both.
+        iconImg.setTexture(weaponItem.id).setVisible(true).setAlpha(0.35);
+        const src   = this.scene.textures.get(weaponItem.id).getSourceImage();
+        const scale = scaleIcon(src, SLOT_BOX_SIZE - 10);
+        iconImg.setDisplaySize(src.width * scale, src.height * scale);
+        bgImg.setTint(0x444444);
+      } else if (equippedItem !== null) {
+        iconImg.setTexture(equippedItem.id).setVisible(true).setAlpha(1);
         const src   = this.scene.textures.get(equippedItem.id).getSourceImage();
         const scale = scaleIcon(src, SLOT_BOX_SIZE - 10);
         iconImg.setDisplaySize(src.width * scale, src.height * scale);
+        bgImg.clearTint();
       } else {
-        iconImg.setVisible(false);
+        iconImg.setVisible(false).setAlpha(1);
+        bgImg.clearTint();
       }
     }
 
