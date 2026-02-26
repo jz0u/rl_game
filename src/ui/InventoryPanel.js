@@ -287,6 +287,8 @@ export default class InventoryPanel extends BasePanel {
       // Right-click — unequip progression
       this.selectionBorder.advance(item, x, y, () => {
         this.inventory.removeItemFromEquipped(item);
+        const result = this.inventory.removeItemFromEquipped(item);
+        if (result === false) return false;
         this.player.unequip(slotName);
         this._refresh();
       }, 'drop');
