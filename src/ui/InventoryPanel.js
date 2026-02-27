@@ -83,23 +83,28 @@ export default class InventoryPanel extends BasePanel {
     const sideX     = 160;
     this.eqSize = eqSize;
 
-    const topY = GAME_WINDOW_CENTER.Y - eqSpacing * 1.5;
-    const row1 = GAME_WINDOW_CENTER.Y - eqSpacing * 0.5;
-    const row2 = GAME_WINDOW_CENTER.Y + eqSpacing * 0.5;
-    const botY = GAME_WINDOW_CENTER.Y + eqSpacing * 1.5;
+    const rowY = [
+      GAME_WINDOW_CENTER.Y - eqSpacing * 2,
+      GAME_WINDOW_CENTER.Y - eqSpacing,
+      GAME_WINDOW_CENTER.Y,
+      GAME_WINDOW_CENTER.Y + eqSpacing,
+      GAME_WINDOW_CENTER.Y + eqSpacing * 2,
+    ];
 
-    // Diablo-style layout: helm+amulet top, weapon+chest+shield mid, gloves+belt+boots lower, shoulder+legs bottom
+    const leftColX  = dollX - sideX;
+    const rightColX = dollX + sideX;
+
     const slotLayout = [
-      { name: 'head',       x: dollX,          y: topY },
-      { name: 'amulet',     x: dollX + sideX,  y: topY },
-      { name: 'primary',    x: dollX - sideX,  y: row1 },
-      { name: 'body_outer', x: dollX,          y: row1 },
-      { name: 'secondary',  x: dollX + sideX,  y: row1 },
-      { name: 'hands',      x: dollX - sideX,  y: row2 },
-      { name: 'body_inner', x: dollX,          y: row2 },
-      { name: 'feet',       x: dollX + sideX,  y: row2 },
-      { name: 'shoulder',   x: dollX - sideX,  y: botY },
-      { name: 'legs',       x: dollX,          y: botY },
+      { name: 'head',       x: leftColX,  y: rowY[0] },
+      { name: 'shoulder',   x: leftColX,  y: rowY[1] },
+      { name: 'body_outer', x: leftColX,  y: rowY[2] },
+      { name: 'body_inner', x: leftColX,  y: rowY[3] },
+      { name: 'legs',       x: leftColX,  y: rowY[4] },
+      { name: 'amulet',     x: rightColX, y: rowY[0] },
+      { name: 'hands',      x: rightColX, y: rowY[1] },
+      { name: 'feet',       x: rightColX, y: rowY[2] },
+      { name: 'primary',    x: rightColX, y: rowY[3] },
+      { name: 'secondary',  x: rightColX, y: rowY[4] },
     ];
 
     for (const { name, x, y } of slotLayout) {
