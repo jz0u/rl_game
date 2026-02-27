@@ -261,7 +261,7 @@ export default class InventoryPanel extends BasePanel {
       const equippedItem = this.inventory.equipped.get(slotName);
       const overlay      = this.itemOverlays[slotName];
       if (equippedItem !== null) {
-        overlay.setTexture(equippedItem.id).setVisible(true);
+        overlay.setTexture(equippedItem.id + '_overlay').setVisible(true);
       } else {
         overlay.setVisible(false);
       }

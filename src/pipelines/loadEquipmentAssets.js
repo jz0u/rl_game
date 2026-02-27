@@ -19,7 +19,7 @@ function folderFor(slot) { return SLOT_FOLDER[slot] ?? slot; }
 export function loadEquipmentAssets(scene, item) {
   if (item.staticOverlay) {
     // Paperdoll icon already loaded at startup under item.id — no spritesheets needed.
-    _refreshOverlay(scene, item.baseName, item.id);
+    _refreshOverlay(scene, item.baseName, item.id + '_overlay');
     return;
   }
 

@@ -1437,3 +1437,9 @@ export const Armory = {
     },
   ],
 };
+
+// Attach overlayPath (_Paperdoll.png) to every item — same folder structure as iconPath.
+Object.values(Armory).flat().forEach(item => {
+  const file = item.fileName ?? item.baseName;
+  item.overlayPath = `assets/armory/${folderFor(item.slot)}/${item.baseName}/${file}_Paperdoll.png`;
+});

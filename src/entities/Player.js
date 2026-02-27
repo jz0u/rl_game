@@ -86,7 +86,7 @@ export default class Player {
       this.overlays[item.slot].destroy();
     }
 
-    const textureKey = item.staticOverlay ? item.id : `${item.baseName}_idle1_diag`;
+    const textureKey = item.staticOverlay ? item.id + '_overlay' : `${item.baseName}_idle1_diag`;
     const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, textureKey);
     overlay.baseName = item.baseName;
     overlay.isStatic = !!item.staticOverlay;

@@ -13,6 +13,7 @@ export function loadAssets(scene){
     scene.load.image('player_paperdoll', 'assets/player/player_paperdoll.png');
     allItems.forEach(item => {
       scene.load.image(item.id, item.iconPath);
+      scene.load.image(item.id + '_overlay', item.overlayPath);
     });
     scene.load.image('shop_panel', 'assets/ui/shop_panel.png');
     scene.load.image('prev_btn', 'assets/ui/shop_arrow_left.png');
