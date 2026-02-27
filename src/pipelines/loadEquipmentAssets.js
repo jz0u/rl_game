@@ -14,7 +14,7 @@ function folderFor(slot) { return SLOT_FOLDER[slot] ?? slot; }
  * Call this before player.equip(item) to ensure overlay animations are available.
  *
  * @param {Phaser.Scene} scene
- * @param {object} item - An Armory item definition with baseName and slot properties.
+ * @param {object} item - An Armory item definition with baseName and equipSlot properties.
  */
 export function loadEquipmentAssets(scene, item) {
   if (item.staticOverlay) {
@@ -23,13 +23,13 @@ export function loadEquipmentAssets(scene, item) {
     return;
   }
 
-  const { baseName, slot } = item;
+  const { baseName, equipSlot } = item;
   // The actual animation file name prefix inside the subdirectory. Resolution order:
   //   animFileName → fileName → baseName
   // animFileName: Paperdoll matches baseName but animation files use a different prefix (e.g. T&C→TC).
   // fileName: both Paperdoll and animations use a different prefix from baseName (e.g. _Main_/_Off_ weapons).
   const fileName = item.animFileName ?? item.fileName ?? baseName;
-  const folder = folderFor(slot);
+  const folder = folderFor(equipSlot);
 
   // Texture keys use baseName (unique per item, even when files share a name across folders)
   const idleKey    = baseName + '_idle1_diag';
