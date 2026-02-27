@@ -3,16 +3,16 @@ const SPRITE_FRAME_SIZE = 128;
 
 /** Render order for equipment overlays. Higher = drawn on top. */
 const OVERLAY_DEPTH = {
-  body_inner:  1,
-  body_outer:  2,
-  legs:        3,
-  feet:        4,
+  legs:        1,
+  feet:        2,
+  body_inner:  3,
+  body_outer:  4,
   hands:       5,
   shoulder:    6,
-  head:        7,
-  primary:     8,
-  secondary:   9,
-  amulet:     10,
+  amulet:      7,
+  head:        8,
+  primary:     9,
+  secondary:   10,
 };
 
 /**
