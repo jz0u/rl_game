@@ -12,6 +12,8 @@ import SelectionBorder from './SelectionBorder';
 import { scaleIcon } from '../config/utils';
 import Shop from '../systems/Shop';
 
+const TAB_ROW_HEIGHT = 28;
+
 export default class ShopPanel extends BasePanel {
   /**
    * Builds and adds all Shop UI elements to the scene.
@@ -21,9 +23,11 @@ export default class ShopPanel extends BasePanel {
    */
   constructor(scene, items) {
     super(scene);
-    this.items       = items;
-    this.currentPage = 0;
-    this.shop        = new Shop();
+    this.items        = items;
+    this.currentPage  = 0;
+    this.activeFilter = 'all';
+    this.filterTabs   = [];
+    this.shop         = new Shop();
     /** Icons currently rendered on this page; destroyed and rebuilt on page change. */
     this.onPage = [];
 
@@ -46,6 +50,7 @@ export default class ShopPanel extends BasePanel {
     this._renderPage(0);
     this.shopPanel.bringToTop(this.prevBtn);
     this.shopPanel.bringToTop(this.nextBtn);
+    this._buildFilterTabs();
 
     this.shopPanel.setDepth(DEPTH_UI);
 
@@ -162,15 +167,16 @@ export default class ShopPanel extends BasePanel {
     this.selectionBorder.reset();
 
     const cols = Math.floor(this.windowWidth / 2 / CELL_SIZE);
-    const rows = Math.floor(this.windowHeight / CELL_SIZE);
+    const rows = Math.floor((this.windowHeight - TAB_ROW_HEIGHT) / CELL_SIZE);
     const paddingX = (this.windowWidth / 2 - cols * CELL_SIZE) / 2;
-    const paddingY = (this.windowHeight - rows * CELL_SIZE) / 2;
+    const paddingY = (this.windowHeight - TAB_ROW_HEIGHT - rows * CELL_SIZE) / 2;
     const originX  = GAME_WINDOW_CENTER.X + paddingX;
-    const originY  = GAME_WINDOW_CENTER.Y - this.windowHeight / 2 + paddingY;
+    const originY  = GAME_WINDOW_CENTER.Y - this.windowHeight / 2 + paddingY + TAB_ROW_HEIGHT;
 
+    const filtered     = this.filteredItems;
     const itemsPerPage = cols * rows;
-    this.totalPages = Math.ceil(this.items.length / itemsPerPage);
-    const pageItems = this.items.slice(
+    this.totalPages = Math.ceil(filtered.length / itemsPerPage);
+    const pageItems = filtered.slice(
       pageNumber * itemsPerPage,
       (pageNumber + 1) * itemsPerPage,
     );
@@ -219,6 +225,65 @@ export default class ShopPanel extends BasePanel {
       this.shopPanel.bringToTop(this.prevBtn);
       this.shopPanel.bringToTop(this.nextBtn);
     }
+    this.filterTabs.forEach(t => this.shopPanel.bringToTop(t));
+  }
+
+  /** Returns items filtered by the active slot tab. Recomputed on every call. */
+  get filteredItems() {
+    if (this.activeFilter === 'all') return this.items;
+    return this.items.filter(item => item.equipSlot === this.activeFilter);
+  }
+
+  /** Builds the horizontal row of slot filter tabs above the item grid. */
+  _buildFilterTabs() {
+    const SLOT_ORDER = ['all','head','amulet','shoulder','body_inner','body_outer','hands','legs','feet','primary','secondary'];
+    const LABEL_MAP  = {
+      all: 'ALL', head: 'HEAD', amulet: 'AMULET', shoulder: 'SHLDR',
+      body_inner: 'BODY', body_outer: 'OUTER', hands: 'HANDS',
+      legs: 'LEGS', feet: 'FEET', primary: 'WEAPON', secondary: 'OFF',
+    };
+
+    const usedSlots = new Set(this.items.map(i => i.equipSlot));
+    const slots = SLOT_ORDER.filter(s => s === 'all' || usedSlots.has(s));
+
+    const tabY = GAME_WINDOW_CENTER.Y - this.windowHeight / 2 + 14;
+    let tabX   = GAME_WINDOW_CENTER.X + 4;
+
+    slots.forEach(slot => {
+      const tab = this.scene.add.text(tabX, tabY, LABEL_MAP[slot], {
+        fontSize: '11px',
+        color: '#aaaaaa',
+        backgroundColor: '#222',
+        padding: { x: 5, y: 3 },
+      })
+      .setScrollFactor(0)
+      .setInteractive();
+
+      tab.on('pointerdown', () => {
+        this.activeFilter = slot;
+        this.currentPage  = 0;
+        this._renderPage(0);
+        this._refreshTabHighlights();
+      });
+
+      this.shopPanel.add(tab);
+      this.shopPanel.bringToTop(tab);
+      this.filterTabs.push(tab);
+      tabX += tab.width + 6;
+    });
+
+    this._refreshTabHighlights();
+  }
+
+  /** Highlights the active tab in gold; dims all others. */
+  _refreshTabHighlights() {
+    const SLOT_ORDER = ['all','head','amulet','shoulder','body_inner','body_outer','hands','legs','feet','primary','secondary'];
+    const usedSlots  = new Set(this.items.map(i => i.equipSlot));
+    const slots      = SLOT_ORDER.filter(s => s === 'all' || usedSlots.has(s));
+
+    this.filterTabs.forEach((tab, i) => {
+      tab.setColor(slots[i] === this.activeFilter ? '#ffdd57' : '#aaaaaa');
+    });
   }
 
   /** Shows the panel and resets the preview so no stale item is displayed. */
