@@ -1,6 +1,20 @@
 /** All player spritesheets use 128×128 px frames. */
 const SPRITE_FRAME_SIZE = 128;
 
+/** Render order for equipment overlays. Higher = drawn on top. */
+const OVERLAY_DEPTH = {
+  body_inner:  1,
+  body_outer:  2,
+  legs:        3,
+  feet:        4,
+  hands:       5,
+  shoulder:    6,
+  head:        7,
+  primary:     8,
+  secondary:   9,
+  amulet:     10,
+};
+
 /**
  * Player — the controllable character sprite.
  *
@@ -90,6 +104,7 @@ export default class Player {
     const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, textureKey);
     overlay.baseName = item.baseName;
     overlay.isStatic = !!item.staticOverlay;
+    overlay.setDepth(OVERLAY_DEPTH[item.equipSlot] ?? 0);
     this.overlays[item.equipSlot] = overlay;
   }
 
