@@ -30,7 +30,10 @@ export default class Player {
    */
   constructor(scene, x, y) {
     this.scene = scene;
-    this.sprite = scene.add.sprite(x, y, "player_idle1_diag");
+    this.sprite = scene.physics.add.sprite(x, y, "player_idle1_diag");
+    this.sprite.setCollideWorldBounds(true);
+    this.sprite.body.setSize(32, 32);
+    this.sprite.body.setOffset(48, 80);
     this.balance = 0;
 
     /**
@@ -214,6 +217,7 @@ export default class Player {
 
     this.attackInProgress = true;
     this.moveTarget = null;
+    this.sprite.body.setVelocity(0, 0);
     this.sprite.flipX = pointerX > this.sprite.x;
 
     this.sprite.play(this.hasWeapon ? "attack1" : "attack2");
@@ -228,6 +232,9 @@ export default class Player {
    */
   update() {
     this._syncOverlays();
+    if (!this.moveTarget && this.sprite.body) {
+      this.sprite.body.setVelocity(0, 0);
+    }
     if (this.attackInProgress) return;
 
     if (!this.moveTarget) return;
@@ -243,17 +250,21 @@ export default class Player {
       this.sprite.play(dir);
     }
 
-    this.sprite.x += Math.cos(angle) * this.stats.moveSpeed;
-    this.sprite.y += Math.sin(angle) * this.stats.moveSpeed;
-
     const distance = Phaser.Math.Distance.Between(
       this.sprite.x, this.sprite.y,
       this.moveTarget.x, this.moveTarget.y,
     );
 
-    if (distance < this.stats.moveSpeed) {
+    if (distance < this.stats.moveSpeed * 2) {
+      this.sprite.body.setVelocity(0, 0);
       this.moveTarget = null;
       this.sprite.play(this.getIdleAnim());
+    } else {
+      const speed = this.stats.moveSpeed * 60;
+      this.sprite.body.setVelocity(
+        Math.cos(angle) * speed,
+        Math.sin(angle) * speed,
+      );
     }
   }
 

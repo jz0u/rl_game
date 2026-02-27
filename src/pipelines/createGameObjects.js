@@ -21,6 +21,9 @@ export function createGameObjects(scene, allItems) {
     Player.createAnims(scene);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite);
+    scene.physics.add.collider(scene.player.sprite, scene.wallLayer);
+    scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    scene.player.sprite.setCollideWorldBounds(true);
     scene.shop             = new Shop();
     scene.shopPanel        = new ShopPanel(scene, allItems);
     scene.inventory        = new Inventory();
