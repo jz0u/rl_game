@@ -140,8 +140,8 @@ export default class ShopPanel extends BasePanel {
 
     this.generalText.setText(
       `${item.displayName}\n\n` +
-        `${item.slot.toUpperCase()} | ${item.type.toUpperCase()}` +
-        `${item.hands ? ' | ' + item.hands.toUpperCase() : ''}\n\n` +
+        `${item.equipSlot.toUpperCase()} | ${(item.weightClass ?? item.rangeType).toUpperCase()}` +
+        `${item.handType ? ' | ' + item.handType.toUpperCase() : ''}\n\n` +
         `${item.description}`,
     );
 

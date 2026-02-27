@@ -236,7 +236,7 @@ export default class InventoryPanel extends BasePanel {
     // Part A — Update equipped slot icons
     const slots = ['head', 'amulet', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
     const weaponItem  = this.inventory.equipped.get('primary');
-    const isTwoHanded = weaponItem !== null && weaponItem.hands === 'two-handed';
+    const isTwoHanded = weaponItem !== null && weaponItem.handType === 'two';
 
     for (const slotName of slots) {
       const equippedItem = this.inventory.equipped.get(slotName);

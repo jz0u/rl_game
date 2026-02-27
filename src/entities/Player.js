@@ -82,15 +82,15 @@ export default class Player {
    * @param {{ slot: string, baseName: string }} item
    */
   equip(item) {
-    if (this.overlays[item.slot]) {
-      this.overlays[item.slot].destroy();
+    if (this.overlays[item.equipSlot]) {
+      this.overlays[item.equipSlot].destroy();
     }
 
     const textureKey = item.staticOverlay ? item.id + '_overlay' : `${item.baseName}_idle1_diag`;
     const overlay = this.scene.add.sprite(this.sprite.x, this.sprite.y, textureKey);
     overlay.baseName = item.baseName;
     overlay.isStatic = !!item.staticOverlay;
-    this.overlays[item.slot] = overlay;
+    this.overlays[item.equipSlot] = overlay;
   }
 
   /**

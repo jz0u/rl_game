@@ -27,7 +27,7 @@ export default class Inventory {
     /**
      * Adds an item to the first available inventory slot.
      * Fails silently if the inventory is full or the item is already present in inventory or equipped.
-     * @param {{ id: string, slot: string }} item - The item to add.
+     * @param {{ id: string, equipSlot: string }} item - The item to add.
      * @returns {false|undefined} Returns false if the item could not be added.
      */
     addItemToInventory(item) {
@@ -80,11 +80,11 @@ export default class Inventory {
      * Fails silently if the inventory is empty or the item is not present.
      * Note: this method only manages data. Callers must also call player.equip(item)
      * separately to update the visual overlay on the player sprite.
-     * @param {{ id: string, slot: string }} item - The item to equip.
+     * @param {{ id: string, equipSlot: string }} item - The item to equip.
      * @returns {false|undefined} Returns false if the item could not be equipped.
      */
     equipItemFromInventory(item) {
-        const equipSlot = item.slot;
+        const equipSlot = item.equipSlot;
         if (this.inventoryCount === 0) {
             return false;
         }
@@ -93,9 +93,9 @@ export default class Inventory {
         }
         else {
             // Block equipping a secondary while a two-handed weapon is in the primary slot.
-            if (item.slot === 'secondary') {
+            if (item.equipSlot === 'secondary') {
                 const currentWeapon = this.equipped.get('primary');
-                if (currentWeapon !== null && currentWeapon.hands === 'two-handed') {
+                if (currentWeapon !== null && currentWeapon.handType === 'two') {
                     return false;
                 }
             }
@@ -134,7 +134,7 @@ export default class Inventory {
             }
 
             // After equipping a two-handed weapon, evict any secondary back to inventory.
-            if (item.slot === 'primary' && item.hands === 'two-handed') {
+            if (item.equipSlot === 'primary' && item.handType === 'two') {
                 const secondaryItem = this.equipped.get('secondary');
                 if (secondaryItem !== null) {
                     const returnSlot = Math.min(...this.emptySlots);
@@ -153,12 +153,12 @@ export default class Inventory {
     /**
      * Moves an item from the equipped map back into the inventory.
      * Fails silently if nothing is equipped, the item is not found, or the inventory is full.
-     * @param {{ id: string, slot: string }} item - The item to unequip.
+     * @param {{ id: string, equipSlot: string }} item - The item to unequip.
      * @returns {false|undefined} Returns false if the item could not be unequipped.
      *   Also returns false if the inventory is full.
      */
     removeItemFromEquipped(item) {
-        const equipSlot = item.slot;
+        const equipSlot = item.equipSlot;
         if (this.equippedItemIds.size === 0) {
             return false;
         }
