@@ -18,8 +18,9 @@ export default class SelectionBorder {
    */
   constructor(scene, container) {
     this.scene          = scene;
-    this.selectedItem   = null;
+    this.selectedItem      = null;
     this.confirmClickCount = 0;
+    this.activeTheme       = null;
     this.border = scene.add.image(0, 0, 'border_selected1')
       .setDisplaySize(CELL_SIZE, CELL_SIZE)
       .setVisible(false)
@@ -41,9 +42,10 @@ export default class SelectionBorder {
   advance(item, x, y, onConfirm, theme = 'buy') {
     const [t1, t2, t3] = THEMES[theme] ?? THEMES.buy;
 
-    if (this.selectedItem !== item) {
-      this.selectedItem   = item;
+    if (this.selectedItem !== item || this.activeTheme !== theme) {
+      this.selectedItem      = item;
       this.confirmClickCount = 1;
+      this.activeTheme       = theme;
       this.border
         .setTexture(t1)
         .setPosition(x, y)
@@ -67,8 +69,9 @@ export default class SelectionBorder {
 
   /** Clears selection state and hides the border. */
   reset() {
-    this.selectedItem   = null;
+    this.selectedItem      = null;
     this.confirmClickCount = 0;
+    this.activeTheme       = null;
     this.border.setVisible(false);
   }
 }
