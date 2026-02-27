@@ -65,8 +65,16 @@ export default class Player {
     // _syncOverlays is called immediately so overlays switch in the same tick as the body.
     this.sprite.on("animationcomplete", () => {
       this.attackInProgress = false;
-      this.sprite.play(this.getIdleAnim());
       this._syncOverlays();
+      if (this.moveTarget) {
+        const angle = Phaser.Math.Angle.Between(
+          this.sprite.x, this.sprite.y,
+          this.moveTarget.x, this.moveTarget.y,
+        );
+        this.sprite.play(this.getDirectionAnim(angle));
+      } else {
+        this.sprite.play(this.getIdleAnim());
+      }
     });
   }
 
@@ -216,7 +224,6 @@ export default class Player {
     if (this.attackInProgress) return;
 
     this.attackInProgress = true;
-    this.moveTarget = null;
     this.sprite.body.setVelocity(0, 0);
     this.sprite.flipX = pointerX > this.sprite.x;
 
