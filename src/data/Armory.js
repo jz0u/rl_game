@@ -31,7 +31,7 @@ function folderFor(slot) { return SLOT_FOLDER[slot] ?? slot; }
  */
 function iconPath(slot, baseName, fileName) {
   const file = fileName ?? baseName;
-  return `assets/armory/${folderFor(slot)}/${baseName}/${file}_Paperdoll.png`;
+  return `assets/armory/${folderFor(slot)}/${baseName}/${file}_Paperdoll2.png`;
 }
 
 export const Armory = {
