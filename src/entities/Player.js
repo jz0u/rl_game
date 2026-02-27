@@ -265,6 +265,17 @@ export default class Player {
         Math.cos(angle) * speed,
         Math.sin(angle) * speed,
       );
+      // If body was stopped by a collider, cancel the move target
+      if (
+        this.sprite.body.blocked.left ||
+        this.sprite.body.blocked.right ||
+        this.sprite.body.blocked.up ||
+        this.sprite.body.blocked.down
+      ) {
+        this.sprite.body.setVelocity(0, 0);
+        this.moveTarget = null;
+        this.sprite.play(this.getIdleAnim());
+      }
     }
   }
 
