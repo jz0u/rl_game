@@ -68,7 +68,7 @@ export default class InventoryPanel extends BasePanel {
     const { dollX, dollSize } = this._buildPaperdoll(this.invPanel);
 
     this.itemOverlays = {};
-    const overlaySlots = ['head', 'amulet', 'shoulder', 'hands', 'body_inner', 'body_outer', 'legs', 'feet', 'primary', 'secondary'];
+    const overlaySlots = ['legs', 'feet', 'body_inner', 'body_outer', 'hands', 'shoulder', 'amulet', 'head', 'primary', 'secondary'];
     for (const slotName of overlaySlots) {
       const overlay = this.scene.add.image(dollX, GAME_WINDOW_CENTER.Y, 'player_paperdoll')
         .setDisplaySize(dollSize, dollSize)
