@@ -1,5 +1,6 @@
 import { playerBaseStats } from '../data/baseStats';
 import Entity from './Entity';
+import CombatEffects from '../effects/CombatEffects';
 
 /** All player spritesheets use 128×128 px frames. */
 const SPRITE_FRAME_SIZE = 128;
@@ -94,6 +95,10 @@ export default class Player extends Entity {
       const dummy = this.scene.dummy;
       if (dummy && !dummy.isDead() && this.canHit(dummy.rect.x, dummy.rect.y)) {
         dummy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+        const hitX = (this.sprite.x + dummy.rect.x) / 2;
+        const hitY = (this.sprite.y + dummy.rect.y) / 2;
+        CombatEffects.showImpactFlash(this.scene, hitX, hitY);
+        CombatEffects.showParticleBurst(this.scene, hitX, hitY);
         this.scene.cameras.main.shake(150, 0.004);
         this.scene.physics.pause();
         this.scene.anims.pauseAll();
@@ -105,6 +110,10 @@ export default class Player extends Entity {
       const dummy2 = this.scene.dummy2;
       if (dummy2 && !dummy2.isDead() && this.canHit(dummy2.rect.x, dummy2.rect.y)) {
         dummy2.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+        const hitX2 = (this.sprite.x + dummy2.rect.x) / 2;
+        const hitY2 = (this.sprite.y + dummy2.rect.y) / 2;
+        CombatEffects.showImpactFlash(this.scene, hitX2, hitY2);
+        CombatEffects.showParticleBurst(this.scene, hitX2, hitY2);
         this.scene.cameras.main.shake(150, 0.004);
         this.scene.physics.pause();
         this.scene.anims.pauseAll();
@@ -404,6 +413,15 @@ export default class Player extends Entity {
     this.attackAngle = Math.atan2(
       this.scene.input.activePointer.worldY - this.sprite.y,
       this.scene.input.activePointer.worldX - this.sprite.x
+    );
+
+    CombatEffects.showArc(
+      this.scene, this.sprite.x, this.sprite.y,
+      this.attackAngle, this.currentArcType, this.currentAttackRange
+    );
+    CombatEffects.showSlashTrail(
+      this.scene, this.sprite.x, this.sprite.y,
+      this.attackAngle, this.currentArcType, this.currentAttackRange
     );
 
     switch (this.weaponType) {
