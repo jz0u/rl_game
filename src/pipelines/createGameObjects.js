@@ -8,6 +8,7 @@ import InventoryPanel from "../ui/InventoryPanel";
 import WindowManager from "../ui/WindowManager";
 import EquipmentManager from "../systems/EquipmentManager";
 import GameActions from "../systems/GameActions";
+import Dummy from "../entities/enemies/Dummy";
 
 
 /**
@@ -18,11 +19,14 @@ import GameActions from "../systems/GameActions";
 export function createGameObjects(scene, allItems) {
     const map = MapManager.create(scene, map2);
 
-    scene.player          = new Player(scene, map.widthInPixels / 2, map.heightInPixels / 2);
+    const playerX = map.widthInPixels / 2;
+    const playerY = map.heightInPixels / 2;
+    scene.player          = new Player(scene, playerX, playerY);
     Player.createAnims(scene);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);
     scene.cameras.main.setZoom(0.9);
+    scene.dummy           = new Dummy(scene, playerX + 200, playerY);
     scene.physics.add.collider(scene.player.sprite, scene.collusionGroup);
     scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.player.sprite.setCollideWorldBounds(true);

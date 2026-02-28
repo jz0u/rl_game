@@ -1,6 +1,5 @@
 import { playerBaseStats } from '../data/baseStats';
-import { computeGearStats } from '../data/gearStats';
-import { computeDerivedStats } from '../systems/StatEngine';
+import Entity from './Entity';
 
 /** All player spritesheets use 128×128 px frames. */
 const SPRITE_FRAME_SIZE = 128;
@@ -26,14 +25,14 @@ const OVERLAY_DEPTH = {
  * slot. Overlays are kept in sync with the body every frame so they stay
  * positioned and play the matching directional animation.
  */
-export default class Player {
+export default class Player extends Entity {
   /**
    * @param {Phaser.Scene} scene - The scene this player belongs to.
    * @param {number} x - Initial world X position.
    * @param {number} y - Initial world Y position.
    */
   constructor(scene, x, y) {
-    this.scene = scene;
+    super(scene, playerBaseStats);
     // Create shadow first so it sits behind the player sprite in the display list.
     // Both are at depth 0; shadow is earlier in the list → renders behind sprite.
     this.shadow = scene.add.sprite(x, y, 'Medieval_Shadow_Male_idle1_diag');
@@ -84,6 +83,16 @@ export default class Player {
         this.sprite.play(this.getDirectionAnim(angle));
       } else {
         this.sprite.play(this.getIdleAnim());
+      }
+      const dummy = this.scene.dummy;
+      if (dummy && !dummy.isDead()) {
+        const dist = Phaser.Math.Distance.Between(
+          this.sprite.x, this.sprite.y,
+          dummy.rect.x, dummy.rect.y
+        );
+        if (dist < 120) {
+          dummy.takeDamage(this.derivedStats.physicalDamage, 'physical');
+        }
       }
     });
   }
@@ -313,11 +322,6 @@ export default class Player {
         overlay.play(weaponAnim, true);
       }
     }
-  }
-
-  recomputeStats(equippedMap) {
-    const gearStats = computeGearStats(equippedMap);
-    this.derivedStats = computeDerivedStats(playerBaseStats, gearStats);
   }
 
   // ── Movement ──
