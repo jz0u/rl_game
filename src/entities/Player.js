@@ -1,3 +1,7 @@
+import { playerBaseStats } from '../data/baseStats';
+import { computeGearStats } from '../data/gearStats';
+import { computeDerivedStats } from '../systems/StatEngine';
+
 /** All player spritesheets use 128×128 px frames. */
 const SPRITE_FRAME_SIZE = 128;
 
@@ -56,7 +60,7 @@ export default class Player {
 
     /** World-space target the player is walking toward; null when idle. */
     this.moveTarget = null;
-    this.stats = { moveSpeed: 3 };
+    this.recomputeStats(new Map());
     this.hasWeapon = false;
     /** True while an attack animation is playing — blocks movement and re-triggering. */
     this.attackInProgress = false;
@@ -173,6 +177,11 @@ export default class Player {
     }
   }
 
+  recomputeStats(equippedMap) {
+    const gearStats = computeGearStats(equippedMap);
+    this.derivedStats = computeDerivedStats(playerBaseStats, gearStats);
+  }
+
   // ── Movement ──
 
   /**
@@ -262,12 +271,12 @@ export default class Player {
       this.moveTarget.x, this.moveTarget.y,
     );
 
-    if (distance < this.stats.moveSpeed * 2) {
+    if (distance < this.derivedStats.moveSpeed * 2) {
       this.sprite.body.setVelocity(0, 0);
       this.moveTarget = null;
       this.sprite.play(this.getIdleAnim());
     } else {
-      const speed = this.stats.moveSpeed * 60;
+      const speed = this.derivedStats.moveSpeed * 60;
       this.sprite.body.setVelocity(
         Math.cos(angle) * speed,
         Math.sin(angle) * speed,

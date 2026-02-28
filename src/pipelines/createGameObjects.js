@@ -33,6 +33,7 @@ export function createGameObjects(scene, allItems) {
 
     scene.equipmentManager.on('equipmentChanged', (equippedMap) => {
       scene.player.syncEquipment(equippedMap);
+      scene.player.recomputeStats(equippedMap);
       if (scene.inventoryPanel.invPanel.visible) {
         scene.inventoryPanel._refresh();
       }

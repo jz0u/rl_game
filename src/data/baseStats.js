@@ -22,9 +22,9 @@ export const playerBaseStats = {
   maxDamage: 0,
 
   // ── Base gear bonus fields (all zero until gear is equipped) ──
-  hp: 0,
-  stamina: 0,
-  magicka: 0,
+  hpBonus: 0,
+  staminaBonus: 0,
+  magickaBonus: 0,
   attackSpeedBonus: 0,
   critChanceBonus: 0,
   accuracyBonus: 0,
