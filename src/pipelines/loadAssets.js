@@ -32,5 +32,13 @@ export function loadAssets(scene){
     scene.load.image('red_selected2',      'assets/ui/red_selected2.png');
     scene.load.image('red_selected3',      'assets/ui/red_selected3.png');
 
+    scene.load.image('hud-back',        'assets/hud/HUD-Back.png');
+    scene.load.image('hud-front',       'assets/hud/HUD-Front.png');
+    scene.load.image('hud-orb-hp',      'assets/hud/HPBarVar1.png');
+    scene.load.image('hud-orb-stamina', 'assets/hud/HPBarVar2.png');
+    scene.load.image('hud-orb-mana',    'assets/hud/ManaBarVar1.png');
+    scene.load.image('hud-skill-slots', 'assets/hud/SkillSlots.png');
+    scene.load.image('hud-exp',         'assets/hud/EXPBar.png');
+
     MapManager.load(scene, map2);
 }

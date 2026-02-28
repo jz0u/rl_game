@@ -6,10 +6,16 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   cursor: none;
 }
 
+body {
+  overflow: hidden;
+}
+
 canvas {
+  display: block;
   cursor: url('/assets/ui/cursor.png') 0 0, none;
 }
 

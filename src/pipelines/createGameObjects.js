@@ -10,6 +10,7 @@ import EquipmentManager from "../systems/EquipmentManager";
 import GameActions from "../systems/GameActions";
 import Dummy from "../entities/enemies/Dummy";
 import CursorUI from "../ui/CursorUI";
+import HUD from "../ui/HUD";
 
 
 /**
@@ -23,6 +24,7 @@ export function createGameObjects(scene, allItems) {
     const playerX = map.widthInPixels / 2;
     const playerY = map.heightInPixels / 2;
     scene.player          = new Player(scene, playerX, playerY);
+    scene.hud             = new HUD(scene, scene.player);
     Player.createAnims(scene);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);

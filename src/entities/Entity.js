@@ -13,6 +13,7 @@ export default class Entity {
     this.derivedStats   = computeDerivedStats(this.baseStats, gearStats);
     this.currentHp      = this.derivedStats.maxHP;
     this.currentStamina = this.derivedStats.maxStamina;
+    this.currentMagicka = this.derivedStats.maxMagicka;
   }
 
   takeDamage(amount, type = 'physical') {

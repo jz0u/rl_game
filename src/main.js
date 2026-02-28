@@ -41,6 +41,7 @@ class GameScene extends Phaser.Scene {
   /** Called every frame by Phaser. */
   update() {
     this.player.update();
+    this.hud?.update();
     this.cursorUI.update();
     this.cameras.main.setScroll(
       Math.round(this.cameras.main.scrollX),
@@ -51,11 +52,11 @@ class GameScene extends Phaser.Scene {
 
 new Phaser.Game({
   type: Phaser.AUTO,
-  width: GAME_WINDOW_WIDTH,
-  height: GAME_WINDOW_HEIGHT,
+  width:  window.innerWidth,
+  height: window.innerHeight,
   backgroundColor: "#000000",
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   physics: {
