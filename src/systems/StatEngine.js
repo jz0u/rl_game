@@ -54,6 +54,9 @@ export function computeDerivedStats(baseStats, gearStats) {
     // ── Mobility ──
     moveSpeed: 3.0 + (baseStats.dexterity * MOVE_SPEED_PER_DEX) + (gearStats.moveSpeedBonus ?? 0),
 
+    // ── Combat geometry ──
+    attackRange: baseStats.attackRange,
+
   };
 
   return stats;

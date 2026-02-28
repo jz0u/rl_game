@@ -423,7 +423,7 @@ export default class Player extends Entity {
     this.sprite.flipX = pointerX > this.sprite.x;
 
     const weapon = this.scene.inventory?.equipped?.get('primary');
-    this.currentAttackRange = weapon?.attackRange ?? 70;
+    this.currentAttackRange = weapon?.attackRange ?? this.derivedStats.attackRange;
     this.currentArcType = weapon?.arcType ?? 'stab';
     this.attackAngle = Math.atan2(
       this.scene.input.activePointer.worldY - this.sprite.y,

@@ -12,7 +12,7 @@ export default class Dummy extends Enemy {
     this.state = 'idle';
     this.aggroRadius = 200;
     this.moveSpeed = 60;
-    this.attackRange = 40;
+    this.attackRange = this.derivedStats.attackRange;
     this.attackCooldown = false;
   }
 

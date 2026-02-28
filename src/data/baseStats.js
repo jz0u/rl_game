@@ -18,6 +18,7 @@ export const playerBaseStats = {
   // ── Base offense (unarmed) ──
   physicalDamage: 20,  // weak unarmed hits — equip a weapon for real damage
   magicalDamage: 0,   // magic requires a staff/wand equipped
+  attackRange: 70,    // unarmed reach in pixels
   minDamage: 0,
   maxDamage: 0,
 
@@ -54,6 +55,7 @@ export const defaultEnemyStats = {
   magicalDamage: 0,
   minDamage: 0,
   maxDamage: 0,
+  attackRange: 40,    // short melee reach in pixels
 
   // ── Base gear bonus fields ──
   attackSpeedBonus: 0,
