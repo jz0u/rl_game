@@ -38,10 +38,31 @@ export default class Enemy extends Entity {
     this.hpLabel.setPosition(anchor.x, anchor.y - 45);
   }
 
-  takeDamage(amount, type) {
+  takeDamage(amount, type = 'physical', attackerX = null) {
     const effective = super.takeDamage(amount, type);
     this.updateHealthBar();
     this.showDamageNumber(effective);
+
+    const anchor = this.rect ?? this.sprite;
+    if (anchor) {
+      // 1. White flash
+      this.rect.setFillStyle(0xffffff);
+      this.scene.time.delayedCall(80, () => this.rect.setFillStyle(0xff2222));
+
+      // 2. Knockback nudge
+      if (attackerX !== null) {
+        const originX = anchor.x;
+        const nudge = anchor.x >= attackerX ? 15 : -15;
+        anchor.x = originX + nudge;
+        this.scene.tweens.add({
+          targets:  anchor,
+          x:        originX,
+          duration: 200,
+          ease:     'Power2',
+        });
+      }
+    }
+
     return effective;
   }
 

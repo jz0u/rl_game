@@ -91,7 +91,14 @@ export default class Player extends Entity {
           dummy.rect.x, dummy.rect.y
         );
         if (dist < 120) {
-          dummy.takeDamage(this.derivedStats.physicalDamage, 'physical');
+          dummy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+          this.scene.cameras.main.shake(150, 0.004);
+          this.scene.physics.pause();
+          this.scene.anims.pauseAll();
+          this.scene.time.delayedCall(80, () => {
+            this.scene.physics.resume();
+            this.scene.anims.resumeAll();
+          });
         }
       }
     });
