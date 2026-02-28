@@ -212,6 +212,7 @@ export default class Player {
     } else {
       this.weaponType = 'melee';
     }
+    this.weaponSubtype = primary?.weaponSubtype ?? null;
   }
 
   /**
@@ -312,9 +313,11 @@ export default class Player {
     this.sprite.flipX = pointerX > this.sprite.x;
 
     switch (this.weaponType) {
-      case 'melee':
+      case 'melee':  this.sprite.play('attack1');        break;
       case 'ranged':
-      case 'magic':  this.sprite.play('attack1');        break;
+        this.sprite.play(this.weaponSubtype === 'bow' ? 'attack1' : 'shooting');
+        break;
+      case 'magic':  this.sprite.play('magic');          break;
       default:       this.sprite.play('martialartpunch');
     }
   }

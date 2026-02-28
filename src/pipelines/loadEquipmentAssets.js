@@ -31,6 +31,7 @@ export function loadEquipmentAssets(scene, item) {
   const fileName = item.animFileName ?? item.fileName ?? baseName;
   const folder = folderFor(equipSlot);
   const isRanged = item.rangeType === 'ranged';
+  const isMagic  = item.weaponSubtype === 'staff';
 
   // Texture keys use baseName (unique per item, even when files share a name across folders)
   const idleKey           = baseName + '_idle1_diag';
@@ -39,10 +40,11 @@ export function loadEquipmentAssets(scene, item) {
   const attack2Key        = baseName + '_MVsv_alt_attack2';
   const shootingKey       = baseName + '_MVsv_alt_shooting';
   const shootingstanceKey = baseName + '_MVsv_alt_shootingstance';
+  const magicKey          = baseName + '_MVsv_alt_magic';
 
   // If already loaded, just ensure anims exist and fix up any overlay, then return
   if (scene.textures.exists(idleKey)) {
-    _registerAnims(scene, baseName, isRanged);
+    _registerAnims(scene, baseName, isRanged, isMagic);
     _refreshOverlay(scene, baseName, idleKey);
     return;
   }
@@ -58,9 +60,13 @@ export function loadEquipmentAssets(scene, item) {
     scene.load.spritesheet(shootingstanceKey, `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_shootingstance.png`, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
   }
 
+  if (isMagic) {
+    scene.load.spritesheet(magicKey, `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_magic.png`, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  }
+
   // Once loaded, register animations and fix up the overlay sprite's texture
   scene.load.once('complete', () => {
-    _registerAnims(scene, baseName, isRanged);
+    _registerAnims(scene, baseName, isRanged, isMagic);
     _refreshOverlay(scene, baseName, idleKey);
   });
 
@@ -92,7 +98,7 @@ function _refreshOverlay(scene, baseName, idleKey) {
  * @param {Phaser.Scene} scene
  * @param {string} baseName - The item's baseName.
  */
-function _registerAnims(scene, baseName, isRanged = false) {
+function _registerAnims(scene, baseName, isRanged = false, isMagic = false) {
   const idleKey    = baseName + '_idle1_diag';
   const walkKey    = baseName + '_walking_diag';
   const attack1Key = baseName + '_MVsv_alt_attack1';
@@ -142,6 +148,18 @@ function _registerAnims(scene, baseName, isRanged = false) {
         frames: scene.anims.generateFrameNumbers(anim.texture, { start: anim.start, end: anim.end }),
         frameRate: anim.frameRate,
         repeat: anim.repeat,
+      });
+    }
+  }
+
+  if (isMagic) {
+    const magicKey = baseName + '_MVsv_alt_magic';
+    if (!scene.anims.exists(baseName + '_magic')) {
+      scene.anims.create({
+        key: baseName + '_magic',
+        frames: scene.anims.generateFrameNumbers(magicKey, { start: 0, end: 2 }),
+        frameRate: 10,
+        repeat: 0,
       });
     }
   }
