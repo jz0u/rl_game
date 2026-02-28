@@ -12,6 +12,9 @@ export default class Enemy extends Entity {
   // Call from subclass constructor AFTER the visual (this.rect / this.sprite) is created.
   createHealthBar(x, y) {
     this.healthBar = this.scene.add.graphics();
+    this.hpLabel = this.scene.add.text(x, y - 45, '', {
+      fontSize: '11px', fill: '#ffffff', stroke: '#000000', strokeThickness: 3
+    }).setOrigin(0.5);
     this.updateHealthBar();
   }
 
@@ -30,6 +33,9 @@ export default class Enemy extends Entity {
     const ratio = this.currentHp / this.derivedStats.maxHP;
     this.healthBar.fillStyle(0xff2222);
     this.healthBar.fillRect(bx, by, BAR_WIDTH * ratio, BAR_HEIGHT);
+
+    this.hpLabel.setText(`${Math.ceil(this.currentHp)} / ${this.derivedStats.maxHP}`);
+    this.hpLabel.setPosition(anchor.x, anchor.y - 45);
   }
 
   takeDamage(amount, type) {
