@@ -11,10 +11,10 @@
  */
 import Phaser from "phaser";
 import { Armory } from "./data/Armory";
-import { loadAssets } from "./pipelines/loadAssets";
-import { createGameObjects } from "./pipelines/createGameObjects";
-import { setupInput } from "./pipelines/input";
-import { setupKeybinds } from "./pipelines/keybinds";
+import { loadAssets } from "./scene/loadAssets";
+import { createGameObjects } from "./scene/createGameObjects";
+import { setupInput } from "./input/input";
+import { setupKeybinds } from "./input/keybinds";
 
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();

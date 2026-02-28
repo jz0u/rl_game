@@ -1,4 +1,4 @@
-import { computeGearStats }    from '../data/gearStats.js';
+import { computeGearStats }    from '../systems/StatEngine.js';
 import { computeDerivedStats } from '../systems/StatEngine.js';
 import CombatEffects            from '../effects/CombatEffects.js';
 

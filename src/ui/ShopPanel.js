@@ -9,7 +9,7 @@ import {
 } from '../config/constants';
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
-import { scaleIcon } from '../config/utils';
+import { scaleIcon } from '../utils';
 import Shop from '../systems/Shop';
 
 const TAB_ROW_HEIGHT = 28;

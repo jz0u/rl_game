@@ -14,21 +14,3 @@ export const defaultGearStats = {
   moveSpeedBonus: 0,
   rangeType: 'melee',
 }
-export function computeGearStats(equippedMap) {
-  let gearStats = { ...defaultGearStats };
-
-  for (const [slot, item] of equippedMap) {
-    if (!item) continue;
-    for (const [key, value] of Object.entries(item.stats)) {
-      if (key in gearStats && key !== 'rangeType') {
-        gearStats[key] += value;
-      }
-    }
-  }
-
-  // rangeType comes from weapon only
-  const weapon = equippedMap.get('primary');
-  gearStats.rangeType = weapon?.rangeType ?? 'melee';
-
-  return gearStats;
-}

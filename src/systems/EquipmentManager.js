@@ -1,4 +1,4 @@
-import { loadEquipmentAssets } from '../pipelines/loadEquipmentAssets';
+import { loadEquipmentAssets } from '../scene/loadEquipmentAssets';
 
 /**
  * EquipmentManager — single source of truth for all equipment state transitions.

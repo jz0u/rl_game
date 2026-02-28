@@ -1,3 +1,5 @@
+import { defaultGearStats } from '../data/gearStats.js';
+
 // ── Scaling constants (tuning knobs — adjust during playtesting) ──
 const HP_PER_VITALITY = 15;
 const STAMINA_PER_ENDURANCE = 8;
@@ -60,4 +62,23 @@ export function computeDerivedStats(baseStats, gearStats) {
   };
 
   return stats;
+}
+
+export function computeGearStats(equippedMap) {
+  let gearStats = { ...defaultGearStats };
+
+  for (const [slot, item] of equippedMap) {
+    if (!item) continue;
+    for (const [key, value] of Object.entries(item.stats)) {
+      if (key in gearStats && key !== 'rangeType') {
+        gearStats[key] += value;
+      }
+    }
+  }
+
+  // rangeType comes from weapon only
+  const weapon = equippedMap.get('primary');
+  gearStats.rangeType = weapon?.rangeType ?? 'melee';
+
+  return gearStats;
 }
