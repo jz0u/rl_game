@@ -1231,6 +1231,7 @@ export const Armory = {
       rangeType: 'melee',
       handType: 'two',
       weaponSubtype: 'spear',
+      arcType: 'wide',
       baseName: 'Medieval_Warfare_Male_Weapon_Main_Halberd',
       fileName: 'Medieval_Warfare_Male_Weapon_Halberd',
       iconPath: iconPath('primary', 'Medieval_Warfare_Male_Weapon_Main_Halberd', 'Medieval_Warfare_Male_Weapon_Halberd'),
@@ -1276,6 +1277,7 @@ export const Armory = {
       rangeType: 'melee',
       handType: 'two',
       weaponSubtype: 'pike',
+      arcType: 'stab',
       baseName: 'Medieval_Warfare_Male_Weapon_Main_Pike',
       fileName: 'Medieval_Warfare_Male_Weapon_Pike',
       iconPath: iconPath('primary', 'Medieval_Warfare_Male_Weapon_Main_Pike', 'Medieval_Warfare_Male_Weapon_Pike'),
@@ -1322,6 +1324,7 @@ export const Armory = {
       rangeType: 'melee',
       handType: 'two',
       weaponSubtype: 'sword',
+      arcType: 'wide',
       baseName: 'Medieval_Warfare_Male_Weapon_Main_Zweihander',
       fileName: 'Medieval_Warfare_Male_Weapon_Zweihander',
       iconPath: iconPath('primary', 'Medieval_Warfare_Male_Weapon_Main_Zweihander', 'Medieval_Warfare_Male_Weapon_Zweihander'),
@@ -1581,6 +1584,12 @@ export const Armory = {
     },
   ],
 };
+
+// Attach arcType to every item. Non-'medium' values are set inline on the item definition;
+// everything else defaults to 'medium' here.
+Object.values(Armory).flat().forEach(item => {
+  if (!item.arcType) item.arcType = 'medium';
+});
 
 // Attach overlayPath (_Paperdoll.png) to every item — same folder structure as iconPath.
 Object.values(Armory).flat().forEach(item => {

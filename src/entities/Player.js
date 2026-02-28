@@ -4,6 +4,13 @@ import Entity from './Entity';
 /** All player spritesheets use 128×128 px frames. */
 const SPRITE_FRAME_SIZE = 128;
 
+/** Half-arc angles (radians) for each weapon arc type used in canHit(). */
+const ARC_HALF = {
+  stab:   Math.PI / 8,         // ~22.5° each side = 45° total
+  medium: (Math.PI * 3) / 8,  // ~67.5° each side = 135° total
+  wide:   (Math.PI * 5) / 8,  // ~112.5° each side = 225° total
+};
+
 /** Render order for equipment overlays. Higher = drawn on top. */
 const OVERLAY_DEPTH = {
   legs:        1,
@@ -85,38 +92,26 @@ export default class Player extends Entity {
         this.sprite.play(this.getIdleAnim());
       }
       const dummy = this.scene.dummy;
-      if (dummy && !dummy.isDead()) {
-        const dist = Phaser.Math.Distance.Between(
-          this.sprite.x, this.sprite.y,
-          dummy.rect.x, dummy.rect.y
-        );
-        if (dist < 120) {
-          dummy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
-          this.scene.cameras.main.shake(150, 0.004);
-          this.scene.physics.pause();
-          this.scene.anims.pauseAll();
-          this.scene.time.delayedCall(80, () => {
-            this.scene.physics.resume();
-            this.scene.anims.resumeAll();
-          });
-        }
+      if (dummy && !dummy.isDead() && this.canHit(dummy.rect.x, dummy.rect.y)) {
+        dummy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+        this.scene.cameras.main.shake(150, 0.004);
+        this.scene.physics.pause();
+        this.scene.anims.pauseAll();
+        this.scene.time.delayedCall(80, () => {
+          this.scene.physics.resume();
+          this.scene.anims.resumeAll();
+        });
       }
       const dummy2 = this.scene.dummy2;
-      if (dummy2 && !dummy2.isDead()) {
-        const dist2 = Phaser.Math.Distance.Between(
-          this.sprite.x, this.sprite.y,
-          dummy2.rect.x, dummy2.rect.y
-        );
-        if (dist2 < 120) {
-          dummy2.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
-          this.scene.cameras.main.shake(150, 0.004);
-          this.scene.physics.pause();
-          this.scene.anims.pauseAll();
-          this.scene.time.delayedCall(80, () => {
-            this.scene.physics.resume();
-            this.scene.anims.resumeAll();
-          });
-        }
+      if (dummy2 && !dummy2.isDead() && this.canHit(dummy2.rect.x, dummy2.rect.y)) {
+        dummy2.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+        this.scene.cameras.main.shake(150, 0.004);
+        this.scene.physics.pause();
+        this.scene.anims.pauseAll();
+        this.scene.time.delayedCall(80, () => {
+          this.scene.physics.resume();
+          this.scene.anims.resumeAll();
+        });
       }
     });
   }
@@ -403,6 +398,14 @@ export default class Player extends Entity {
     this.sprite.body.setVelocity(0, 0);
     this.sprite.flipX = pointerX > this.sprite.x;
 
+    const weapon = this.scene.inventory?.equipped?.get('primary');
+    this.currentAttackRange = weapon?.attackRange ?? 70;
+    this.currentArcType = weapon?.arcType ?? 'stab';
+    this.attackAngle = Math.atan2(
+      this.scene.input.activePointer.worldY - this.sprite.y,
+      this.scene.input.activePointer.worldX - this.sprite.x
+    );
+
     switch (this.weaponType) {
       case 'melee':  this.sprite.play('attack1');        break;
       case 'ranged':
@@ -426,6 +429,24 @@ export default class Player extends Entity {
   }
 
   // ── Game loop ──
+
+  // ── Hit detection ──
+
+  canHit(targetX, targetY) {
+    const dx = targetX - this.sprite.x;
+    const dy = targetY - this.sprite.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > this.currentAttackRange) return false;
+
+    const angleToTarget = Math.atan2(dy, dx);
+    const attackAngle = this.attackAngle ?? 0;
+
+    let diff = Math.abs(angleToTarget - attackAngle);
+    if (diff > Math.PI) diff = 2 * Math.PI - diff;
+
+    const half = ARC_HALF[this.currentArcType ?? 'stab'];
+    return diff <= half;
+  }
 
   /**
    * Called every frame. Handles movement toward the current moveTarget and
