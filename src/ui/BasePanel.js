@@ -1,4 +1,4 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER, PANEL_SCALE } from '../config/constants';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_CENTER, PANEL_SCALE, COLOR_PANEL_BG, COLOR_SLOT_DARK, COLOR_PANEL_BORDER } from '../config/constants';
 
 /**
  * Base class for full-screen game windows (Shop, InventoryWindow, …).
@@ -26,7 +26,7 @@ export default class BasePanel {
     const bgRect = this.scene.add.rectangle(
       GAME_WINDOW_CENTER.X, GAME_WINDOW_CENTER.Y,
       this.windowWidth - 7, this.windowHeight - 7,
-      0xdbc8a8,
+      COLOR_PANEL_BG,
     ).setAlpha(0.1);
 
     const shopWindow = this.scene.add.image(
@@ -52,9 +52,9 @@ export default class BasePanel {
 
     for (let i = 0; i < 3; i++) {
       const rect = this.scene.add.graphics();
-      rect.fillStyle(0x1a1a1a, 0.5);
+      rect.fillStyle(COLOR_SLOT_DARK, 0.5);
       rect.fillRect(leftX + i * rectW, topY, rectW, paneH);
-      rect.lineStyle(1, 0x8b6914, 0.8);
+      rect.lineStyle(1, COLOR_PANEL_BORDER, 0.8);
       rect.strokeRect(leftX + i * rectW, topY, rectW, paneH);
       rect.setAlpha(0); // DEV BOUNDS — hidden, keep for layout reference
       container.add(rect);

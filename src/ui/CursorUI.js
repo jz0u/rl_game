@@ -1,3 +1,5 @@
+import { DEPTH_EFFECTS_TOP } from '../config/constants';
+
 export default class CursorUI {
   constructor(scene) {
     this.scene = scene;
@@ -8,7 +10,7 @@ export default class CursorUI {
       strokeThickness: 3,
       backgroundColor: '#00000066',
       padding: { x: 4, y: 2 }
-    }).setDepth(9999).setScrollFactor(0);
+    }).setDepth(DEPTH_EFFECTS_TOP).setScrollFactor(0);
   }
 
   update() {

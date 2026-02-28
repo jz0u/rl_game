@@ -1,6 +1,7 @@
 import { computeGearStats }    from '../systems/StatEngine.js';
 import { computeDerivedStats } from '../systems/StatEngine.js';
 import CombatEffects            from '../effects/CombatEffects.js';
+import { COLOR_DAMAGE_RED, KNOCKBACK_DURATION_MS, KNOCKBACK_DISTANCE_PX } from '../config/constants.js';
 
 export default class Entity {
   constructor(scene, baseStats) {
@@ -60,19 +61,19 @@ export default class Entity {
     if (!anchor) return;
     if (anchor.setFillStyle) {
       anchor.setFillStyle(0xffffff);
-      this.scene.time.delayedCall(80, () => anchor.setFillStyle(0xff2222));
+      this.scene.time.delayedCall(80, () => anchor.setFillStyle(COLOR_DAMAGE_RED));
     } else {
       anchor.setTintFill(0xffffff);
       this.scene.time.delayedCall(80, () => anchor.clearTint());
     }
     if (attackerX !== null && attackerX !== undefined) {
       const originX = anchor.x;
-      const nudge = anchor.x >= attackerX ? 20 : -20;
+      const nudge = anchor.x >= attackerX ? KNOCKBACK_DISTANCE_PX : -KNOCKBACK_DISTANCE_PX;
       anchor.x = originX + nudge;
       this.scene.tweens.add({
         targets:  anchor,
         x:        originX,
-        duration: 200,
+        duration: KNOCKBACK_DURATION_MS,
         ease:     'Power2',
       });
     }

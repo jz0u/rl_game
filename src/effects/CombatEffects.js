@@ -1,3 +1,5 @@
+import { DEPTH_EFFECTS, DEPTH_EFFECTS_TOP } from '../config/constants';
+
 const ARC_HALF = {
   stab:   Math.PI / 8,
   medium: (Math.PI * 3) / 8,
@@ -7,7 +9,7 @@ const ARC_HALF = {
 export default class CombatEffects {
   static showArc(scene, x, y, angle, arcType, range) {
     const g = scene.add.graphics();
-    g.setDepth(9998);
+    g.setDepth(DEPTH_EFFECTS);
     g.fillStyle(0xffff00, 0.15);
     g.lineStyle(1, 0xffff00, 0.4);
     const half = ARC_HALF[arcType] ?? ARC_HALF.stab;
@@ -24,7 +26,7 @@ export default class CombatEffects {
 
   static showSlashTrail(scene, x, y, angle, arcType, range) {
     const g = scene.add.graphics();
-    g.setDepth(9999);
+    g.setDepth(DEPTH_EFFECTS_TOP);
     g.lineStyle(3, 0xffffff, 0.9);
     const half = ARC_HALF[arcType] ?? ARC_HALF.stab;
     const steps = 20;
@@ -52,7 +54,7 @@ export default class CombatEffects {
 
   static showImpactFlash(scene, x, y) {
     const g = scene.add.graphics();
-    g.setDepth(9999);
+    g.setDepth(DEPTH_EFFECTS_TOP);
     g.fillStyle(0xffffff, 1);
     g.fillCircle(x, y, 8);
     g.lineStyle(2, 0xffdd00, 1);
@@ -72,7 +74,7 @@ export default class CombatEffects {
     const count = 8;
     for (let i = 0; i < count; i++) {
       const g = scene.add.graphics();
-      g.setDepth(9999);
+      g.setDepth(DEPTH_EFFECTS_TOP);
       g.fillStyle(0xffdd00, 1);
       g.fillRect(-3, -3, 6, 6);
       g.x = x;

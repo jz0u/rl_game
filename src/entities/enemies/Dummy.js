@@ -1,10 +1,11 @@
 import Enemy from './Enemy.js';
 import { defaultEnemyStats } from '../../data/baseStats.js';
+import { COLOR_DAMAGE_RED } from '../../config/constants.js';
 
 export default class Dummy extends Enemy {
   constructor(scene, x, y) {
     super(scene, x, y, defaultEnemyStats);
-    this.rect = scene.add.rectangle(x, y, 40, 60, 0xff2222);
+    this.rect = scene.add.rectangle(x, y, 40, 60, COLOR_DAMAGE_RED);
     scene.physics.add.existing(this.rect, false);
     this.rect.body.setCollideWorldBounds(true);
     this.createHealthBar(x, y);

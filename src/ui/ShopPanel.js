@@ -6,6 +6,7 @@ import {
   NAV_BTN_WIDTH,
   NAV_BTN_HEIGHT,
   DEPTH_UI,
+  COLOR_SLOT_DARK,
 } from '../config/constants';
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
@@ -177,7 +178,7 @@ export default class ShopPanel extends BasePanel {
       const y   = originY + row * CELL_SIZE + CELL_SIZE / 2;
 
       const goldRect = this.scene.add.graphics();
-      goldRect.fillStyle(0x1a1a1a, 0.5);
+      goldRect.fillStyle(COLOR_SLOT_DARK, 0.5);
       goldRect.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
       this.onPage.push(goldRect);
       this.shopPanel.add(goldRect);

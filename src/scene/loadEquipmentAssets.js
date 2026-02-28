@@ -1,5 +1,4 @@
-// matches player sprite frame size
-const SPRITE_FRAME_SIZE = 128;
+import { SPRITE_FRAME_SIZE } from '../config/constants';
 
 const SLOT_FOLDER = {
   primary:   'primary_weapon',

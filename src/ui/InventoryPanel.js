@@ -1,4 +1,4 @@
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING, INVENTORY_SIZE, DEPTH_UI, DEPTH_UI_TOP } from '../config/constants';
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_CENTER, CELL_SIZE, ICON_SIZE, NAV_BTN_WIDTH, NAV_BTN_HEIGHT, SLOT_BOX_SIZE, SLOT_SPACING, INVENTORY_SIZE, DEPTH_UI, DEPTH_UI_TOP, COLOR_SLOT_DARK } from '../config/constants';
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
 import { scaleIcon } from '../utils';
@@ -138,7 +138,7 @@ export default class InventoryPanel extends BasePanel {
 
       // Dark fill background rect
       const fillRect = this.scene.add.graphics();
-      fillRect.fillStyle(0x1a1a1a, 0.5);
+      fillRect.fillStyle(COLOR_SLOT_DARK, 0.5);
       fillRect.fillRect(x - CELL_SIZE / 2, y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE);
       this.invPanel.add(fillRect);
 

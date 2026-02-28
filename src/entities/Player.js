@@ -1,9 +1,7 @@
 import { playerBaseStats } from '../data/baseStats';
 import Entity from './Entity';
 import CombatEffects from '../effects/CombatEffects';
-
-/** All player spritesheets use 128×128 px frames. */
-const SPRITE_FRAME_SIZE = 128;
+import { SPRITE_FRAME_SIZE, KNOCKBACK_DURATION_MS, KNOCKBACK_DISTANCE_PX } from '../config/constants';
 
 /** Half-arc angles (radians) for each weapon arc type used in canHit(). */
 const ARC_HALF = {
@@ -152,12 +150,12 @@ export default class Player extends Entity {
     // Knockback nudge — identical to Entity base class.
     if (attackerX !== null && attackerX !== undefined) {
       const originX = anchor.x;
-      const nudge = anchor.x >= attackerX ? 20 : -20;
+      const nudge = anchor.x >= attackerX ? KNOCKBACK_DISTANCE_PX : -KNOCKBACK_DISTANCE_PX;
       anchor.x = originX + nudge;
       this.scene.tweens.add({
         targets:  anchor,
         x:        originX,
-        duration: 200,
+        duration: KNOCKBACK_DURATION_MS,
         ease:     'Power2',
       });
     }

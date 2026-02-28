@@ -1,4 +1,5 @@
 import Entity from '../Entity.js';
+import { COLOR_HP_BAR_BG, COLOR_DAMAGE_RED } from '../../config/constants.js';
 
 const BAR_WIDTH  = 40;
 const BAR_HEIGHT = 5;
@@ -27,11 +28,11 @@ export default class Enemy extends Entity {
 
     this.healthBar.clear();
 
-    this.healthBar.fillStyle(0x880000);
+    this.healthBar.fillStyle(COLOR_HP_BAR_BG);
     this.healthBar.fillRect(bx, by, BAR_WIDTH, BAR_HEIGHT);
 
     const ratio = this.currentHp / this.derivedStats.maxHP;
-    this.healthBar.fillStyle(0xff2222);
+    this.healthBar.fillStyle(COLOR_DAMAGE_RED);
     this.healthBar.fillRect(bx, by, BAR_WIDTH * ratio, BAR_HEIGHT);
 
     this.hpLabel.setText(`${Math.ceil(this.currentHp)} / ${this.derivedStats.maxHP}`);

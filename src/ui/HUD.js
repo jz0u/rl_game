@@ -1,3 +1,5 @@
+import { DEPTH_HUD, DEPTH_HUD_MID, DEPTH_HUD_TOP, COLOR_HP_BAR_BG, COLOR_DAMAGE_RED } from '../config/constants';
+
 export default class HUD {
   constructor(scene, player) {
     this.scene  = scene;
@@ -8,7 +10,6 @@ export default class HUD {
     const camH = scene.cameras.main.height;
     const CX   = camW / 2;
     const BY   = camH;
-    const HUD_DEPTH = 100;
 
     // ── Scale factor ──
     const base    = Math.min(camW, camH);
@@ -17,20 +18,20 @@ export default class HUD {
 
     // ── HUD bar layers ──
     this.hudBack = scene.add.image(CX, BY, 'hud-back')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(HUD_DEPTH).setScale(scale);
+      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD).setScale(scale);
 
     const hudW = 324 * scale;
     const hudH = 66  * scale;
 
     this.skillSlots = scene.add.image(CX, BY - (hudH * 0.1), 'hud-skill-slots')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(HUD_DEPTH + 1).setScale(scale);
+      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD_MID).setScale(scale);
 
     this.hudFront = scene.add.image(CX, BY, 'hud-front')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(HUD_DEPTH + 2).setScale(scale);
+      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD_TOP).setScale(scale);
 
     // ── EXP bar ──
     this.expBar = scene.add.image(CX, BY - (hudH * 0.1), 'hud-exp')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(HUD_DEPTH + 1).setScale(scale);
+      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD_MID).setScale(scale);
     this.expBarFullWidth = this.expBar.width;
     this.expBar.setCrop(0, 0, this.expBarFullWidth, this.expBar.height);
 
@@ -47,13 +48,13 @@ export default class HUD {
     this._hideManaOrb();
 
     // ── HP bar (top-left) ──
-    this.hpBar = scene.add.graphics().setScrollFactor(0).setDepth(HUD_DEPTH);
+    this.hpBar = scene.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD);
     this.hpText = scene.add.text(20, 40, '', {
       fontSize: '12px',
       color: '#ffffff',
       stroke: '#000000',
       strokeThickness: 3,
-    }).setScrollFactor(0).setDepth(HUD_DEPTH);
+    }).setScrollFactor(0).setDepth(DEPTH_HUD);
   }
 
   // ── Private helpers ──
@@ -63,11 +64,11 @@ export default class HUD {
 
     const bg = scene.add.image(x, y, textureKey)
       .setOrigin(0.5, 1).setScrollFactor(0)
-      .setDepth(101).setTint(0x222222).setScale(scale);
+      .setDepth(DEPTH_HUD_MID).setTint(0x222222).setScale(scale);
 
     const orb = scene.add.image(x, y, textureKey)
       .setOrigin(0.5, 1).setScrollFactor(0)
-      .setDepth(102).setScale(scale);
+      .setDepth(DEPTH_HUD_TOP).setScale(scale);
 
     const orbH = orb.displayHeight;
     const orbW = orb.displayWidth;
@@ -75,7 +76,7 @@ export default class HUD {
     const maskRect = scene.add.graphics().setScrollFactor(0);
     maskRect.fillStyle(0xffffff);
     maskRect.fillRect(x - orbW / 2, y - orbH, orbW, orbH);
-    maskRect.setDepth(102);
+    maskRect.setDepth(DEPTH_HUD_TOP);
     maskRect.setVisible(false);
     const mask = maskRect.createGeometryMask();
     orb.setMask(mask);
@@ -112,9 +113,9 @@ export default class HUD {
     const p   = this.player;
     const pct = Math.max(0, Math.min(1, p.currentHp / p.derivedStats.maxHP));
     this.hpBar.clear();
-    this.hpBar.fillStyle(0x880000);
+    this.hpBar.fillStyle(COLOR_HP_BAR_BG);
     this.hpBar.fillRect(20, 20, 200, 16);
-    this.hpBar.fillStyle(0xff2222);
+    this.hpBar.fillStyle(COLOR_DAMAGE_RED);
     this.hpBar.fillRect(20, 20, 200 * pct, 16);
     this.hpText.setText(`HP: ${p.currentHp} / ${p.derivedStats.maxHP}`);
   }
