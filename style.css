@@ -6,6 +6,11 @@
 * {
   margin: 0;
   padding: 0;
+  cursor: none;
+}
+
+canvas {
+  cursor: url('/assets/ui/cursor.png') 0 0, none;
 }
 
 body {

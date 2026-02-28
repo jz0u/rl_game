@@ -9,6 +9,7 @@ import WindowManager from "../ui/WindowManager";
 import EquipmentManager from "../systems/EquipmentManager";
 import GameActions from "../systems/GameActions";
 import Dummy from "../entities/enemies/Dummy";
+import CursorUI from "../ui/CursorUI";
 
 
 /**
@@ -55,4 +56,6 @@ export function createGameObjects(scene, allItems) {
         inventoryPanel:   scene.inventoryPanel,
         shopPanel:        scene.shopPanel,
     });
+
+    scene.cursorUI = new CursorUI(scene);
 }
