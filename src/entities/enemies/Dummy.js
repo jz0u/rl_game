@@ -11,8 +11,6 @@ export default class Dummy extends Enemy {
 
     this.state = 'idle';
     this.aggroRadius = 200;
-    this.moveSpeed = 60;
-    this.attackRange = this.derivedStats.attackRange;
     this.attackCooldown = false;
   }
 
@@ -32,7 +30,7 @@ export default class Dummy extends Enemy {
       if (dist > this.aggroRadius * 1.5) {
         this.state = 'idle';
         this.rect.body.setVelocity(0, 0);
-      } else if (dist < this.attackRange) {
+      } else if (dist < this.derivedStats.attackRange) {
         this.rect.body.setVelocity(0, 0);
         if (!this.attackCooldown) {
           this.attackCooldown = true;
@@ -49,8 +47,8 @@ export default class Dummy extends Enemy {
           px, py,
         );
         this.rect.body.setVelocity(
-          Math.cos(angle) * this.moveSpeed,
-          Math.sin(angle) * this.moveSpeed,
+          Math.cos(angle) * this.derivedStats.moveSpeed * 60,
+          Math.sin(angle) * this.derivedStats.moveSpeed * 60,
         );
       }
       this.updateHealthBar();

@@ -58,6 +58,9 @@ export const defaultEnemyStats = {
   attackRange: 40,    // short melee reach in pixels
 
   // ── Base gear bonus fields ──
+  hpBonus: 0,
+  staminaBonus: 0,
+  magickaBonus: 0,
   attackSpeedBonus: 0,
   critChanceBonus: 0,
   accuracyBonus: 0,
