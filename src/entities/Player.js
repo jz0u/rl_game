@@ -245,7 +245,7 @@ export default class Player {
       if (!currentAnim || overlay.isStatic) continue;
 
       const weaponAnim = overlay.baseName + "_" + currentAnim;
-      if (overlay.anims.currentAnim?.key !== weaponAnim) {
+      if (overlay.anims.currentAnim?.key !== weaponAnim && this.scene.anims.exists(weaponAnim)) {
         overlay.play(weaponAnim, true);
       }
     }
@@ -312,9 +312,9 @@ export default class Player {
     this.sprite.flipX = pointerX > this.sprite.x;
 
     switch (this.weaponType) {
-      case 'melee':  this.sprite.play('attack1');        break;
-      case 'ranged': this.sprite.play('shooting');       break;
-      case 'magic':  this.sprite.play('magic');          break;
+      case 'melee':
+      case 'ranged':
+      case 'magic':  this.sprite.play('attack1');        break;
       default:       this.sprite.play('martialartpunch');
     }
   }

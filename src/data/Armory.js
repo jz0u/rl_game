@@ -1308,6 +1308,7 @@ export const Armory = {
       weaponSubtype: 'crossbow',
       baseName: 'Medieval_Warfare_Male_Weapon_Main_XBow',
       fileName: 'Medieval_Warfare_Male_Weapon_XBow',
+      animFileName: 'Medieval_Warfare_Male_Weapon_Xbow',
       iconPath: iconPath('primary', 'Medieval_Warfare_Male_Weapon_Main_XBow', 'Medieval_Warfare_Male_Weapon_XBow'),
       stats: { damageValue: 1 },
       value: 0,

@@ -30,16 +30,19 @@ export function loadEquipmentAssets(scene, item) {
   // fileName: both Paperdoll and animations use a different prefix from baseName (e.g. _Main_/_Off_ weapons).
   const fileName = item.animFileName ?? item.fileName ?? baseName;
   const folder = folderFor(equipSlot);
+  const isRanged = item.rangeType === 'ranged';
 
   // Texture keys use baseName (unique per item, even when files share a name across folders)
-  const idleKey    = baseName + '_idle1_diag';
-  const walkKey    = baseName + '_walking_diag';
-  const attack1Key = baseName + '_MVsv_alt_attack1';
-  const attack2Key = baseName + '_MVsv_alt_attack2';
+  const idleKey           = baseName + '_idle1_diag';
+  const walkKey           = baseName + '_walking_diag';
+  const attack1Key        = baseName + '_MVsv_alt_attack1';
+  const attack2Key        = baseName + '_MVsv_alt_attack2';
+  const shootingKey       = baseName + '_MVsv_alt_shooting';
+  const shootingstanceKey = baseName + '_MVsv_alt_shootingstance';
 
   // If already loaded, just ensure anims exist and fix up any overlay, then return
   if (scene.textures.exists(idleKey)) {
-    _registerAnims(scene, baseName);
+    _registerAnims(scene, baseName, isRanged);
     _refreshOverlay(scene, baseName, idleKey);
     return;
   }
@@ -50,9 +53,14 @@ export function loadEquipmentAssets(scene, item) {
   scene.load.spritesheet(attack1Key, `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_attack1.png`, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
   scene.load.spritesheet(attack2Key, `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_attack2.png`, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
 
+  if (isRanged) {
+    scene.load.spritesheet(shootingKey,       `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_shooting.png`,       { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+    scene.load.spritesheet(shootingstanceKey, `assets/armory/${folder}/${baseName}/${fileName}_MVsv_alt_shootingstance.png`, { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE });
+  }
+
   // Once loaded, register animations and fix up the overlay sprite's texture
   scene.load.once('complete', () => {
-    _registerAnims(scene, baseName);
+    _registerAnims(scene, baseName, isRanged);
     _refreshOverlay(scene, baseName, idleKey);
   });
 
@@ -84,7 +92,7 @@ function _refreshOverlay(scene, baseName, idleKey) {
  * @param {Phaser.Scene} scene
  * @param {string} baseName - The item's baseName.
  */
-function _registerAnims(scene, baseName) {
+function _registerAnims(scene, baseName, isRanged = false) {
   const idleKey    = baseName + '_idle1_diag';
   const walkKey    = baseName + '_walking_diag';
   const attack1Key = baseName + '_MVsv_alt_attack1';
@@ -118,5 +126,23 @@ function _registerAnims(scene, baseName) {
       frameRate: anim.frameRate,
       repeat: anim.repeat,
     });
+  }
+
+  if (isRanged) {
+    const shootingKey       = baseName + '_MVsv_alt_shooting';
+    const shootingstanceKey = baseName + '_MVsv_alt_shootingstance';
+    const rangedAnims = [
+      { key: baseName + '_shooting',       texture: shootingKey,       start: 0, end: 2, frameRate: 10, repeat: 0 },
+      { key: baseName + '_shootingstance', texture: shootingstanceKey, start: 0, end: 2, frameRate: 10, repeat: 0 },
+    ];
+    for (const anim of rangedAnims) {
+      if (scene.anims.exists(anim.key)) continue;
+      scene.anims.create({
+        key: anim.key,
+        frames: scene.anims.generateFrameNumbers(anim.texture, { start: anim.start, end: anim.end }),
+        frameRate: anim.frameRate,
+        repeat: anim.repeat,
+      });
+    }
   }
 }
