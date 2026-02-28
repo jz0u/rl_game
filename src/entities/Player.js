@@ -93,7 +93,7 @@ export default class Player extends Entity {
         this.sprite.play(this.getIdleAnim());
       }
       const dummy = this.scene.dummy;
-      if (dummy && !dummy.isDead() && this.canHit(dummy.rect.x, dummy.rect.y)) {
+      if (dummy && !dummy.isDead() && this.canHit(dummy.rect)) {
         dummy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
         const hitX = (this.sprite.x + dummy.rect.x) / 2;
         const hitY = (this.sprite.y + dummy.rect.y) / 2;
@@ -108,7 +108,7 @@ export default class Player extends Entity {
         });
       }
       const dummy2 = this.scene.dummy2;
-      if (dummy2 && !dummy2.isDead() && this.canHit(dummy2.rect.x, dummy2.rect.y)) {
+      if (dummy2 && !dummy2.isDead() && this.canHit(dummy2.rect)) {
         dummy2.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
         const hitX2 = (this.sprite.x + dummy2.rect.x) / 2;
         const hitY2 = (this.sprite.y + dummy2.rect.y) / 2;
@@ -450,20 +450,29 @@ export default class Player extends Entity {
 
   // ── Hit detection ──
 
-  canHit(targetX, targetY) {
-    const dx = targetX - this.sprite.x;
-    const dy = targetY - this.sprite.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist > this.currentAttackRange) return false;
+  canHit(rect) {
+    const hw = rect.width / 2;
+    const hh = rect.height / 2;
+    const points = [
+      { x: rect.x - hw, y: rect.y - hh },
+      { x: rect.x + hw, y: rect.y - hh },
+      { x: rect.x - hw, y: rect.y + hh },
+      { x: rect.x + hw, y: rect.y + hh },
+      { x: rect.x,      y: rect.y      },
+    ];
 
-    const angleToTarget = Math.atan2(dy, dx);
+    const range = this.currentAttackRange;
     const attackAngle = this.attackAngle ?? 0;
-
-    let diff = Math.abs(angleToTarget - attackAngle);
-    if (diff > Math.PI) diff = 2 * Math.PI - diff;
-
     const half = ARC_HALF[this.currentArcType ?? 'stab'];
-    return diff <= half;
+
+    return points.some(({ x, y }) => {
+      const dx = x - this.sprite.x;
+      const dy = y - this.sprite.y;
+      if (dx * dx + dy * dy > range * range) return false;
+      let diff = Math.abs(Math.atan2(dy, dx) - attackAngle);
+      if (diff > Math.PI) diff = 2 * Math.PI - diff;
+      return diff <= half;
+    });
   }
 
   /**
