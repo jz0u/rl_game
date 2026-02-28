@@ -31,17 +31,6 @@ export default class ShopPanel extends BasePanel {
     /** Icons currently rendered on this page; destroyed and rebuilt on page change. */
     this.onPage = [];
 
-    // ── Toggle button ──
-    this.shopBtn = this.scene.add
-      .text(20, 20, 'ITEMS', {
-        fontSize: '16px',
-        backgroundColor: '#333',
-        padding: { x: 10, y: 6 },
-        color: '#fff',
-      })
-      .setInteractive()
-      .setScrollFactor(0);
-
     // ── Shop panel container ──
     this.shopPanel = this._buildContainer();
 
@@ -54,7 +43,6 @@ export default class ShopPanel extends BasePanel {
 
     this.shopPanel.setDepth(DEPTH_UI);
 
-    this.shopBtn.on('pointerdown', () => this.scene.windowManager.open(this));
     this.hide();
   }
 

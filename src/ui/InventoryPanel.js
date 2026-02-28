@@ -12,7 +12,7 @@ import { scaleIcon } from '../config/utils';
  *
  * Clicking an inventory icon opens a popup with EQUIP and DROP actions.
  * Clicking an equipment slot shows that slot's item info in the text area.
- * The panel is toggled via the "BAG" button.
+ * The panel is toggled via keyboard shortcut (I).
  */
 export default class InventoryPanel extends BasePanel {
   /**
@@ -31,24 +31,12 @@ export default class InventoryPanel extends BasePanel {
     this.equipSlotBgs   = {};
     this.currentPage = 0;
 
-    // ── Toggle button ──
-    this.invBtn = this.scene.add
-      .text(20, 56, 'BAG', {
-        fontSize: '16px',
-        backgroundColor: '#333',
-        padding: { x: 10, y: 6 },
-        color: '#fff',
-      })
-      .setInteractive()
-      .setScrollFactor(0);
-
     // ── Inventory panel container ──
     this.invPanel = this._buildContainer();
 
     this._buildPanel();
     this.invPanel.setDepth(DEPTH_UI);
 
-    this.invBtn.on('pointerdown', () => this.scene.windowManager.open(this));
     this.hide();
   }
 
