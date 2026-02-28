@@ -34,7 +34,7 @@ export default class Dummy extends Enemy {
         this.rect.body.setVelocity(0, 0);
         if (!this.attackCooldown) {
           this.attackCooldown = true;
-          this.currentArcType = 'medium';
+          this.currentArcType = 'stab';
           this.currentAttackRange = this.derivedStats.attackRange;
           const attackAngle = Phaser.Math.Angle.Between(this.rect.x, this.rect.y, px, py);
           this.scene.actions.damagePlayer(this.derivedStats.physicalDamage, this.rect.x);
