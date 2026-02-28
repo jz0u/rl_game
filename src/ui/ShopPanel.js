@@ -68,7 +68,7 @@ export default class ShopPanel extends BasePanel {
     const rectW = this.windowWidth / 6; // (windowWidth / 2) / 3
 
     this.generalText = this.scene.add.text(leftX + 10, topY + 10, '', {
-      fontFamily: 'Georgia, serif',
+      fontFamily: 'Darinia',
       fontSize: '14px',
       color: '#ffffff',
       wordWrap: { width: rectW - 52 },
@@ -77,6 +77,7 @@ export default class ShopPanel extends BasePanel {
     });
 
     this.statText = this.scene.add.text(leftX + 2 * rectW + 10, topY + 10, '', {
+      fontFamily: 'Darinia',
       fontSize: '13px',
       color: '#ffffff',
       wordWrap: { width: rectW - 52 },
@@ -239,6 +240,7 @@ export default class ShopPanel extends BasePanel {
 
     slots.forEach(slot => {
       const tab = this.scene.add.text(tabX, tabY, LABEL_MAP[slot], {
+        fontFamily: 'Darinia',
         fontSize: '11px',
         color: '#aaaaaa',
         backgroundColor: '#222',
