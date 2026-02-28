@@ -45,10 +45,25 @@ export default class Dummy extends Enemy {
           this.rect.x, this.rect.y,
           px, py,
         );
-        this.rect.body.setVelocity(
-          Math.cos(angle) * this.derivedStats.moveSpeed * 60,
-          Math.sin(angle) * this.derivedStats.moveSpeed * 60,
-        );
+        let vx = Math.cos(angle) * this.derivedStats.moveSpeed * 60;
+        let vy = Math.sin(angle) * this.derivedStats.moveSpeed * 60;
+
+        // Separation steering — nudge away from the other dummy when close.
+        const SEPARATION = 60;
+        for (const key of ['dummy', 'dummy2']) {
+          const other = this.scene[key];
+          if (!other || other === this || other.state === 'dead') continue;
+          const dx = this.rect.x - other.rect.x;
+          const dy = this.rect.y - other.rect.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d > 0 && d < SEPARATION) {
+            const strength = (SEPARATION - d) / SEPARATION;
+            vx += (dx / d) * strength * this.derivedStats.moveSpeed * 60;
+            vy += (dy / d) * strength * this.derivedStats.moveSpeed * 60;
+          }
+        }
+
+        this.rect.body.setVelocity(vx, vy);
       }
       this.updateHealthBar();
     }
