@@ -22,6 +22,11 @@ export default class GameActions {
     moveTo(x, y)       { this.player.moveTo(x, y); }
     attack(x)          { this.player.attack(x); }
 
+    // Combat — called by enemies
+    damagePlayer(amount)   { return this.player.takeDamage(amount, 'physical'); }
+    getPlayerPosition()    { return { x: this.player.sprite.x, y: this.player.sprite.y }; }
+    getPlayerSprite()      { return this.player.sprite; }
+
     // Inventory
     addItem(item)      { return this.inventory.addItemToInventory(item); }
 }

@@ -16,7 +16,7 @@ export const playerBaseStats = {
   magicalResist: 10,
 
   // ── Base offense (unarmed) ──
-  physicalDamage: 3,  // weak unarmed hits — equip a weapon for real damage
+  physicalDamage: 20,  // weak unarmed hits — equip a weapon for real damage
   magicalDamage: 0,   // magic requires a staff/wand equipped
   minDamage: 0,
   maxDamage: 0,
