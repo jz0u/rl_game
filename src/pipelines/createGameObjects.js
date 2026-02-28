@@ -20,7 +20,8 @@ export function createGameObjects(scene, allItems) {
     scene.player          = new Player(scene, map.widthInPixels / 2, map.heightInPixels / 2);
     Player.createAnims(scene);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    scene.cameras.main.startFollow(scene.player.sprite);
+    scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);
+    scene.cameras.main.setZoom(0.9);
     scene.physics.add.collider(scene.player.sprite, scene.wallLayer);
     scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.player.sprite.setCollideWorldBounds(true);
