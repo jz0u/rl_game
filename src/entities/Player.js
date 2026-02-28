@@ -128,9 +128,10 @@ export default class Player extends Entity {
 
   // ── Combat ──
 
-  takeDamage(amount, type) {
+  takeDamage(amount, type, attackerX) {
     if (this.invincible) return 0;
     const effective = super.takeDamage(amount, type);
+    this._applyHitReaction(this.sprite, attackerX);
     this.invincible = true;
     this.scene.time.delayedCall(500, () => { this.invincible = false; });
     return effective;

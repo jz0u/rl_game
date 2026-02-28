@@ -43,26 +43,7 @@ export default class Enemy extends Entity {
     this.updateHealthBar();
     this.showDamageNumber(effective);
 
-    const anchor = this.rect ?? this.sprite;
-    if (anchor) {
-      // 1. White flash
-      this.rect.setFillStyle(0xffffff);
-      this.scene.time.delayedCall(80, () => this.rect.setFillStyle(0xff2222));
-
-      // 2. Knockback nudge
-      if (attackerX !== null) {
-        const originX = anchor.x;
-        const nudge = anchor.x >= attackerX ? 15 : -15;
-        anchor.x = originX + nudge;
-        this.scene.tweens.add({
-          targets:  anchor,
-          x:        originX,
-          duration: 200,
-          ease:     'Power2',
-        });
-      }
-    }
-
+    this._applyHitReaction(this.rect ?? this.sprite, attackerX);
     return effective;
   }
 

@@ -23,7 +23,7 @@ export default class GameActions {
     attack(x)          { this.player.attack(x); }
 
     // Combat — called by enemies
-    damagePlayer(amount)   { return this.player.takeDamage(amount, 'physical'); }
+    damagePlayer(amount, attackerX)   { return this.player.takeDamage(amount, 'physical', attackerX); }
     getPlayerPosition()    { return { x: this.player.sprite.x, y: this.player.sprite.y }; }
     getPlayerSprite()      { return this.player.sprite; }
 

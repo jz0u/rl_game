@@ -34,7 +34,7 @@ export default class Dummy extends Enemy {
         this.rect.body.setVelocity(0, 0);
         if (!this.attackCooldown) {
           this.attackCooldown = true;
-          this.scene.actions.damagePlayer(this.derivedStats.physicalDamage);
+          this.scene.actions.damagePlayer(this.derivedStats.physicalDamage, this.rect.x);
           this.rect.setFillStyle(0xffffff);
           this.scene.time.delayedCall(80, () => this.rect.setFillStyle(0xff2222));
           this.scene.time.delayedCall(this.derivedStats.attackSpeed, () => {

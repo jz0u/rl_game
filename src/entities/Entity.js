@@ -1,5 +1,6 @@
 import { computeGearStats }    from '../data/gearStats.js';
 import { computeDerivedStats } from '../systems/StatEngine.js';
+import CombatEffects            from '../effects/CombatEffects.js';
 
 export default class Entity {
   constructor(scene, baseStats) {
@@ -35,6 +36,47 @@ export default class Entity {
   }
 
   onDeath() {}
+
+  performAttack(angle) {
+    const anchor = this.sprite ?? this.rect;
+    CombatEffects.showArc(
+      this.scene, anchor.x, anchor.y,
+      angle, this.currentArcType, this.currentAttackRange,
+    );
+    CombatEffects.showSlashTrail(
+      this.scene, anchor.x, anchor.y,
+      angle, this.currentArcType, this.currentAttackRange,
+    );
+    this.attackInProgress = true;
+    this.scene.time.delayedCall(this.derivedStats.attackSpeed, () => {
+      this.attackInProgress = false;
+      this.onAttackComplete();
+    });
+  }
+
+  onAttackComplete() {}
+
+  _applyHitReaction(anchor, attackerX) {
+    if (!anchor) return;
+    if (anchor.setFillStyle) {
+      anchor.setFillStyle(0xffffff);
+      this.scene.time.delayedCall(80, () => anchor.setFillStyle(0xff2222));
+    } else {
+      anchor.setTint(0xffffff);
+      this.scene.time.delayedCall(80, () => anchor.clearTint());
+    }
+    if (attackerX !== null && attackerX !== undefined) {
+      const originX = anchor.x;
+      const nudge = anchor.x >= attackerX ? 20 : -20;
+      anchor.x = originX + nudge;
+      this.scene.tweens.add({
+        targets:  anchor,
+        x:        originX,
+        duration: 200,
+        ease:     'Power2',
+      });
+    }
+  }
 
   getDirectionAnim(angle) {
     const deg = Phaser.Math.RadToDeg(angle);
