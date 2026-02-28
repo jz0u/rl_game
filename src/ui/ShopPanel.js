@@ -289,7 +289,7 @@ export default class ShopPanel extends BasePanel {
    * @param {object} item - An Armory item definition.
    */
   _buyItem(item) {
-    return this.scene.equipmentManager.buy(item);
+    return this.scene.actions.buyItem(item);
   }
 
   /** Hides the entire shop panel. */

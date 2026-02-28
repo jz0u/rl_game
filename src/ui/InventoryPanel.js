@@ -163,7 +163,7 @@ export default class InventoryPanel extends BasePanel {
         } else {
           // Left-click — equip progression
           this.selectionBorder.advance(item, x, y, () => {
-            return this.scene.equipmentManager.equip(item);
+            return this.scene.actions.equipItem(item);
           }, 'equip');
         }
       };
@@ -303,7 +303,7 @@ export default class InventoryPanel extends BasePanel {
     if (pointer.rightButtonDown()) {
       // Right-click — unequip progression
       this.selectionBorder.advance(item, x, y, () => {
-        return this.scene.equipmentManager.unequip(slotName);
+        return this.scene.actions.unequipSlot(slotName);
       }, 'drop');
     }
   }

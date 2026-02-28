@@ -24,7 +24,7 @@ export function setupInput(scene) {
             const outside =
                 pointer.x < panelLeft  || pointer.x > panelRight ||
                 pointer.y < panelTop   || pointer.y > panelBottom;
-            if (outside) scene.windowManager.closeAll();
+            if (outside) scene.actions.closeAll();
             return; // Never trigger gameplay while a panel was open
         }
 
@@ -32,9 +32,9 @@ export function setupInput(scene) {
         if (currentlyOver.length > 0) return;
 
         if (pointer.rightButtonDown()) {
-            scene.player.moveTo(pointer.worldX, pointer.worldY);
+            scene.actions.moveTo(pointer.worldX, pointer.worldY);
         } else if (pointer.leftButtonDown()) {
-            scene.player.attack(pointer.worldX);
+            scene.actions.attack(pointer.worldX);
         }
     });
 }

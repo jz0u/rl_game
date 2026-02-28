@@ -88,6 +88,18 @@ export default class WindowManager {
     this._hideArrows();
   }
 
+  isOpen(panel) {
+    return this.currentNode?.window === panel;
+  }
+
+  close(panel) {
+    if (this.isOpen(panel)) this.closeAll();
+  }
+
+  toggle(panel) {
+    this.isOpen(panel) ? this.close(panel) : this.open(panel);
+  }
+
   _showArrows() {
     this.leftPrevBtn.setVisible(true);
     this.leftNextBtn.setVisible(true);

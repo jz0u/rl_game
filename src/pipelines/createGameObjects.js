@@ -7,6 +7,7 @@ import Inventory from "../systems/Inventory";
 import InventoryPanel from "../ui/InventoryPanel";
 import WindowManager from "../ui/WindowManager";
 import EquipmentManager from "../systems/EquipmentManager";
+import GameActions from "../systems/GameActions";
 
 
 /**
@@ -41,4 +42,13 @@ export function createGameObjects(scene, allItems) {
     });
     scene.windowManager.addWindow(scene.shopPanel);
     scene.windowManager.addWindow(scene.inventoryPanel);
+
+    scene.actions = new GameActions({
+        player:           scene.player,
+        inventory:        scene.inventory,
+        equipmentManager: scene.equipmentManager,
+        windowManager:    scene.windowManager,
+        inventoryPanel:   scene.inventoryPanel,
+        shopPanel:        scene.shopPanel,
+    });
 }
