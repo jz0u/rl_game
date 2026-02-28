@@ -11,3 +11,4 @@ export const SLOT_SPACING   = 120;
 export const INVENTORY_SIZE = 24;
 export const DEPTH_UI       = 10;
 export const DEPTH_UI_TOP   = 20;
+export const CAMERA_ZOOM    = 1;

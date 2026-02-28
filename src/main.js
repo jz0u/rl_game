@@ -52,12 +52,12 @@ class GameScene extends Phaser.Scene {
 
 new Phaser.Game({
   type: Phaser.AUTO,
-  width:  window.innerWidth,
-  height: window.innerHeight,
   backgroundColor: "#000000",
   scale: {
-    mode: Phaser.Scale.RESIZE,
+    mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
+    width:  window.innerWidth,
+    height: window.innerHeight,
   },
   physics: {
     default: "arcade",

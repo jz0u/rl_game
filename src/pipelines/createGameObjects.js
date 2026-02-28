@@ -26,9 +26,9 @@ export function createGameObjects(scene, allItems) {
     scene.player          = new Player(scene, playerX, playerY);
     scene.hud             = new HUD(scene, scene.player);
     Player.createAnims(scene);
+    scene.cameras.main.setZoom(1);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);
-    scene.cameras.main.setZoom(0.9);
     scene.dummy           = new Dummy(scene, playerX + 200, playerY);
     scene.dummy2          = new Dummy(scene, playerX + 350, playerY);
     scene.physics.add.collider(scene.player.sprite, scene.collusionGroup);
