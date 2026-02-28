@@ -1,7 +1,7 @@
 import Player from "../entities/Player";
 import { Armory } from "../data/Armory";
 import MapManager from "../maps/MapManager";
-import { map1 } from "../maps/map1";
+import { map2 } from "../maps/map2";
 
 /**
  * Loads all game assets into the Phaser loader. Call from scene.preload().
@@ -32,5 +32,5 @@ export function loadAssets(scene){
     scene.load.image('red_selected2',      'assets/ui/red_selected2.png');
     scene.load.image('red_selected3',      'assets/ui/red_selected3.png');
 
-    MapManager.load(scene, map1);
+    MapManager.load(scene, map2);
 }

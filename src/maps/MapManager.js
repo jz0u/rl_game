@@ -10,7 +10,21 @@ export default class MapManager {
         mapDef.layers.forEach(layerName => {
             scene[`${layerName}Layer`] = map.createLayer(layerName, tilesets, 0, 0);
         });
-        scene[`${mapDef.collisionLayer}Layer`].setCollisionByExclusion([-1]);
+
+        const objectLayer = map.getObjectLayer(mapDef.collisionLayer);
+        const collisionGroup = scene.physics.add.staticGroup();
+        objectLayer.objects.forEach(obj => {
+            const rect = scene.add.rectangle(
+                obj.x + obj.width / 2,
+                obj.y + obj.height / 2,
+                obj.width,
+                obj.height
+            );
+            scene.physics.add.existing(rect, true);
+            collisionGroup.add(rect);
+        });
+        scene[`${mapDef.collisionLayer}Group`] = collisionGroup;
+
         return map;
     }
 }

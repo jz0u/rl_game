@@ -1,6 +1,6 @@
 import Player from "../entities/Player";
 import MapManager from "../maps/MapManager";
-import { map1 } from "../maps/map1";
+import { map2 } from "../maps/map2";
 import Shop from "../systems/Shop";
 import ShopPanel from "../ui/ShopPanel";
 import Inventory from "../systems/Inventory";
@@ -16,14 +16,14 @@ import GameActions from "../systems/GameActions";
  * @param {object[]} allItems - Full item catalogue from Armory (all slots combined).
  */
 export function createGameObjects(scene, allItems) {
-    const map = MapManager.create(scene, map1);
+    const map = MapManager.create(scene, map2);
 
     scene.player          = new Player(scene, map.widthInPixels / 2, map.heightInPixels / 2);
     Player.createAnims(scene);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);
     scene.cameras.main.setZoom(0.9);
-    scene.physics.add.collider(scene.player.sprite, scene.wallLayer);
+    scene.physics.add.collider(scene.player.sprite, scene.collusionGroup);
     scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.player.sprite.setCollideWorldBounds(true);
     scene.shop             = new Shop();
