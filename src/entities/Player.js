@@ -77,6 +77,7 @@ export default class Player extends Entity {
     this.weaponType = null; // null | 'melee' | 'ranged' | 'magic'
     /** True while an attack animation is playing — blocks movement and re-triggering. */
     this.attackInProgress = false;
+    this.invincible = false;
 
     // When an attack animation finishes, clear the flag and return to idle.
     // _syncOverlays is called immediately so overlays switch in the same tick as the body.
@@ -123,6 +124,20 @@ export default class Player extends Entity {
         });
       }
     });
+  }
+
+  // ── Combat ──
+
+  takeDamage(amount, type) {
+    if (this.invincible) return 0;
+    const effective = super.takeDamage(amount, type);
+    this.invincible = true;
+    this.scene.time.delayedCall(500, () => { this.invincible = false; });
+    return effective;
+  }
+
+  onDeath() {
+    console.log('player died');
   }
 
   // ── Asset loading ──

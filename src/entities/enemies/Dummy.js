@@ -13,6 +13,7 @@ export default class Dummy extends Enemy {
     this.aggroRadius = 200;
     this.moveSpeed = 60;
     this.attackRange = 40;
+    this.attackCooldown = false;
   }
 
   update() {
@@ -33,6 +34,15 @@ export default class Dummy extends Enemy {
         this.rect.body.setVelocity(0, 0);
       } else if (dist < this.attackRange) {
         this.rect.body.setVelocity(0, 0);
+        if (!this.attackCooldown) {
+          this.attackCooldown = true;
+          this.scene.actions.damagePlayer(this.derivedStats.physicalDamage);
+          this.rect.setFillStyle(0xffffff);
+          this.scene.time.delayedCall(80, () => this.rect.setFillStyle(0xff2222));
+          this.scene.time.delayedCall(this.derivedStats.attackSpeed, () => {
+            this.attackCooldown = false;
+          });
+        }
       } else {
         const angle = Phaser.Math.Angle.Between(
           this.rect.x, this.rect.y,

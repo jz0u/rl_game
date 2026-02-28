@@ -45,6 +45,15 @@ export default class HUD {
     this.staminaOrb = this._makeOrb(staminaOrbX,  orbY, 'hud-orb-stamina', scale);
     this.manaOrb    = this._makeOrb(staminaOrbX,  orbY, 'hud-orb-mana',    scale);
     this._hideManaOrb();
+
+    // ── HP bar (top-left) ──
+    this.hpBar = scene.add.graphics().setScrollFactor(0).setDepth(HUD_DEPTH);
+    this.hpText = scene.add.text(20, 40, '', {
+      fontSize: '12px',
+      color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 3,
+    }).setScrollFactor(0).setDepth(HUD_DEPTH);
   }
 
   // ── Private helpers ──
@@ -99,9 +108,21 @@ export default class HUD {
 
   // ── Game loop ──
 
+  updateHUD() {
+    const p   = this.player;
+    const pct = Math.max(0, Math.min(1, p.currentHp / p.derivedStats.maxHP));
+    this.hpBar.clear();
+    this.hpBar.fillStyle(0x880000);
+    this.hpBar.fillRect(20, 20, 200, 16);
+    this.hpBar.fillStyle(0xff2222);
+    this.hpBar.fillRect(20, 20, 200 * pct, 16);
+    this.hpText.setText(`HP: ${p.currentHp} / ${p.derivedStats.maxHP}`);
+  }
+
   update() {
     const p = this.player;
     const d = p.derivedStats;
+    this.updateHUD();
 
     this._updateOrb(this.hpOrb, p.currentHp, d.maxHP);
 
