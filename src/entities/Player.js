@@ -34,6 +34,11 @@ export default class Player {
    */
   constructor(scene, x, y) {
     this.scene = scene;
+    // Create shadow first so it sits behind the player sprite in the display list.
+    // Both are at depth 0; shadow is earlier in the list → renders behind sprite.
+    this.shadow = scene.add.sprite(x, y, 'Medieval_Shadow_Male_idle1_diag');
+    this.shadow.setAlpha(0.4);
+
     this.sprite = scene.physics.add.sprite(x, y, "player_idle1_diag");
     this.sprite.setCollideWorldBounds(true);
     this.sprite.body.setSize(32, 32);
@@ -161,9 +166,56 @@ export default class Player {
       'Medieval_Warfare_Male_1_MVsv_alt_victory8',
     ];
 
+    const SHADOW_BASE = 'assets/player/Medieval_Male_Shadow/';
+    const shadowKeys = [
+      'Medieval_Shadow_Male_idle1_diag',
+      'Medieval_Shadow_Male_idle2_diag',
+      'Medieval_Shadow_Male_walking_diag',
+      'Medieval_Shadow_Male_running_diag',
+      'Medieval_Shadow_Male_collapse_diag',
+      'Medieval_Shadow_Male_dead_diag',
+      'Medieval_Shadow_Male_ko_diag',
+      'Medieval_Shadow_Male_kneel_diag',
+      'Medieval_Shadow_Male_sitting1_diag',
+      'Medieval_Shadow_Male_sitting2_diag',
+      'Medieval_Shadow_Male_sleeping_diag',
+      'Medieval_Shadow_Male_MVsv_alt_attack1',
+      'Medieval_Shadow_Male_MVsv_alt_attack2',
+      'Medieval_Shadow_Male_MVsv_alt_critical1',
+      'Medieval_Shadow_Male_MVsv_alt_critical2',
+      'Medieval_Shadow_Male_MVsv_alt_critical3',
+      'Medieval_Shadow_Male_MVsv_alt_critical4',
+      'Medieval_Shadow_Male_MVsv_alt_critical5',
+      'Medieval_Shadow_Male_MVsv_alt_critical6',
+      'Medieval_Shadow_Male_MVsv_alt_dead1',
+      'Medieval_Shadow_Male_MVsv_alt_dead2',
+      'Medieval_Shadow_Male_MVsv_alt_dead3',
+      'Medieval_Shadow_Male_MVsv_alt_magic',
+      'Medieval_Shadow_Male_MVsv_alt_martialartpunch',
+      'Medieval_Shadow_Male_MVsv_alt_martialartcritical',
+      'Medieval_Shadow_Male_MVsv_alt_martialartstance',
+      'Medieval_Shadow_Male_MVsv_alt_shooting',
+      'Medieval_Shadow_Male_MVsv_alt_shootingstance',
+      'Medieval_Shadow_Male_MVsv_alt_stance1',
+      'Medieval_Shadow_Male_MVsv_alt_stance2',
+      'Medieval_Shadow_Male_MVsv_alt_stance3',
+      'Medieval_Shadow_Male_MVsv_alt_stance4',
+      'Medieval_Shadow_Male_MVsv_alt_stance5',
+      'Medieval_Shadow_Male_MVsv_alt_stance6',
+      'Medieval_Shadow_Male_MVsv_alt_victory1',
+      'Medieval_Shadow_Male_MVsv_alt_victory2',
+      'Medieval_Shadow_Male_MVsv_alt_victory3',
+      'Medieval_Shadow_Male_MVsv_alt_victory4',
+      'Medieval_Shadow_Male_MVsv_alt_victory5',
+      'Medieval_Shadow_Male_MVsv_alt_victory6',
+      'Medieval_Shadow_Male_MVsv_alt_victory7',
+      'Medieval_Shadow_Male_MVsv_alt_victory8',
+    ];
+
     const opts = { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE };
     legacySheets.forEach(({ key, path }) => scene.load.spritesheet(key, path, opts));
     newKeys.forEach(key => scene.load.spritesheet(key, `${BASE}${key}.png`, opts));
+    shadowKeys.forEach(key => scene.load.spritesheet(key, `${SHADOW_BASE}${key}.png`, opts));
   }
 
   // ── Equipment ──
@@ -234,6 +286,17 @@ export default class Player {
    */
   _syncOverlays() {
     const currentAnim = this.sprite.anims.currentAnim?.key;
+
+    // Sync shadow sprite
+    this.shadow.x = this.sprite.x;
+    this.shadow.y = this.sprite.y;
+    this.shadow.flipX = this.sprite.flipX;
+    if (currentAnim) {
+      const shadowAnim = 'shadow_' + currentAnim;
+      if (this.shadow.anims.currentAnim?.key !== shadowAnim && this.scene.anims.exists(shadowAnim)) {
+        this.shadow.play(shadowAnim, true);
+      }
+    }
 
     for (const slot in this.overlays) {
       const overlay = this.overlays[slot];
@@ -459,6 +522,35 @@ export default class Player {
       mv('martialartstance',   'Medieval_Warfare_Male_1_MVsv_alt_martialartstance',   12, 0),
     ];
 
-    [...anims, ...newAnims].forEach(anim => scene.anims.create(anim));
+    // Shadow animations — 'shadow_' prefix, mirrors every body anim key.
+    const S = 'Medieval_Shadow_Male_';
+    const shadowAnims = [
+      // Directional _diag
+      ...diag8('shadow_walk',     S + 'walking_diag',   8,  -1),
+      ...diag3('shadow_idle',     S + 'idle1_diag',     6,  -1),
+      ...diag8('shadow_run',      S + 'running_diag',   10, -1),
+      ...diag3('shadow_collapse', S + 'collapse_diag',  8,   0),
+      ...diag3('shadow_dead',     S + 'dead_diag',      8,   0),
+      ...diag3('shadow_ko',       S + 'ko_diag',        8,   0),
+      ...diag3('shadow_kneel',    S + 'kneel_diag',     6,   0),
+      ...diag3('shadow_sit1',     S + 'sitting1_diag',  6,   0),
+      ...diag3('shadow_sit2',     S + 'sitting2_diag',  6,   0),
+      ...diag3('shadow_sleep',    S + 'sleeping_diag',  6,   0),
+      // MVsv_alt
+      mv('shadow_attack1',          S + 'MVsv_alt_attack1',          8,  0),
+      mv('shadow_attack2',          S + 'MVsv_alt_attack2',          8,  0),
+      ...[1,2,3,4,5,6].map(n => mv(`shadow_critical${n}`,  S + `MVsv_alt_critical${n}`,  12, 0)),
+      ...[1,2,3].map(n =>       mv(`shadow_mvdead${n}`,    S + `MVsv_alt_dead${n}`,       8,  0)),
+      mv('shadow_magic',            S + 'MVsv_alt_magic',            10, 0),
+      mv('shadow_shooting',         S + 'MVsv_alt_shooting',         10, 0),
+      mv('shadow_shootingstance',   S + 'MVsv_alt_shootingstance',   10, 0),
+      ...[1,2,3,4,5,6].map(n => mv(`shadow_stance${n}`,    S + `MVsv_alt_stance${n}`,     6,  0)),
+      mv('shadow_martialartpunch',    S + 'MVsv_alt_martialartpunch',    12, 0),
+      mv('shadow_martialartcritical', S + 'MVsv_alt_martialartcritical', 12, 0),
+      mv('shadow_martialartstance',   S + 'MVsv_alt_martialartstance',   12, 0),
+      ...[1,2,3,4,5,6,7,8].map(n => mv(`shadow_victory${n}`, S + `MVsv_alt_victory${n}`, 10, 0)),
+    ];
+
+    [...anims, ...newAnims, ...shadowAnims].forEach(anim => scene.anims.create(anim));
   }
 }
