@@ -137,6 +137,32 @@ export default class Player extends Entity {
     return effective;
   }
 
+  _applyHitReaction(anchor, attackerX) {
+    // Tint base sprite + all active overlays so the flash shows through gear.
+    const sprites = [anchor, ...Object.values(this.overlays).filter(Boolean)];
+    for (const s of sprites) {
+      s.setTint(0xffffff);
+    }
+    this.scene.time.delayedCall(80, () => {
+      for (const s of sprites) {
+        s.clearTint();
+      }
+    });
+
+    // Knockback nudge — identical to Entity base class.
+    if (attackerX !== null && attackerX !== undefined) {
+      const originX = anchor.x;
+      const nudge = anchor.x >= attackerX ? 20 : -20;
+      anchor.x = originX + nudge;
+      this.scene.tweens.add({
+        targets:  anchor,
+        x:        originX,
+        duration: 200,
+        ease:     'Power2',
+      });
+    }
+  }
+
   onDeath() {
     console.log('player died');
   }
