@@ -101,6 +101,23 @@ export default class Player extends Entity {
           });
         }
       }
+      const dummy2 = this.scene.dummy2;
+      if (dummy2 && !dummy2.isDead()) {
+        const dist2 = Phaser.Math.Distance.Between(
+          this.sprite.x, this.sprite.y,
+          dummy2.rect.x, dummy2.rect.y
+        );
+        if (dist2 < 120) {
+          dummy2.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+          this.scene.cameras.main.shake(150, 0.004);
+          this.scene.physics.pause();
+          this.scene.anims.pauseAll();
+          this.scene.time.delayedCall(80, () => {
+            this.scene.physics.resume();
+            this.scene.anims.resumeAll();
+          });
+        }
+      }
     });
   }
 
