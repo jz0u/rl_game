@@ -34,8 +34,8 @@ export default class CombatEffects {
     for (let i = 0; i <= steps; i++) {
       const a = startAngle + (endAngle - startAngle) * (i / steps);
       points.push({
-        x: x + Math.cos(a) * range * 0.6,
-        y: y + Math.sin(a) * range * 0.6,
+        x: x + Math.cos(a) * range,
+        y: y + Math.sin(a) * range,
       });
     }
     g.beginPath();
