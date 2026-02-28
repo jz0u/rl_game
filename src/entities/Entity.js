@@ -62,7 +62,7 @@ export default class Entity {
       anchor.setFillStyle(0xffffff);
       this.scene.time.delayedCall(80, () => anchor.setFillStyle(0xff2222));
     } else {
-      anchor.setTint(0xffffff);
+      anchor.setTintFill(0xffffff);
       this.scene.time.delayedCall(80, () => anchor.clearTint());
     }
     if (attackerX !== null && attackerX !== undefined) {

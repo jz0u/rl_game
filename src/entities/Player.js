@@ -141,7 +141,7 @@ export default class Player extends Entity {
     // Tint base sprite + all active overlays so the flash shows through gear.
     const sprites = [anchor, ...Object.values(this.overlays).filter(Boolean)];
     for (const s of sprites) {
-      s.setTint(0xffffff);
+      s.setTintFill(0xffffff);
     }
     this.scene.time.delayedCall(80, () => {
       for (const s of sprites) {
