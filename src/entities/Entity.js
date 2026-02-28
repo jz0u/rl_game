@@ -35,4 +35,20 @@ export default class Entity {
   }
 
   onDeath() {}
+
+  getDirectionAnim(angle) {
+    const deg = Phaser.Math.RadToDeg(angle);
+    if (deg >= -135 && deg < -45) return "walk_ne";
+    if (deg >= -45  && deg < 45)  return "walk_se";
+    if (deg >= 45   && deg < 135) return "walk_sw";
+    return "walk_nw";
+  }
+
+  getIdleAnim() {
+    const anchor = this.sprite ?? this.rect;
+    const current = anchor?.anims?.currentAnim?.key;
+    if (current?.startsWith('walk_')) return current.replace('walk_', 'idle_');
+    if (current?.startsWith('idle_')) return current;
+    return 'idle_sw';
+  }
 }

@@ -378,33 +378,9 @@ export default class Player extends Entity {
     this.moveTarget = { x, y };
   }
 
-  /**
-   * Maps a movement angle to one of four diagonal walk animations.
-   *   -90° = NE,  0° = SE,  90° = SW,  180° = NW
-   * Note: does not use `this` — could be static, kept as instance method for API consistency.
-   * @param {number} angle - Angle in radians from Phaser.Math.Angle.Between.
-   * @returns {string} Animation key (e.g. "walk_sw").
-   */
-  getDirectionAnim(angle) {
-    const deg = Phaser.Math.RadToDeg(angle);
-    if (deg >= -135 && deg < -45) return "walk_ne";
-    if (deg >= -45 && deg < 45) return "walk_se";
-    if (deg >= 45 && deg < 135) return "walk_sw";
-    return "walk_nw";
-  }
-
-  /**
-   * Returns the idle animation key that matches the player's current facing direction.
-   * Converts "walk_{dir}" → "idle_{dir}". Falls back to "idle_sw" if unknown.
-   * Note: reads this.sprite — cannot be static.
-   * @returns {string} Animation key.
-   */
   getIdleAnim() {
     if (this.weaponType === 'ranged') return 'shootingstance';
-    const current = this.sprite.anims.currentAnim?.key;
-    if (current?.startsWith('walk_')) return current.replace('walk_', 'idle_');
-    if (current?.startsWith('idle_')) return current;
-    return 'idle_sw';
+    return super.getIdleAnim();
   }
 
   // ── Combat ──
