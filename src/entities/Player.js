@@ -62,6 +62,7 @@ export default class Player {
     this.moveTarget = null;
     this.recomputeStats(new Map());
     this.hasWeapon = false;
+    this.weaponType = null; // null | 'melee' | 'ranged' | 'magic'
     /** True while an attack animation is playing — blocks movement and re-triggering. */
     this.attackInProgress = false;
 
@@ -200,7 +201,17 @@ export default class Player {
         this.unequip(slot);
       }
     }
-    this.hasWeapon = equippedMap.get('primary') !== null;
+    const primary = equippedMap.get('primary');
+    this.hasWeapon  = primary != null;
+    if (!primary) {
+      this.weaponType = null;
+    } else if (primary.weaponSubtype === 'staff') {
+      this.weaponType = 'magic';
+    } else if (primary.rangeType === 'ranged') {
+      this.weaponType = 'ranged';
+    } else {
+      this.weaponType = 'melee';
+    }
   }
 
   /**
@@ -278,10 +289,11 @@ export default class Player {
    * @returns {string} Animation key.
    */
   getIdleAnim() {
+    if (this.weaponType === 'ranged') return 'shootingstance';
     const current = this.sprite.anims.currentAnim?.key;
-    if (current?.startsWith("walk_")) return current.replace("walk_", "idle_");
-    if (current?.startsWith("attack")) return "idle_sw";
-    return current || "idle_sw";
+    if (current?.startsWith('walk_')) return current.replace('walk_', 'idle_');
+    if (current?.startsWith('idle_')) return current;
+    return 'idle_sw';
   }
 
   // ── Combat ──
@@ -299,7 +311,24 @@ export default class Player {
     this.sprite.body.setVelocity(0, 0);
     this.sprite.flipX = pointerX > this.sprite.x;
 
-    this.sprite.play(this.hasWeapon ? "attack1" : "attack2");
+    switch (this.weaponType) {
+      case 'melee':  this.sprite.play('attack1');        break;
+      case 'ranged': this.sprite.play('shooting');       break;
+      case 'magic':  this.sprite.play('magic');          break;
+      default:       this.sprite.play('martialartpunch');
+    }
+  }
+
+  /**
+   * Triggers a random critical-hit animation.
+   * Cancels movement and blocks re-triggering until the animation completes.
+   */
+  triggerCritical() {
+    if (this.attackInProgress) return;
+
+    this.attackInProgress = true;
+    this.sprite.body.setVelocity(0, 0);
+    this.sprite.play(`critical${Phaser.Math.Between(1, 6)}`);
   }
 
   // ── Game loop ──
@@ -381,8 +410,8 @@ export default class Player {
       { key: "idle_ne", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 9, end: 11 }), frameRate: 6, repeat: -1 },
 
       // Player attack
-      { key: "attack1", frames: scene.anims.generateFrameNumbers("player_attack1", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
-      { key: "attack2", frames: scene.anims.generateFrameNumbers("player_attack2", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
+      { key: "attack1", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_MVsv_alt_attack1", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
+      { key: "attack2", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_MVsv_alt_attack2", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
     ];
 
     // Helpers for building directional _diag animation groups.
