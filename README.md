@@ -4,6 +4,11 @@ A browser-based top-down action RPG built with Phaser 3. You play as a fresh rec
 
 > *Each dungeon room belongs to something. You take it from them.*
 
+![Inventory](./public/screenshots/1.png)
+![Shop](./public/screenshots/2.png)
+![Gameplay](./public/screenshots/3.png)
+![Combat](./public/screenshots/4.png)
+
 ---
 
 ## Features
