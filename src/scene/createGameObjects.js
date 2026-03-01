@@ -1,4 +1,5 @@
 import Player from "../entities/Player";
+import { registerPlayerAnims } from './loadPlayerAssets';
 import MapManager from "../maps/MapManager";
 import { map2 } from "../maps/map2";
 import Shop from "../systems/Shop";
@@ -25,7 +26,7 @@ export function createGameObjects(scene, allItems) {
     const playerY = map.heightInPixels / 2;
     scene.player          = new Player(scene, playerX, playerY);
     scene.hud             = new HUD(scene, scene.player);
-    Player.createAnims(scene);
+    registerPlayerAnims(scene);
     scene.cameras.main.setZoom(1);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);
