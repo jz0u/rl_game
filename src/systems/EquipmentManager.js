@@ -61,7 +61,6 @@ export default class EquipmentManager extends Phaser.Events.EventEmitter {
   buy(item) {
     if (this.scene.shop.buy(item, this.scene.player, this.inventory) === false) return false;
     loadEquipmentAssets(this.scene, item);
-    this.emit('equipmentChanged', this.inventory.equipped);
     return true;
   }
 }
