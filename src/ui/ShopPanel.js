@@ -6,6 +6,7 @@ import {
   NAV_BTN_WIDTH,
   NAV_BTN_HEIGHT,
   DEPTH_UI,
+  DEPTH_UI_TOP,
   COLOR_SLOT_DARK,
 } from '../config/constants';
 import BasePanel from './BasePanel';
@@ -104,6 +105,7 @@ export default class ShopPanel extends BasePanel {
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
+      .setDepth(DEPTH_UI_TOP)
       .on('pointerdown', () => {
         if (this.currentPage > 0) {
           this.currentPage--;
@@ -116,6 +118,7 @@ export default class ShopPanel extends BasePanel {
       .setDisplaySize(NAV_BTN_WIDTH, NAV_BTN_HEIGHT)
       .setInteractive()
       .setScrollFactor(0)
+      .setDepth(DEPTH_UI_TOP)
       .on('pointerdown', () => {
         if (this.currentPage < this.totalPages - 1) {
           this.currentPage++;
