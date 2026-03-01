@@ -11,6 +11,7 @@
  */
 import Phaser from "phaser";
 import { Armory } from "./data/Armory";
+import { validateArmory } from "./data/validateArmory";
 import { loadAssets } from "./scene/loadAssets";
 import { createGameObjects } from "./scene/createGameObjects";
 import { setupInput } from "./input/input";
@@ -18,6 +19,11 @@ import { setupKeybinds } from "./input/keybinds";
 
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();
+
+if (import.meta.env.DEV) {
+  const violations = validateArmory(Armory);
+  if (violations === 0) console.log('[Armory] All items valid.');
+}
 
 import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './config/constants';
 

@@ -6,6 +6,7 @@ export const defaultGearStats = {
   magicalDamage: 0,
   physicalResist: 0,
   magicalResist: 0,
+  blockChance: 0,   // reserved — block/parry mechanic not yet implemented
   minDamage: 0,
   maxDamage: 0,
   attackSpeedBonus: 0,
