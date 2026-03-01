@@ -10,7 +10,10 @@ const ARC_HALF = {
   wide:   (Math.PI * 5) / 8,  // ~112.5° each side = 225° total
 };
 
-/** Render order for equipment overlays. Higher = drawn on top. */
+// Render order for equipment overlays relative to the base
+// body sprite. Lower = rendered first (behind). The body
+// sprite itself has no explicit depth — it sits below all
+// overlays by creation order.
 const OVERLAY_DEPTH = {
   legs:        1,
   feet:        2,
@@ -48,7 +51,8 @@ export default class Player extends Entity {
     this.sprite.setCollideWorldBounds(true);
     this.sprite.body.setSize(32, 32);
     this.sprite.body.setOffset(48, 80);
-    this.balance = 0;
+    this.balance = 0; // TODO: wire to economy system — used by Shop.buy()
+                     //   but not yet persisted or displayed in HUD
 
     /**
      * One sprite overlay per equipment slot; null if that slot is empty.
@@ -80,8 +84,10 @@ export default class Player extends Entity {
     // When an attack animation finishes, clear the flag and return to idle.
     // _syncOverlays is called immediately so overlays switch in the same tick as the body.
     this.sprite.on("animationcomplete", () => {
+      // 1. Clear attack state and re-sync equipment overlays
       this.attackInProgress = false;
       this._syncOverlays();
+      // 2. Resume movement toward queued moveTarget if one exists
       if (this.moveTarget) {
         const angle = Phaser.Math.Angle.Between(
           this.sprite.x, this.sprite.y,
@@ -91,6 +97,10 @@ export default class Player extends Entity {
       } else {
         this.sprite.play(this.getIdleAnim());
       }
+      // 3. Apply hit detection and damage to enemies in range
+      // NOTE: dummy/dummy2 are hardcoded scene references —
+      //   TODO: replace with scene enemy registry when enemies
+      //   are generalized (see CombatSystem extraction)
       const dummy = this.scene.dummy;
       if (dummy && !dummy.isDead() && this.canHit(dummy.rect)) {
         dummy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
@@ -136,29 +146,18 @@ export default class Player extends Entity {
   }
 
   _applyHitReaction(anchor, attackerX) {
-    // Tint base sprite + all active overlays so the flash shows through gear.
-    const sprites = [anchor, ...Object.values(this.overlays).filter(Boolean)];
-    for (const s of sprites) {
+    // Flash all active overlays to match the base-sprite tint.
+    // Base-sprite tint and knockback are both delegated to super.
+    const overlaySprites = Object.values(this.overlays).filter(Boolean);
+    for (const s of overlaySprites) {
       s.setTintFill(0xffffff);
     }
     this.scene.time.delayedCall(80, () => {
-      for (const s of sprites) {
+      for (const s of overlaySprites) {
         s.clearTint();
       }
     });
-
-    // Knockback nudge — identical to Entity base class.
-    if (attackerX !== null && attackerX !== undefined) {
-      const originX = anchor.x;
-      const nudge = anchor.x >= attackerX ? KNOCKBACK_DISTANCE_PX : -KNOCKBACK_DISTANCE_PX;
-      anchor.x = originX + nudge;
-      this.scene.tweens.add({
-        targets:  anchor,
-        x:        originX,
-        duration: KNOCKBACK_DURATION_MS,
-        ease:     'Power2',
-      });
-    }
+    super._applyHitReaction(anchor, attackerX);
   }
 
   onDeath() {
@@ -167,6 +166,8 @@ export default class Player extends Entity {
 
   // ── Asset loading ──
 
+  // TODO: move to src/scene/loadAssets.js — static asset
+  // loading has no dependency on Player instance state
   /**
    * Loads all base player spritesheets. Call this from the scene's preload().
    * Equipment spritesheets are loaded separately when an item is equipped.
@@ -368,6 +369,10 @@ export default class Player extends Entity {
     this.shadow.x = this.sprite.x;
     this.shadow.y = this.sprite.y;
     this.shadow.flipX = this.sprite.flipX;
+    // Shadow anim keys mirror body anim keys with a 'shadow_'
+    // prefix — this contract is established in createAnims().
+    // If you add a new body animation, add a matching shadow
+    // sheet and anim registration or the shadow will freeze.
     if (currentAnim) {
       const shadowAnim = 'shadow_' + currentAnim;
       if (this.shadow.anims.currentAnim?.key !== shadowAnim && this.scene.anims.exists(shadowAnim)) {
@@ -424,6 +429,9 @@ export default class Player extends Entity {
     this.sprite.flipX = pointerX > this.sprite.x;
 
     const weapon = this.scene.inventory?.equipped?.get('primary');
+    // Transient attack state — set at attack start, consumed by
+    // canHit() and the animationcomplete handler. Not persistent
+    // between attacks.
     this.currentAttackRange = weapon?.attackRange ?? this.derivedStats.attackRange;
     this.currentArcType = weapon?.arcType ?? 'stab';
     this.attackAngle = Math.atan2(
@@ -521,6 +529,8 @@ export default class Player extends Entity {
       this.moveTarget.x, this.moveTarget.y,
     );
 
+    // * 2 gives ~2 frames of lookahead at 60fps to prevent
+    // oscillation around the target point
     if (distance < this.derivedStats.moveSpeed * 2) {
       this.sprite.body.setVelocity(0, 0);
       this.moveTarget = null;
@@ -547,6 +557,9 @@ export default class Player extends Entity {
 
   // ── Animations ──
 
+  // TODO: move to src/scene/loadAssets.js (or playerAnims.js)
+  // — animation registration is scene lifecycle work, not
+  // entity behaviour
   /**
    * Registers all base player animations with the Phaser animation manager.
    * Must be called once after preload(), before any sprites are played.
