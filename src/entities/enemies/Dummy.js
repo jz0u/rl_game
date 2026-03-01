@@ -49,11 +49,10 @@ export default class Dummy extends Enemy {
         let vx = Math.cos(angle) * this.derivedStats.moveSpeed * 60;
         let vy = Math.sin(angle) * this.derivedStats.moveSpeed * 60;
 
-        // Separation steering — nudge away from the other dummy when close.
+        // Separation steering — nudge away from nearby enemies when close.
         const SEPARATION = 60;
-        for (const key of ['dummy', 'dummy2']) {
-          const other = this.scene[key];
-          if (!other || other === this || other.state === 'dead') continue;
+        for (const other of this.scene.enemies.getAll()) {
+          if (other === this || other.state === 'dead') continue;
           const dx = this.rect.x - other.rect.x;
           const dy = this.rect.y - other.rect.y;
           const d = Math.sqrt(dx * dx + dy * dy);
@@ -77,6 +76,7 @@ export default class Dummy extends Enemy {
   onDeath() {
     this.state = 'dead';
     this.rect.body.setVelocity(0, 0);
+    this.scene.enemies.unregister(this);
     this.scene.tweens.add({
       targets:    this.rect,
       alpha:      0,

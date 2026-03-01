@@ -98,31 +98,13 @@ export default class Player extends Entity {
         this.sprite.play(this.getIdleAnim());
       }
       // 3. Apply hit detection and damage to enemies in range
-      // NOTE: dummy/dummy2 are hardcoded scene references —
-      //   TODO: replace with scene enemy registry when enemies
-      //   are generalized (see CombatSystem extraction)
-      const dummy = this.scene.dummy;
-      if (dummy && !dummy.isDead() && this.canHit(dummy.rect)) {
-        dummy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
-        const hitX = (this.sprite.x + dummy.rect.x) / 2;
-        const hitY = (this.sprite.y + dummy.rect.y) / 2;
+      for (const enemy of this.scene.enemies.getLiving()) {
+        if (!this.canHit(enemy.rect)) continue;
+        enemy.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+        const hitX = (this.sprite.x + enemy.rect.x) / 2;
+        const hitY = (this.sprite.y + enemy.rect.y) / 2;
         CombatEffects.showImpactFlash(this.scene, hitX, hitY);
         CombatEffects.showParticleBurst(this.scene, hitX, hitY);
-        this.scene.cameras.main.shake(150, 0.004);
-        this.scene.physics.pause();
-        this.scene.anims.pauseAll();
-        this.scene.time.delayedCall(80, () => {
-          this.scene.physics.resume();
-          this.scene.anims.resumeAll();
-        });
-      }
-      const dummy2 = this.scene.dummy2;
-      if (dummy2 && !dummy2.isDead() && this.canHit(dummy2.rect)) {
-        dummy2.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
-        const hitX2 = (this.sprite.x + dummy2.rect.x) / 2;
-        const hitY2 = (this.sprite.y + dummy2.rect.y) / 2;
-        CombatEffects.showImpactFlash(this.scene, hitX2, hitY2);
-        CombatEffects.showParticleBurst(this.scene, hitX2, hitY2);
         this.scene.cameras.main.shake(150, 0.004);
         this.scene.physics.pause();
         this.scene.anims.pauseAll();

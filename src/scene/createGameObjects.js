@@ -10,6 +10,7 @@ import WindowManager from "../ui/WindowManager";
 import EquipmentManager from "../systems/EquipmentManager";
 import GameActions from "../systems/GameActions";
 import Dummy from "../entities/enemies/Dummy";
+import EnemyRegistry from "../systems/EnemyRegistry";
 import CursorUI from "../ui/CursorUI";
 import HUD from "../ui/HUD";
 
@@ -30,8 +31,11 @@ export function createGameObjects(scene, allItems) {
     scene.cameras.main.setZoom(1);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);
+    scene.enemies         = new EnemyRegistry();
     scene.dummy           = new Dummy(scene, playerX + 200, playerY);
+    scene.enemies.register(scene.dummy);
     scene.dummy2          = new Dummy(scene, playerX + 350, playerY);
+    scene.enemies.register(scene.dummy2);
     scene.physics.add.collider(scene.player.sprite, scene.collusionGroup);
     scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.player.sprite.setCollideWorldBounds(true);
