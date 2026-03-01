@@ -320,6 +320,9 @@ export default class InventoryPanel extends BasePanel {
     this.invPanel.setVisible(false);
   }
 
+  // WARNING: calling toggle() directly bypasses WindowManager.
+  // Always route open/close through windowManager.toggle()
+  // (via GameActions) to keep nav arrows and ESC handling in sync.
   /** Toggles the panel open/closed. */
   toggle() {
     if (this.invPanel.visible) {

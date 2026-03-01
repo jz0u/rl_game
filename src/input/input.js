@@ -19,8 +19,11 @@ export function setupInput(scene) {
     const panelBottom = GAME_WINDOW_CENTER.Y + halfH;
 
     scene.input.on("pointerdown", (pointer, currentlyOver) => {
+        // Single authoritative check — WindowManager is the source
+        // of truth for whether any UI panel is open. Avoids reading
+        // raw .visible flags on individual panels directly.
         // If a panel is open, use geometry to decide: inside → ignore, outside → close
-        if (scene.shopPanel.shopPanel.visible || scene.inventoryPanel.invPanel.visible) {
+        if (scene.windowManager.isAnyOpen()) {
             const outside =
                 pointer.x < panelLeft  || pointer.x > panelRight ||
                 pointer.y < panelTop   || pointer.y > panelBottom;
