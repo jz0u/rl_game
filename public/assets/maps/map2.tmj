@@ -83,7 +83,7 @@
         {
          "draworder":"topdown",
          "id":4,
-         "name":"collusion",
+         "name":"collision",
          "objects":[
                 {
                  "height":84,
@@ -299,7 +299,7 @@
         {
          "columns":16,
          "firstgid":1,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles_2.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles_2.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -312,7 +312,7 @@
         {
          "columns":16,
          "firstgid":257,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles_3.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles_3.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -325,7 +325,7 @@
         {
          "columns":16,
          "firstgid":513,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles_12.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles_12.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -338,7 +338,7 @@
         {
          "columns":16,
          "firstgid":769,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_7.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_7.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -351,7 +351,7 @@
         {
          "columns":16,
          "firstgid":1025,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_8.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_8.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -364,7 +364,7 @@
         {
          "columns":16,
          "firstgid":1281,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_9.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_9.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -377,7 +377,7 @@
         {
          "columns":16,
          "firstgid":1537,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_10.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_10.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -390,7 +390,7 @@
         {
          "columns":16,
          "firstgid":1793,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_11.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_11.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
@@ -403,7 +403,7 @@
         {
          "columns":16,
          "firstgid":2049,
-         "image":"..\/..\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_13.png",
+         "image":"..\/..\/..\/..\/..\/gamedev\/tiles\/Medieval_Underdeep_Tiles\/Medieval_Underdeep_Tiles_13.png",
          "imageheight":768,
          "imagewidth":768,
          "margin":0,
