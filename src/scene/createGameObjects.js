@@ -36,7 +36,7 @@ export function createGameObjects(scene, allItems) {
     scene.enemies.register(scene.dummy);
     scene.dummy2          = new Dummy(scene, playerX + 350, playerY);
     scene.enemies.register(scene.dummy2);
-    scene.physics.add.collider(scene.player.sprite, scene.collusionGroup);
+    scene.physics.add.collider(scene.player.sprite, scene.collisionGroup);
     scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.player.sprite.setCollideWorldBounds(true);
     scene.shop             = new Shop();

@@ -13,5 +13,5 @@ export const map2 = {
         { name: 'Medieval_Underdeep_Tiles_13', path: 'assets/tiles/Medieval_Underdeep_Tiles/Medieval_Underdeep_Tiles_13.png' },
     ],
     layers: ['background', 'floor', 'edges'],
-    collisionLayer: 'collusion',
+    collisionLayer: 'collision',
 };
