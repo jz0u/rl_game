@@ -1,4 +1,4 @@
-import { GAME_WINDOW_CENTER, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, PANEL_SCALE } from '../config/constants.js';
+import { GAME_WINDOW_CENTER, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, PANEL_SCALE, DEPTH_UI } from '../config/constants.js';
 
 /**
  * Registers all pointer input handlers for the scene.
@@ -24,9 +24,11 @@ export function setupInput(scene) {
         // raw .visible flags on individual panels directly.
         // If a panel is open, use geometry to decide: inside → ignore, outside → close
         if (scene.windowManager.isAnyOpen()) {
+            const onUIObject = currentlyOver.some(obj => obj.depth >= DEPTH_UI);
             const outside =
-                pointer.x < panelLeft  || pointer.x > panelRight ||
-                pointer.y < panelTop   || pointer.y > panelBottom;
+                !onUIObject &&
+                (pointer.x < panelLeft  || pointer.x > panelRight ||
+                 pointer.y < panelTop   || pointer.y > panelBottom);
             if (outside) scene.actions.closeAll();
             return; // Never trigger gameplay while a panel was open
         }
