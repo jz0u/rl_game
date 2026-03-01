@@ -64,8 +64,8 @@ new Phaser.Game({
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width:  window.innerWidth,
-    height: window.innerHeight,
+    width:  GAME_WINDOW_WIDTH,
+    height: GAME_WINDOW_HEIGHT,
   },
   physics: {
     default: "arcade",
