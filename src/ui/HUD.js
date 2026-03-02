@@ -1,60 +1,33 @@
-import { DEPTH_HUD, DEPTH_HUD_MID, DEPTH_HUD_TOP, COLOR_HP_BAR_BG, COLOR_DAMAGE_RED } from '../config/constants';
+import { DEPTH_HUD, DEPTH_HUD_MID, DEPTH_HUD_TOP } from '../config/constants';
 
 export default class HUD {
   constructor(scene, player) {
     this.scene  = scene;
     this.player = player;
 
-    // ── Layout constants ──
-    const camW = scene.cameras.main.width;
     const camH = scene.cameras.main.height;
-    const CX   = camW / 2;
-    const BY   = camH;
 
-    // ── Scale factor ──
-    const base    = Math.min(camW, camH);
-    const targetH = base * 0.20;
-    const scale   = targetH / 66; // 66 = HUD-Back natural height
+    // Scale orbs to ~13% of screen height
+    const naturalH = scene.textures.get('hud-orb-hp').getSourceImage().height;
+    const orbScale = (camH * 0.13) / naturalH;
 
-    // ── HUD bar layers ──
-    this.hudBack = scene.add.image(CX, BY, 'hud-back')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD).setScale(scale);
+    // Compute orb display dimensions at this scale
+    const naturalW = scene.textures.get('hud-orb-hp').getSourceImage().width;
+    const orbW     = naturalW * orbScale;
+    const orbH     = naturalH * orbScale;
 
-    const hudW = 324 * scale;
-    const hudH = 66  * scale;
+    // Top-left anchor — origin(0.5, 1) so Y = bottom edge of orb
+    const pad  = orbW * 0.25;
+    const gap  = orbH * 0.25;
+    const orbX = pad + orbW / 2;
 
-    this.skillSlots = scene.add.image(CX, BY - (hudH * 0.1), 'hud-skill-slots')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD_MID).setScale(scale);
+    const y1 = pad + orbH;
+    const y2 = y1 + gap + orbH;
+    const y3 = y2 + gap + orbH;
 
-    this.hudFront = scene.add.image(CX, BY, 'hud-front')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD_TOP).setScale(scale);
-
-    // ── EXP bar ──
-    this.expBar = scene.add.image(CX, BY - (hudH * 0.1), 'hud-exp')
-      .setOrigin(0.5, 1).setScrollFactor(0).setDepth(DEPTH_HUD_MID).setScale(scale);
-    this.expBarFullWidth = this.expBar.width;
-    this.expBar.setCrop(0, 0, this.expBarFullWidth, this.expBar.height);
-
-    // ── Orbs ──
-    const hudLeft     = CX - hudW / 2;
-    const hudRight    = CX + hudW / 2;
-    const hpOrbX      = hudLeft  + (33 * scale);
-    const staminaOrbX = hudRight - (33 * scale);
-    const orbY        = BY - 4;
-
-    this.hpOrb      = this._makeOrb(hpOrbX,      orbY, 'hud-orb-hp',      scale);
-    this.staminaOrb = this._makeOrb(staminaOrbX,  orbY, 'hud-orb-stamina', scale);
-    this.manaOrb    = this._makeOrb(staminaOrbX,  orbY, 'hud-orb-mana',    scale);
-    this._hideManaOrb();
-
-    // ── HP bar (top-left) ──
-    this.hpBar = scene.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD);
-    this.hpText = scene.add.text(20, 40, '', {
-      fontSize: '12px',
-      color: '#ffffff',
-      stroke: '#000000',
-      strokeThickness: 3,
-    }).setScrollFactor(0).setDepth(DEPTH_HUD);
+    this.hpOrb      = this._makeOrb(orbX, y1, 'hud-orb-hp',      orbScale);
+    this.staminaOrb = this._makeOrb(orbX, y2, 'hud-orb-stamina',  orbScale);
+    this.manaOrb    = this._makeOrb(orbX, y3, 'hud-orb-mana',     orbScale);
   }
 
   // ── Private helpers ──
@@ -73,6 +46,12 @@ export default class HUD {
     const orbH = orb.displayHeight;
     const orbW = orb.displayWidth;
 
+    const borderNaturalW = scene.textures.get('hud-orb-border').getSourceImage().width;
+    const borderScale    = (orbW * 1.2) / borderNaturalW;
+    scene.add.image(x, y + orbH * 0.1, 'hud-orb-border')
+      .setOrigin(0.5, 1).setScrollFactor(0)
+      .setDepth(DEPTH_HUD_TOP + 1).setScale(borderScale);
+
     const maskRect = scene.add.graphics().setScrollFactor(0);
     maskRect.fillStyle(0xffffff);
     maskRect.fillRect(x - orbW / 2, y - orbH, orbW, orbH);
@@ -81,21 +60,16 @@ export default class HUD {
     const mask = maskRect.createGeometryMask();
     orb.setMask(mask);
 
-    return { orb, bg, maskRect, orbW, orbH, anchorX: x, anchorY: y };
-  }
+    const fontSize = Math.max(9, Math.round(orbH * 0.14));
+    const label = scene.add.text(x, y - orbH / 2, '', {
+      fontSize: `${fontSize}px`,
+      color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 3,
+      align: 'center',
+    }).setOrigin(0.5, 0.5).setScrollFactor(0).setDepth(DEPTH_HUD_TOP + 2);
 
-  _hideManaOrb() {
-    this.manaOrb.orb.setVisible(false);
-    this.manaOrb.bg.setVisible(false);
-    this.staminaOrb.orb.setVisible(true);
-    this.staminaOrb.bg.setVisible(true);
-  }
-
-  _showManaOrb() {
-    this.manaOrb.orb.setVisible(true);
-    this.manaOrb.bg.setVisible(true);
-    this.staminaOrb.orb.setVisible(false);
-    this.staminaOrb.bg.setVisible(false);
+    return { orb, bg, maskRect, orbW, orbH, anchorX: x, anchorY: y, label };
   }
 
   _updateOrb(orbData, current, max) {
@@ -105,34 +79,16 @@ export default class HUD {
     maskRect.clear();
     maskRect.fillStyle(0xffffff);
     maskRect.fillRect(anchorX - orbW / 2, anchorY - fillH, orbW, fillH);
+    orbData.label.setText(`${current.toFixed(2)} / ${max.toFixed(2)}`);
   }
 
   // ── Game loop ──
 
-  updateHUD() {
-    const p   = this.player;
-    const pct = Math.max(0, Math.min(1, p.currentHp / p.derivedStats.maxHP));
-    this.hpBar.clear();
-    this.hpBar.fillStyle(COLOR_HP_BAR_BG);
-    this.hpBar.fillRect(20, 20, 200, 16);
-    this.hpBar.fillStyle(COLOR_DAMAGE_RED);
-    this.hpBar.fillRect(20, 20, 200 * pct, 16);
-    this.hpText.setText(`HP: ${p.currentHp} / ${p.derivedStats.maxHP}`);
-  }
-
   update() {
     const p = this.player;
     const d = p.derivedStats;
-    this.updateHUD();
-
-    this._updateOrb(this.hpOrb, p.currentHp, d.maxHP);
-
-    if (p.weaponType === 'magic') {
-      this._showManaOrb();
-      this._updateOrb(this.manaOrb, p.currentMagicka ?? d.maxMagicka, d.maxMagicka);
-    } else {
-      this._hideManaOrb();
-      this._updateOrb(this.staminaOrb, p.currentStamina, d.maxStamina);
-    }
+    this._updateOrb(this.hpOrb,      p.currentHp,                      d.maxHP);
+    this._updateOrb(this.staminaOrb, p.currentStamina,                  d.maxStamina);
+    this._updateOrb(this.manaOrb,    p.currentMagicka ?? d.maxMagicka,  d.maxMagicka);
   }
 }
