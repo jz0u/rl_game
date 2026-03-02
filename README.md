@@ -1,4 +1,4 @@
-# RL
+# RL (RougueLite)
 
 A browser-based top-down action RPG built with Phaser 3. You play as a fresh recruit at an adventurers' guild — your job is to invade monster dwellings, slay every creature inside, collect their trophies, and trade them in for gold and reputation.
 
