@@ -122,7 +122,8 @@ export default class Goblin extends Character {
       case 'attack':
         if (dist > this.derivedStats.attackRange) {
           this.state = 'chase';
-        } else if (!this.attackInProgress && !this.isStaggered) {
+        } else if (!this.attackInProgress) {
+          if (this.scene.time.now < this.staggerUntil) return;
           const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y, px, py);
           // currentArcType and currentAttackRange already set to melee defaults in constructor.
           this.attack(angle);

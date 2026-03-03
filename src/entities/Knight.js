@@ -120,7 +120,7 @@ export default class Knight extends Character {
    * @param {number} pointerX - World X of the click, used for facing + angle calculation.
    */
   attack(pointerX) {
-    if (this.attackInProgress || this.isStaggered) return;
+    if (this.attackInProgress) return;
 
     this.sprite.flipX = pointerX > this.sprite.x;
 
