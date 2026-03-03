@@ -37,14 +37,14 @@ export const knightBaseStats = {
 
 export const goblinBaseStats = {
   // ── Primary stats ──
-  strength: 3,
-  dexterity: 3,
-  intelligence: 1,
-  vitality: 3,
-  endurance: 3,
+  strength: 10,
+  dexterity: 10,
+  intelligence: 10,
+  vitality: 10,
+  endurance: 10,
 
   // ── Base resource pools ──
-  hp: 30,
+  hp: 100,
   stamina: 30,
   magicka: 0,
 
@@ -53,12 +53,12 @@ export const goblinBaseStats = {
   magicalResist: 5,
 
   // ── Base offense ──
-  physicalDamage: 3,
+  physicalDamage: 50,
   magicalDamage: 0,
   minDamage: 0,
   maxDamage: 0,
   attackRange: 50,    // short melee reach in pixels
-  guardDamage: 10,    // goblin jab stagger baseline
+  guardDamage: 25,    // goblin jab stagger baseline
 
   // ── Base gear bonus fields ──
   hpBonus: 0,
