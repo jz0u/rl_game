@@ -15,5 +15,6 @@ export const defaultGearStats = {
   moveSpeedBonus: 0,
   guardBonus:  0,   // armour contribution to guard
   guardDamage: 0,   // weapon contribution to guard damage
+  staminaCost: 0,   // stamina cost per attack (from equipped gear)
   rangeType: 'melee',
 }

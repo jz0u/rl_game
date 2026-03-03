@@ -20,12 +20,13 @@ const BASE_CRIT_DAMAGE = 1.5;       // 1.5x crit multiplier before STR scaling
 const ATTACK_SPEED_FLOOR = 300;     // ms — fastest possible attack
 
 // ── Guard constants ──
-const BASE_GUARD          = 10;
-const GUARD_PER_ENDURANCE = 3;
-const MIN_STAGGER_MS      = 80;
-const MAX_STAGGER_MS      = 600;
-const BASE_STAGGER_MS     = 250;
-const STAGGER_SCALAR      = 8;
+const BASE_GUARD              = 10;
+const GUARD_PER_ENDURANCE     = 3;
+const GUARD_BREAK_STAGGER_MS  = 400;
+
+// ── Stamina regen constants ──
+const BASE_STAMINA_REGEN          = 8;
+const STAMINA_REGEN_PER_ENDURANCE = 1.5;
 
 // ── Guard lookup tables (derived from item properties instead of per-item stats) ──
 const GUARD_BONUS_BY_WEIGHT = { light: 5, medium: 15, heavy: 30 };
@@ -54,12 +55,12 @@ export function computeDerivedStats(baseStats, gearStats) {
 
     // ── Resource pools ──
     maxHP:      baseStats.hp      + (baseStats.vitality     * HP_PER_VITALITY)        + gearStats.hp,
-    maxStamina: baseStats.stamina + (baseStats.endurance    * STAMINA_PER_ENDURANCE)  + gearStats.stamina,
+    maxStamina: baseStats.stamina + (baseStats.endurance    * STAMINA_PER_ENDURANCE)  + gearStats.stamina + gearStats.guardBonus,
     maxMagicka: baseStats.magicka + (baseStats.intelligence * MAGICKA_PER_INTELLIGENCE) + gearStats.magicka,
 
     // ── Regeneration (per second) ──
     healthRegen:  REGEN_BASE + (baseStats.vitality     * REGEN_PER_STAT),
-    staminaRegen: REGEN_BASE + (baseStats.endurance    * REGEN_PER_STAT),
+    staminaRegen: BASE_STAMINA_REGEN + (baseStats.endurance * STAMINA_REGEN_PER_ENDURANCE),
     magickaRegen: REGEN_BASE + (baseStats.intelligence * REGEN_PER_STAT),
 
     // ── Defense ──
@@ -86,6 +87,9 @@ export function computeDerivedStats(baseStats, gearStats) {
     // ── Guard ──
     guard:       BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
     guardDamage: (baseStats.guardDamage ?? 0) + (gearStats.guardDamage ?? 0),
+
+    // ── Stamina cost ──
+    staminaCost: (baseStats.staminaCost ?? 0) + gearStats.staminaCost,
 
   };
 
@@ -121,10 +125,4 @@ export function computeGearStats(equippedMap) {
   gearStats.rangeType = weapon?.rangeType ?? 'melee';
 
   return gearStats;
-}
-
-export function computeStaggerDuration(attackGuardDamage, defenderGuard) {
-  const delta    = attackGuardDamage - defenderGuard;
-  const duration = BASE_STAGGER_MS + delta * STAGGER_SCALAR;
-  return Math.round(Math.min(MAX_STAGGER_MS, Math.max(MIN_STAGGER_MS, duration)));
 }
