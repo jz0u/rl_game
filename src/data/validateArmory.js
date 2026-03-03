@@ -17,6 +17,7 @@ const VALID_STAT_KEYS = new Set([
   'attackSpeedBonus', 'critChanceBonus', 'accuracyBonus', 'moveSpeedBonus',
   'blockChance',
   'guardBonus', 'guardDamage',
+  'staminaCost',
 ]);
 
 function warn(id, field, message) {

@@ -31,6 +31,7 @@ export const playerBaseStats = {
   critChanceBonus: 0,
   accuracyBonus: 0,
   moveSpeedBonus: 0,
+  staminaCost: 15,    // unarmed attack stamina cost baseline
   rangeType: 'melee', // default to melee for unarmed
 }
 
@@ -67,5 +68,6 @@ export const defaultEnemyStats = {
   critChanceBonus: 0,
   accuracyBonus: 0,
   moveSpeedBonus: 0,
+  staminaCost: 0,
   rangeType: 'melee',
 }
