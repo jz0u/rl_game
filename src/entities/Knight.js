@@ -1,5 +1,5 @@
 import Character from './Character.js';
-import { playerBaseStats } from '../data/baseStats.js';
+import { knightBaseStats } from '../data/baseStats.js';
 
 // Render order for equipment overlays relative to the base
 // body sprite. Lower = rendered first (behind). The body
@@ -40,7 +40,7 @@ export default class Knight extends Character {
    */
   constructor(scene, x, y) {
     // animPrefix='' → bare anim keys, no prefix ('walk_sw' etc.)
-    super(scene, x, y, playerBaseStats, '', true);
+    super(scene, x, y, knightBaseStats, '', true);
 
     // Shadow behind the base body sprite.
     this.shadow = scene.add.sprite(x, y, 'Medieval_Shadow_Male_idle1_diag');

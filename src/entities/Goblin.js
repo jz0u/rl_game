@@ -1,5 +1,5 @@
 import Character from './Character.js';
-import { defaultEnemyStats } from '../data/baseStats.js';
+import { goblinBaseStats } from '../data/baseStats.js';
 
 /**
  * Goblin — an AI-controlled enemy that extends Character.
@@ -17,7 +17,7 @@ export default class Goblin extends Character {
    * @param {number} y - Spawn Y.
    */
   constructor(scene, x, y) {
-    super(scene, x, y, defaultEnemyStats, 'goblin', false);
+    super(scene, x, y, goblinBaseStats, 'goblin', false);
 
     this.sprite = scene.physics.add.sprite(x, y, 'goblin_idle1_diag');
     this.sprite.setCollideWorldBounds(true);

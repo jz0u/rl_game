@@ -1,4 +1,4 @@
-export const playerBaseStats = {
+export const knightBaseStats = {
   // ── Primary stats ──
   strength: 5,     // increases melee damage, carry weight, and heavy armor effectiveness
   dexterity: 5,    // increases attack speed, ranged damage, dodge chance, and move speed
@@ -35,7 +35,7 @@ export const playerBaseStats = {
   rangeType: 'melee', // default to melee for unarmed
 }
 
-export const defaultEnemyStats = {
+export const goblinBaseStats = {
   // ── Primary stats ──
   strength: 3,
   dexterity: 3,
