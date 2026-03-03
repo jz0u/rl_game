@@ -55,10 +55,12 @@ export default class CombatEffects {
   static showImpactFlash(scene, x, y) {
     const g = scene.add.graphics();
     g.setDepth(DEPTH_EFFECTS_TOP);
+    g.x = x;
+    g.y = y;
     g.fillStyle(0xffffff, 1);
-    g.fillCircle(x, y, 8);
+    g.fillCircle(0, 0, 8);
     g.lineStyle(2, 0xffdd00, 1);
-    g.strokeCircle(x, y, 12);
+    g.strokeCircle(0, 0, 12);
     scene.tweens.add({
       targets:    g,
       alpha:      0,
