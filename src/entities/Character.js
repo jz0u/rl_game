@@ -283,7 +283,7 @@ export default class Character extends Entity {
   _spendStamina(amount) {
     this.currentStamina -= amount;
     if (this.currentStamina <= 0) {
-      this.currentStamina = this.derivedStats.staminaMax;
+      this.currentStamina = this.derivedStats.maxStamina;
       this._applyStagger(GUARD_BREAK_STAGGER_MS);
     }
   }
@@ -353,7 +353,7 @@ export default class Character extends Entity {
     // Stamina regeneration.
     const delta = this.scene.game.loop.delta / 1000;
     this.currentStamina = Math.min(
-      this.derivedStats.staminaMax,
+      this.derivedStats.maxStamina,
       this.currentStamina + this.derivedStats.staminaRegen * delta,
     );
 
