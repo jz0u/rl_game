@@ -79,8 +79,8 @@ export default class Knight extends Character {
     // Must be called after this.sprite is created.
     this._registerAnimComplete();
 
-    // Knight hits enemies.
-    this.targets = () => this.scene.enemies.getLiving();
+    // Knight hits living goblins.
+    this.targets = () => (this.scene.goblins ?? []).filter(g => !g.isDead());
   }
 
   // ── Combat (Knight-specific) ──

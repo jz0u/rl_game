@@ -56,7 +56,7 @@ export default class Goblin extends Character {
     if (this.state === 'dead') return;
     this.state = 'dead';
     if (this.sprite.body) this.sprite.body.setVelocity(0, 0);
-    this.scene.enemies.unregister(this);
+    // No registry to unregister from — isDead() filters this goblin out naturally.
 
     // Play collapse in the current idle direction (defaults to SW).
     const idleKey     = this.getIdleAnim();
@@ -154,9 +154,9 @@ export default class Goblin extends Character {
     let vx = Math.cos(angle) * this.derivedStats.moveSpeed * 60;
     let vy = Math.sin(angle) * this.derivedStats.moveSpeed * 60;
 
-    // Separation steering — nudge away from nearby enemies to prevent clumping.
+    // Separation steering — nudge away from nearby goblins to prevent clumping.
     const SEPARATION = 60;
-    for (const other of this.scene.enemies.getAll()) {
+    for (const other of (this.scene.goblins ?? [])) {
       if (other === this || other.isDead()) continue;
       const anchor = other.sprite ?? other.rect;
       if (!anchor) continue;

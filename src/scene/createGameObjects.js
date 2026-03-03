@@ -10,11 +10,24 @@ import InventoryPanel from "../ui/InventoryPanel";
 import WindowManager from "../ui/WindowManager";
 import EquipmentManager from "../systems/EquipmentManager";
 import GameActions from "../systems/GameActions";
-import Dummy from "../entities/enemies/Dummy";
-import EnemyRegistry from "../systems/EnemyRegistry";
 import CursorUI from "../ui/CursorUI";
 import HUD from "../ui/HUD";
 
+const GOBLIN_COUNT    = 20;
+const MIN_SPAWN_DIST  = 200;  // minimum px from knight start position
+
+/**
+ * Returns a random spawn position within map bounds that is at least
+ * MIN_SPAWN_DIST pixels away from (cx, cy).
+ */
+function randomSpawn(cx, cy, mapW, mapH, rng = Math) {
+  let x, y;
+  do {
+    x = rng.random() * mapW;
+    y = rng.random() * mapH;
+  } while (Math.hypot(x - cx, y - cy) < MIN_SPAWN_DIST);
+  return { x, y };
+}
 
 /**
  * Instantiates the core game objects and attaches them to the scene.
@@ -24,26 +37,29 @@ import HUD from "../ui/HUD";
 export function createGameObjects(scene, allItems) {
     const map = MapManager.create(scene, map2);
 
-    const playerX = map.widthInPixels / 2;
+    const playerX = map.widthInPixels  / 2;
     const playerY = map.heightInPixels / 2;
-    scene.knight          = new Knight(scene, playerX, playerY);
-    scene.hud             = new HUD(scene, scene.knight);
+
+    scene.knight = new Knight(scene, playerX, playerY);
+    scene.hud    = new HUD(scene, scene.knight);
     registerPlayerAnims(scene);
     registerGoblinAnims(scene);
+
     scene.cameras.main.setZoom(1);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.cameras.main.startFollow(scene.knight.sprite, true, 0.1, 0.1);
-    scene.enemies         = new EnemyRegistry();
-    scene.dummy           = new Dummy(scene, playerX + 200, playerY);
-    scene.enemies.register(scene.dummy);
-    scene.dummy2          = new Dummy(scene, playerX + 350, playerY);
-    scene.enemies.register(scene.dummy2);
-    scene.goblin          = new Goblin(scene, playerX - 200, playerY);
-    scene.enemies.register(scene.goblin);
+
+    // Spawn 20 goblins scattered across the map, away from the knight.
+    scene.goblins = [];
+    for (let i = 0; i < GOBLIN_COUNT; i++) {
+        const { x, y } = randomSpawn(playerX, playerY, map.widthInPixels, map.heightInPixels);
+        scene.goblins.push(new Goblin(scene, x, y));
+    }
+
     scene.physics.add.collider(scene.knight.sprite, scene.collisionGroup);
-    scene.physics.add.collider(scene.goblin.sprite, scene.collisionGroup);
     scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     scene.knight.sprite.setCollideWorldBounds(true);
+
     scene.shop             = new Shop();
     scene.shopPanel        = new ShopPanel(scene, allItems);
     scene.inventory        = new Inventory();

@@ -47,9 +47,7 @@ class GameScene extends Phaser.Scene {
   /** Called every frame by Phaser. */
   update() {
     this.knight.update();
-    if (this.dummy)  this.dummy.update();
-    if (this.dummy2) this.dummy2.update();
-    if (this.goblin) this.goblin.update();
+    for (const goblin of this.goblins) goblin.update();
     this.hud?.update();
     this.cursorUI.update();
     this.cameras.main.setScroll(

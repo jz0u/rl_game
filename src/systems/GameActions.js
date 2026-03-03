@@ -18,19 +18,14 @@ export default class GameActions {
     unequipSlot(slot)  { return this.equipmentManager.unequip(slot); }
     buyItem(item)      { return this.equipmentManager.buy(item); }
 
-    // Movement / combat — input.js calls these
+    // Movement / combat — called by input.js
     moveTo(x, y)       { this.knight.moveTo(x, y); }
     attack(x)          { this.knight.attack(x); }
 
-    // Combat — position / damage queries used by enemies
+    // Combat — position / damage queries used by Goblin AI
     getKnightPosition()         { return { x: this.knight.sprite.x, y: this.knight.sprite.y }; }
     getKnightSprite()           { return this.knight.sprite; }
     damageKnight(amount, atX)   { return this.knight.takeDamage(amount, 'physical', atX); }
-
-    // Backward-compat aliases for Dummy (still calls getPlayerPosition / damagePlayer)
-    getPlayerPosition()         { return this.getKnightPosition(); }
-    getPlayerSprite()           { return this.getKnightSprite(); }
-    damagePlayer(amount, atX)   { return this.damageKnight(amount, atX); }
 
     // Inventory
     addItem(item)      { return this.inventory.addItemToInventory(item); }

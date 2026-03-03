@@ -55,7 +55,7 @@ export default class Character extends Entity {
     /**
      * Returns the array of characters this entity can damage during an attack.
      * Set by subclass constructor:
-     *   Knight:  () => this.scene.enemies.getLiving()
+     *   Knight:  () => this.scene.goblins.filter(g => !g.isDead())
      *   Goblin:  () => [this.scene.knight]
      */
     this.targets = () => [];
