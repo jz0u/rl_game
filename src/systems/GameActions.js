@@ -1,6 +1,6 @@
 export default class GameActions {
-    constructor({ player, inventory, equipmentManager, windowManager, inventoryPanel, shopPanel }) {
-        this.player           = player;
+    constructor({ knight, inventory, equipmentManager, windowManager, inventoryPanel, shopPanel }) {
+        this.knight           = knight;
         this.inventory        = inventory;
         this.equipmentManager = equipmentManager;
         this.windowManager    = windowManager;
@@ -18,14 +18,19 @@ export default class GameActions {
     unequipSlot(slot)  { return this.equipmentManager.unequip(slot); }
     buyItem(item)      { return this.equipmentManager.buy(item); }
 
-    // Movement / combat — player.attack takes a single x coordinate
-    moveTo(x, y)       { this.player.moveTo(x, y); }
-    attack(x)          { this.player.attack(x); }
+    // Movement / combat — input.js calls these
+    moveTo(x, y)       { this.knight.moveTo(x, y); }
+    attack(x)          { this.knight.attack(x); }
 
-    // Combat — called by enemies
-    damagePlayer(amount, attackerX)   { return this.player.takeDamage(amount, 'physical', attackerX); }
-    getPlayerPosition()    { return { x: this.player.sprite.x, y: this.player.sprite.y }; }
-    getPlayerSprite()      { return this.player.sprite; }
+    // Combat — position / damage queries used by enemies
+    getKnightPosition()         { return { x: this.knight.sprite.x, y: this.knight.sprite.y }; }
+    getKnightSprite()           { return this.knight.sprite; }
+    damageKnight(amount, atX)   { return this.knight.takeDamage(amount, 'physical', atX); }
+
+    // Backward-compat aliases for Dummy (still calls getPlayerPosition / damagePlayer)
+    getPlayerPosition()         { return this.getKnightPosition(); }
+    getPlayerSprite()           { return this.getKnightSprite(); }
+    damagePlayer(amount, atX)   { return this.damageKnight(amount, atX); }
 
     // Inventory
     addItem(item)      { return this.inventory.addItemToInventory(item); }

@@ -1,5 +1,6 @@
-import Player from "../entities/Player";
-import { registerPlayerAnims } from './loadPlayerAssets';
+import Knight from "../entities/Knight";
+import Goblin from "../entities/Goblin";
+import { registerPlayerAnims, registerGoblinAnims } from './loadPlayerAssets';
 import MapManager from "../maps/MapManager";
 import { map2 } from "../maps/map2";
 import Shop from "../systems/Shop";
@@ -25,30 +26,34 @@ export function createGameObjects(scene, allItems) {
 
     const playerX = map.widthInPixels / 2;
     const playerY = map.heightInPixels / 2;
-    scene.player          = new Player(scene, playerX, playerY);
-    scene.hud             = new HUD(scene, scene.player);
+    scene.knight          = new Knight(scene, playerX, playerY);
+    scene.hud             = new HUD(scene, scene.knight);
     registerPlayerAnims(scene);
+    registerGoblinAnims(scene);
     scene.cameras.main.setZoom(1);
     scene.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    scene.cameras.main.startFollow(scene.player.sprite, true, 0.1, 0.1);
+    scene.cameras.main.startFollow(scene.knight.sprite, true, 0.1, 0.1);
     scene.enemies         = new EnemyRegistry();
     scene.dummy           = new Dummy(scene, playerX + 200, playerY);
     scene.enemies.register(scene.dummy);
     scene.dummy2          = new Dummy(scene, playerX + 350, playerY);
     scene.enemies.register(scene.dummy2);
-    scene.physics.add.collider(scene.player.sprite, scene.collisionGroup);
+    scene.goblin          = new Goblin(scene, playerX - 200, playerY);
+    scene.enemies.register(scene.goblin);
+    scene.physics.add.collider(scene.knight.sprite, scene.collisionGroup);
+    scene.physics.add.collider(scene.goblin.sprite, scene.collisionGroup);
     scene.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    scene.player.sprite.setCollideWorldBounds(true);
+    scene.knight.sprite.setCollideWorldBounds(true);
     scene.shop             = new Shop();
     scene.shopPanel        = new ShopPanel(scene, allItems);
     scene.inventory        = new Inventory();
-    scene.equipmentManager = new EquipmentManager(scene.inventory, scene.player, scene);
+    scene.equipmentManager = new EquipmentManager(scene.inventory, scene.knight, scene);
     scene.inventoryPanel   = new InventoryPanel(scene, scene.inventory, allItems);
     scene.windowManager    = new WindowManager(scene);
 
     scene.equipmentManager.on('equipmentChanged', (equippedMap) => {
-      scene.player.syncEquipment(equippedMap);
-      scene.player.recomputeStats(equippedMap);
+      scene.knight.syncEquipment(equippedMap);
+      scene.knight.recomputeStats(equippedMap);
       if (scene.inventoryPanel.invPanel.visible) {
         scene.inventoryPanel._refresh();
       }
@@ -57,7 +62,7 @@ export function createGameObjects(scene, allItems) {
     scene.windowManager.addWindow(scene.inventoryPanel);
 
     scene.actions = new GameActions({
-        player:           scene.player,
+        knight:           scene.knight,
         inventory:        scene.inventory,
         equipmentManager: scene.equipmentManager,
         windowManager:    scene.windowManager,

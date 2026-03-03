@@ -59,7 +59,7 @@ export default class EquipmentManager extends Phaser.Events.EventEmitter {
    * @returns {boolean} false if the purchase failed, true otherwise.
    */
   buy(item) {
-    if (this.scene.shop.buy(item, this.scene.player, this.inventory) === false) return false;
+    if (this.scene.shop.buy(item, this.scene.knight, this.inventory) === false) return false;
     loadEquipmentAssets(this.scene, item);
     return true;
   }

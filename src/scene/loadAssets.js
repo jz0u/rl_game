@@ -1,4 +1,4 @@
-import { loadPlayerSpritesheets } from './loadPlayerAssets';
+import { loadPlayerSpritesheets, loadGoblinSpritesheets } from './loadPlayerAssets';
 import { Armory } from "../data/Armory";
 import MapManager from "../maps/MapManager";
 import { map2 } from "../maps/map2";
@@ -10,6 +10,7 @@ import { map2 } from "../maps/map2";
 export function loadAssets(scene){
     const allItems = Object.values(Armory).flat();
     loadPlayerSpritesheets(scene);
+    loadGoblinSpritesheets(scene);
     scene.load.image('player_paperdoll', 'assets/player/player_paperdoll.png');
     allItems.forEach(item => {
       scene.load.image(item.id, item.iconPath);

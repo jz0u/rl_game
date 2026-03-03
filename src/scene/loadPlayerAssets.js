@@ -129,6 +129,57 @@ export function loadPlayerSpritesheets(scene) {
 }
 
 /**
+ * Loads all Goblin spritesheets. Call this from scene.preload().
+ * @param {Phaser.Scene} scene
+ */
+export function loadGoblinSpritesheets(scene) {
+  const BASE = 'assets/enemies/Medieval_Dungeons_Goblin/Medieval_Dungeons_Goblin_';
+  const opts = { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE };
+
+  // Directional sheets (3 frames/dir × 4 dirs = 12 total, or 8 frames/dir × 4 dirs = 32 total)
+  scene.load.spritesheet('goblin_idle1_diag',    BASE + 'idle1_diag.png',    opts);
+  scene.load.spritesheet('goblin_walking_diag',  BASE + 'walking_diag.png',  opts);
+  scene.load.spritesheet('goblin_collapse_diag', BASE + 'collapse_diag.png', opts);
+
+  // Attack / special — single row, 3 frames
+  scene.load.spritesheet('goblin_MVsv_alt_attack1', BASE + 'MVsv_alt_attack1.png', opts);
+}
+
+/**
+ * Registers all Goblin animations. Must be called after preload() completes.
+ * Animation keys follow the pattern 'goblin_{base}', e.g. 'goblin_walk_sw'.
+ * @param {Phaser.Scene} scene
+ */
+export function registerGoblinAnims(scene) {
+  const diag3 = (key, sheet, rate, rep) => [
+    { key: `goblin_${key}_sw`, frames: scene.anims.generateFrameNumbers(sheet, { start: 0,  end: 2  }), frameRate: rate, repeat: rep },
+    { key: `goblin_${key}_nw`, frames: scene.anims.generateFrameNumbers(sheet, { start: 3,  end: 5  }), frameRate: rate, repeat: rep },
+    { key: `goblin_${key}_se`, frames: scene.anims.generateFrameNumbers(sheet, { start: 6,  end: 8  }), frameRate: rate, repeat: rep },
+    { key: `goblin_${key}_ne`, frames: scene.anims.generateFrameNumbers(sheet, { start: 9,  end: 11 }), frameRate: rate, repeat: rep },
+  ];
+  const diag8 = (key, sheet, rate, rep) => [
+    { key: `goblin_${key}_sw`, frames: scene.anims.generateFrameNumbers(sheet, { start: 0,  end: 7  }), frameRate: rate, repeat: rep },
+    { key: `goblin_${key}_nw`, frames: scene.anims.generateFrameNumbers(sheet, { start: 8,  end: 15 }), frameRate: rate, repeat: rep },
+    { key: `goblin_${key}_se`, frames: scene.anims.generateFrameNumbers(sheet, { start: 16, end: 23 }), frameRate: rate, repeat: rep },
+    { key: `goblin_${key}_ne`, frames: scene.anims.generateFrameNumbers(sheet, { start: 24, end: 31 }), frameRate: rate, repeat: rep },
+  ];
+
+  const goblinAnims = [
+    ...diag3('idle',     'goblin_idle1_diag',    6,  -1),
+    ...diag8('walk',     'goblin_walking_diag',   8,  -1),
+    ...diag3('collapse', 'goblin_collapse_diag',  8,   0),
+    {
+      key:       'goblin_attack1',
+      frames:    scene.anims.generateFrameNumbers('goblin_MVsv_alt_attack1', { start: 0, end: 2 }),
+      frameRate: 8,
+      repeat:    0,
+    },
+  ];
+
+  goblinAnims.forEach(anim => scene.anims.create(anim));
+}
+
+/**
  * Registers all base player animations with the Phaser animation manager.
  * Must be called once after preload(), before any sprites are played.
  * Equipment items register their own animations when equipped.

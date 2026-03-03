@@ -81,8 +81,8 @@ export function loadEquipmentAssets(scene, item) {
  * @param {string} idleKey - The loaded idle spritesheet texture key.
  */
 function _refreshOverlay(scene, baseName, idleKey) {
-  for (const slot in scene.player.overlays) {
-    const overlay = scene.player.overlays[slot];
+  for (const slot in scene.knight.overlays) {
+    const overlay = scene.knight.overlays[slot];
     if (overlay && overlay.baseName === baseName) {
       overlay.setTexture(idleKey);
     }
