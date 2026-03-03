@@ -118,7 +118,7 @@ export default class Character extends Entity {
           this.derivedStats.physicalDamage,
           'physical',
           this.sprite.x,
-          this.derivedStats.poiseDamage,
+          this.derivedStats.guardDamage,
         );
 
         const hitX = (this.sprite.x + box.x) / 2;
@@ -255,10 +255,10 @@ export default class Character extends Entity {
    * Intercepts Entity.takeDamage to apply stagger on every effective hit.
    * Subclasses should call super.takeDamage(...) which routes here.
    */
-  takeDamage(amount, type = 'physical', attackerX = null, poiseDamage = 10) {
+  takeDamage(amount, type = 'physical', attackerX = null, guardDamage = 10) {
     const effective = super.takeDamage(amount, type);   // Entity.takeDamage
     if (effective > 0) {
-      const duration = computeStaggerDuration(poiseDamage, this.derivedStats.poise);
+      const duration = computeStaggerDuration(guardDamage, this.derivedStats.guard);
       this._applyStagger(duration);
     }
     return effective;

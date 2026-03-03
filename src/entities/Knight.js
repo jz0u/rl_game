@@ -85,10 +85,10 @@ export default class Knight extends Character {
 
   // ── Combat (Knight-specific) ──
 
-  takeDamage(amount, type, attackerX, poiseDamage = 10) {
+  takeDamage(amount, type, attackerX, guardDamage = 10) {
     if (this.invincible) return 0;
     // Character.takeDamage → Entity.takeDamage + _applyStagger
-    const effective = super.takeDamage(amount, type, attackerX, poiseDamage);
+    const effective = super.takeDamage(amount, type, attackerX, guardDamage);
     this._applyHitReaction(this.sprite, attackerX);
     this.invincible = true;
     this.scene.time.delayedCall(500, () => { this.invincible = false; });

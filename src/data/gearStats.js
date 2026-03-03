@@ -13,7 +13,7 @@ export const defaultGearStats = {
   critChanceBonus: 0,
   accuracyBonus: 0,
   moveSpeedBonus: 0,
-  poiseBonus:  0,   // armour contribution to poise
-  poiseDamage: 0,   // weapon contribution to poise damage
+  guardBonus:  0,   // armour contribution to guard
+  guardDamage: 0,   // weapon contribution to guard damage
   rangeType: 'melee',
 }

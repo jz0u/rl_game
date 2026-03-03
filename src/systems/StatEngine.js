@@ -19,17 +19,17 @@ const BASE_ATTACK_SPEED = 1000;     // ms between attacks at 0 DEX
 const BASE_CRIT_DAMAGE = 1.5;       // 1.5x crit multiplier before STR scaling
 const ATTACK_SPEED_FLOOR = 300;     // ms — fastest possible attack
 
-// ── Poise constants ──
-const BASE_POISE          = 10;
-const POISE_PER_ENDURANCE = 3;
+// ── Guard constants ──
+const BASE_GUARD          = 10;
+const GUARD_PER_ENDURANCE = 3;
 const MIN_STAGGER_MS      = 80;
 const MAX_STAGGER_MS      = 600;
 const BASE_STAGGER_MS     = 250;
 const STAGGER_SCALAR      = 8;
 
-// ── Poise lookup tables (derived from item properties instead of per-item stats) ──
-const POISE_BONUS_BY_WEIGHT = { light: 5, medium: 15, heavy: 30 };
-const POISE_DAMAGE_BY_SUBTYPE = {
+// ── Guard lookup tables (derived from item properties instead of per-item stats) ──
+const GUARD_BONUS_BY_WEIGHT = { light: 5, medium: 15, heavy: 30 };
+const GUARD_DAMAGE_BY_SUBTYPE = {
   sword:    15,  // one-handed default; two-handed overridden in computeGearStats
   axe:      30,
   mace:     35,
@@ -83,9 +83,9 @@ export function computeDerivedStats(baseStats, gearStats) {
     // ── Combat geometry ──
     attackRange: baseStats.attackRange,
 
-    // ── Poise ──
-    poise:       BASE_POISE + (baseStats.endurance * POISE_PER_ENDURANCE) + (gearStats.poiseBonus ?? 0),
-    poiseDamage: (baseStats.poiseDamage ?? 0) + (gearStats.poiseDamage ?? 0),
+    // ── Guard ──
+    guard:       BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
+    guardDamage: (baseStats.guardDamage ?? 0) + (gearStats.guardDamage ?? 0),
 
   };
 
@@ -103,16 +103,16 @@ export function computeGearStats(equippedMap) {
       }
     }
 
-    // Derive poiseBonus from weightClass (armor) and poiseDamage from weaponSubtype.
+    // Derive guardBonus from weightClass (armor) and guardDamage from weaponSubtype.
     // This avoids adding redundant fields to every item in Armory.js.
     if (item.weightClass) {
-      gearStats.poiseBonus += POISE_BONUS_BY_WEIGHT[item.weightClass] ?? 0;
+      gearStats.guardBonus += GUARD_BONUS_BY_WEIGHT[item.weightClass] ?? 0;
     }
     if (item.weaponSubtype) {
-      const base = POISE_DAMAGE_BY_SUBTYPE[item.weaponSubtype] ?? 0;
-      // Two-handed swords deal more poise damage than one-handed.
+      const base = GUARD_DAMAGE_BY_SUBTYPE[item.weaponSubtype] ?? 0;
+      // Two-handed swords deal more guard damage than one-handed.
       const bonus = (item.weaponSubtype === 'sword' && item.handType === 'two') ? 20 : 0;
-      gearStats.poiseDamage += base + bonus;
+      gearStats.guardDamage += base + bonus;
     }
   }
 
@@ -123,8 +123,8 @@ export function computeGearStats(equippedMap) {
   return gearStats;
 }
 
-export function computeStaggerDuration(attackPoiseDamage, defenderPoise) {
-  const delta    = attackPoiseDamage - defenderPoise;
+export function computeStaggerDuration(attackGuardDamage, defenderGuard) {
+  const delta    = attackGuardDamage - defenderGuard;
   const duration = BASE_STAGGER_MS + delta * STAGGER_SCALAR;
   return Math.round(Math.min(MAX_STAGGER_MS, Math.max(MIN_STAGGER_MS, duration)));
 }

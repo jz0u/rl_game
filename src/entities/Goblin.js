@@ -44,8 +44,8 @@ export default class Goblin extends Character {
 
   // ── Combat (enemy-style: health bar + damage numbers) ──
 
-  takeDamage(amount, type = 'physical', attackerX = null, poiseDamage = 10) {
-    const effective = super.takeDamage(amount, type, attackerX, poiseDamage);  // → Character.takeDamage
+  takeDamage(amount, type = 'physical', attackerX = null, guardDamage = 10) {
+    const effective = super.takeDamage(amount, type, attackerX, guardDamage);  // → Character.takeDamage
     this.updateHealthBar();
     this.showDamageNumber(effective);
     this._applyHitReaction(this.hitbox, attackerX);
