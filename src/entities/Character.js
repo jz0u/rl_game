@@ -1,7 +1,7 @@
 import Entity from './Entity.js';
 import CombatEffects from '../effects/CombatEffects.js';
 import { COLOR_HP_BAR_BG, COLOR_DAMAGE_RED } from '../config/constants.js';
-import { computeStaggerDuration } from '../systems/StatEngine.js';
+const GUARD_BREAK_STAGGER_MS = 400;
 
 /** Half-arc angles (radians) for each weapon arc type used in canHit(). */
 const ARC_HALF = {
@@ -52,7 +52,7 @@ export default class Character extends Entity {
     this.attackAngle      = 0;
     this.currentArcType   = 'stab';
     this.currentAttackRange = baseStats.attackRange ?? 70;
-    this.isStaggered      = false;
+    this.staggerUntil     = 0;      // scene.time.now value after which stagger expires
     this.attackId         = null;   // cancel token — invalidated when an attack is staggered out
 
     /**
@@ -186,9 +186,11 @@ export default class Character extends Entity {
    * @param {number} angle - World-space angle in radians from attacker to target.
    */
   attack(angle) {
-    if (this.attackInProgress || this.isStaggered) return;
+    if (this.attackInProgress) return;
+    if (this.scene.time.now < this.staggerUntil) return;
 
     this.attackId         = Symbol();   // new token per attack swing
+    if (this.playable) this._spendStamina(this.derivedStats.staminaCost);
     this.attackInProgress = true;
     if (this.sprite.body) this.sprite.body.setVelocity(0, 0);
     this.attackAngle      = angle;
@@ -257,10 +259,8 @@ export default class Character extends Entity {
    */
   takeDamage(amount, type = 'physical', attackerX = null, guardDamage = 10) {
     const effective = super.takeDamage(amount, type);   // Entity.takeDamage
-    if (effective > 0) {
-      const duration = computeStaggerDuration(guardDamage, this.derivedStats.guard);
-      this._applyStagger(duration);
-    }
+    this._applyHitReaction(this.hitbox, attackerX);
+    this._spendStamina(guardDamage);
     return effective;
   }
 
@@ -277,10 +277,15 @@ export default class Character extends Entity {
         this.sprite.play(this._animKey('idle_sw'));
       }
     }
-    this.isStaggered = true;
-    this.scene.time.delayedCall(duration, () => {
-      this.isStaggered = false;
-    });
+    this.staggerUntil = this.scene.time.now + duration;
+  }
+
+  _spendStamina(amount) {
+    this.currentStamina -= amount;
+    if (this.currentStamina <= 0) {
+      this.currentStamina = this.derivedStats.staminaMax;
+      this._applyStagger(GUARD_BREAK_STAGGER_MS);
+    }
   }
 
   // ── Health bar ──
@@ -345,6 +350,13 @@ export default class Character extends Entity {
    * call super.update() unless playable=true.
    */
   update() {
+    // Stamina regeneration.
+    const delta = this.scene.game.loop.delta / 1000;
+    this.currentStamina = Math.min(
+      this.derivedStats.staminaMax,
+      this.currentStamina + this.derivedStats.staminaRegen * delta,
+    );
+
     // Ensure the body is stopped when no target is set.
     if (!this.moveTarget && this.sprite?.body) {
       this.sprite.body.setVelocity(0, 0);
