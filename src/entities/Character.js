@@ -1,6 +1,7 @@
 import Entity from './Entity.js';
 import CombatEffects from '../effects/CombatEffects.js';
 import { COLOR_HP_BAR_BG, COLOR_DAMAGE_RED } from '../config/constants.js';
+import { computeStaggerDuration } from '../systems/StatEngine.js';
 
 /** Half-arc angles (radians) for each weapon arc type used in canHit(). */
 const ARC_HALF = {
@@ -51,6 +52,8 @@ export default class Character extends Entity {
     this.attackAngle      = 0;
     this.currentArcType   = 'stab';
     this.currentAttackRange = baseStats.attackRange ?? 70;
+    this.isStaggered      = false;
+    this.attackId         = null;   // cancel token — invalidated when an attack is staggered out
 
     /**
      * Returns the array of characters this entity can damage during an attack.
@@ -75,6 +78,10 @@ export default class Character extends Entity {
     this.hitbox = this.sprite;
 
     this.sprite.on('animationcomplete', () => {
+      // Capture cancel token NOW — before we clear attackInProgress — so
+      // a stagger that arrived mid-animation can invalidate this swing.
+      const thisAttack = this.attackId;
+
       // Save the flag before clearing it so we know whether a hit-detection
       // animation (attack) completed vs. a one-shot death/stagger animation.
       const wasAttacking = this.attackInProgress;
@@ -99,11 +106,20 @@ export default class Character extends Entity {
       // collapse / stagger / any other one-shot non-looping animation.
       if (!wasAttacking) return;
 
+      // If this swing was staggered out, its cancel token will have been
+      // nulled — don't deal damage from the cancelled animation.
+      if (this.attackId !== thisAttack) return;
+
       for (const t of this.targets()) {
         const box = t.hitbox ?? t.rect ?? t.sprite;
         if (!box || !this.canHit(box)) continue;
 
-        t.takeDamage(this.derivedStats.physicalDamage, 'physical', this.sprite.x);
+        t.takeDamage(
+          this.derivedStats.physicalDamage,
+          'physical',
+          this.sprite.x,
+          this.derivedStats.poiseDamage,
+        );
 
         const hitX = (this.sprite.x + box.x) / 2;
         const hitY = (this.sprite.y + box.y) / 2;
@@ -170,8 +186,9 @@ export default class Character extends Entity {
    * @param {number} angle - World-space angle in radians from attacker to target.
    */
   attack(angle) {
-    if (this.attackInProgress) return;
+    if (this.attackInProgress || this.isStaggered) return;
 
+    this.attackId         = Symbol();   // new token per attack swing
     this.attackInProgress = true;
     if (this.sprite.body) this.sprite.body.setVelocity(0, 0);
     this.attackAngle      = angle;
@@ -229,6 +246,40 @@ export default class Character extends Entity {
       let diff = Math.abs(Math.atan2(dy, dx) - this.attackAngle);
       if (diff > Math.PI) diff = 2 * Math.PI - diff;
       return diff <= half;
+    });
+  }
+
+  // ── Damage / stagger ──
+
+  /**
+   * Intercepts Entity.takeDamage to apply stagger on every effective hit.
+   * Subclasses should call super.takeDamage(...) which routes here.
+   */
+  takeDamage(amount, type = 'physical', attackerX = null, poiseDamage = 10) {
+    const effective = super.takeDamage(amount, type);   // Entity.takeDamage
+    if (effective > 0) {
+      const duration = computeStaggerDuration(poiseDamage, this.derivedStats.poise);
+      this._applyStagger(duration);
+    }
+    return effective;
+  }
+
+  /**
+   * Staggered characters cannot attack for `duration` ms.
+   * If an attack animation is in progress it is immediately cancelled.
+   */
+  _applyStagger(duration) {
+    if (this.attackInProgress) {
+      this.attackInProgress = false;
+      this.attackId         = null;   // invalidate cancel token
+      if (this.sprite.anims) {
+        this.sprite.stop();
+        this.sprite.play(this._animKey('idle_sw'));
+      }
+    }
+    this.isStaggered = true;
+    this.scene.time.delayedCall(duration, () => {
+      this.isStaggered = false;
     });
   }
 

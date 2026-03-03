@@ -85,10 +85,10 @@ export default class Knight extends Character {
 
   // ── Combat (Knight-specific) ──
 
-  takeDamage(amount, type, attackerX) {
+  takeDamage(amount, type, attackerX, poiseDamage = 10) {
     if (this.invincible) return 0;
-    // Call Entity.takeDamage (Character does not override it).
-    const effective = super.takeDamage(amount, type);
+    // Character.takeDamage → Entity.takeDamage + _applyStagger
+    const effective = super.takeDamage(amount, type, attackerX, poiseDamage);
     this._applyHitReaction(this.sprite, attackerX);
     this.invincible = true;
     this.scene.time.delayedCall(500, () => { this.invincible = false; });
@@ -120,7 +120,7 @@ export default class Knight extends Character {
    * @param {number} pointerX - World X of the click, used for facing + angle calculation.
    */
   attack(pointerX) {
-    if (this.attackInProgress) return;
+    if (this.attackInProgress || this.isStaggered) return;
 
     this.sprite.flipX = pointerX > this.sprite.x;
 

@@ -25,7 +25,7 @@ export default class GameActions {
     // Combat — position / damage queries used by Goblin AI
     getKnightPosition()         { return { x: this.knight.sprite.x, y: this.knight.sprite.y }; }
     getKnightSprite()           { return this.knight.sprite; }
-    damageKnight(amount, atX)   { return this.knight.takeDamage(amount, 'physical', atX); }
+    damageKnight(amount, atX, poiseDamage = 10) { return this.knight.takeDamage(amount, 'physical', atX, poiseDamage); }
 
     // Inventory
     addItem(item)      { return this.inventory.addItemToInventory(item); }

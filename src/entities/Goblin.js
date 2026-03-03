@@ -44,8 +44,8 @@ export default class Goblin extends Character {
 
   // ── Combat (enemy-style: health bar + damage numbers) ──
 
-  takeDamage(amount, type = 'physical', attackerX = null) {
-    const effective = super.takeDamage(amount, type);  // → Entity.takeDamage
+  takeDamage(amount, type = 'physical', attackerX = null, poiseDamage = 10) {
+    const effective = super.takeDamage(amount, type, attackerX, poiseDamage);  // → Character.takeDamage
     this.updateHealthBar();
     this.showDamageNumber(effective);
     this._applyHitReaction(this.hitbox, attackerX);
@@ -122,7 +122,7 @@ export default class Goblin extends Character {
       case 'attack':
         if (dist > this.derivedStats.attackRange) {
           this.state = 'chase';
-        } else if (!this.attackInProgress) {
+        } else if (!this.attackInProgress && !this.isStaggered) {
           const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y, px, py);
           // currentArcType and currentAttackRange already set to melee defaults in constructor.
           this.attack(angle);

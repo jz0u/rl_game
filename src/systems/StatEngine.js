@@ -19,6 +19,30 @@ const BASE_ATTACK_SPEED = 1000;     // ms between attacks at 0 DEX
 const BASE_CRIT_DAMAGE = 1.5;       // 1.5x crit multiplier before STR scaling
 const ATTACK_SPEED_FLOOR = 300;     // ms — fastest possible attack
 
+// ── Poise constants ──
+const BASE_POISE          = 10;
+const POISE_PER_ENDURANCE = 3;
+const MIN_STAGGER_MS      = 80;
+const MAX_STAGGER_MS      = 600;
+const BASE_STAGGER_MS     = 250;
+const STAGGER_SCALAR      = 8;
+
+// ── Poise lookup tables (derived from item properties instead of per-item stats) ──
+const POISE_BONUS_BY_WEIGHT = { light: 5, medium: 15, heavy: 30 };
+const POISE_DAMAGE_BY_SUBTYPE = {
+  sword:    15,  // one-handed default; two-handed overridden in computeGearStats
+  axe:      30,
+  mace:     35,
+  hammer:   35,
+  spear:    20,
+  pike:     25,
+  halberd:  30,
+  bow:      12,
+  crossbow: 12,
+  arquebus: 12,
+  staff:    10,
+};
+
 export function computeDerivedStats(baseStats, gearStats) {
 
   // ── Pre-compute weapon bonus based on weapon type ──
@@ -59,6 +83,10 @@ export function computeDerivedStats(baseStats, gearStats) {
     // ── Combat geometry ──
     attackRange: baseStats.attackRange,
 
+    // ── Poise ──
+    poise:       BASE_POISE + (baseStats.endurance * POISE_PER_ENDURANCE) + (gearStats.poiseBonus ?? 0),
+    poiseDamage: (baseStats.poiseDamage ?? 0) + (gearStats.poiseDamage ?? 0),
+
   };
 
   return stats;
@@ -74,6 +102,18 @@ export function computeGearStats(equippedMap) {
         gearStats[key] += value;
       }
     }
+
+    // Derive poiseBonus from weightClass (armor) and poiseDamage from weaponSubtype.
+    // This avoids adding redundant fields to every item in Armory.js.
+    if (item.weightClass) {
+      gearStats.poiseBonus += POISE_BONUS_BY_WEIGHT[item.weightClass] ?? 0;
+    }
+    if (item.weaponSubtype) {
+      const base = POISE_DAMAGE_BY_SUBTYPE[item.weaponSubtype] ?? 0;
+      // Two-handed swords deal more poise damage than one-handed.
+      const bonus = (item.weaponSubtype === 'sword' && item.handType === 'two') ? 20 : 0;
+      gearStats.poiseDamage += base + bonus;
+    }
   }
 
   // rangeType comes from weapon only
@@ -81,4 +121,10 @@ export function computeGearStats(equippedMap) {
   gearStats.rangeType = weapon?.rangeType ?? 'melee';
 
   return gearStats;
+}
+
+export function computeStaggerDuration(attackPoiseDamage, defenderPoise) {
+  const delta    = attackPoiseDamage - defenderPoise;
+  const duration = BASE_STAGGER_MS + delta * STAGGER_SCALAR;
+  return Math.round(Math.min(MAX_STAGGER_MS, Math.max(MIN_STAGGER_MS, duration)));
 }

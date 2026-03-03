@@ -19,6 +19,7 @@ export const playerBaseStats = {
   physicalDamage: 20,  // weak unarmed hits — equip a weapon for real damage
   magicalDamage: 0,   // magic requires a staff/wand equipped
   attackRange: 70,    // unarmed reach in pixels
+  poiseDamage: 15,    // unarmed stagger baseline
   minDamage: 0,
   maxDamage: 0,
 
@@ -56,6 +57,7 @@ export const defaultEnemyStats = {
   minDamage: 0,
   maxDamage: 0,
   attackRange: 50,    // short melee reach in pixels
+  poiseDamage: 10,    // goblin jab stagger baseline
 
   // ── Base gear bonus fields ──
   hpBonus: 0,
