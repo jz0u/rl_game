@@ -29,7 +29,6 @@ export default class EnemyAI extends Character {
     const effective = super.takeDamage(amount, type, attackerX, guardDamage);
     this.updateHealthBar();
     this.showDamageNumber(effective);
-    this._applyHitReaction(this.hitbox, attackerX);
     if (this.state === 'idle') this.state = 'chase';
     return effective;
   }

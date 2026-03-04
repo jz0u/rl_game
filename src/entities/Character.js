@@ -254,17 +254,6 @@ export default class Character extends Entity {
   // ── Damage / stagger ──
 
   /**
-   * Intercepts Entity.takeDamage to apply stagger on every effective hit.
-   * Subclasses should call super.takeDamage(...) which routes here.
-   */
-  takeDamage(amount, type = 'physical', attackerX = null, guardDamage = 10) {
-    const effective = super.takeDamage(amount, type);   // Entity.takeDamage
-    this._applyHitReaction(this.hitbox, attackerX);
-    this._spendStamina(guardDamage);
-    return effective;
-  }
-
-  /**
    * Guard-break stagger: cancels any in-progress attack, plays the guard_break
    * animation, and blocks new attacks for `duration` ms.
    */
@@ -283,6 +272,24 @@ export default class Character extends Entity {
     this.sprite.once('animationcomplete', () => {
       this.sprite.play(this._animKey('idle_sw'));
     });
+  }
+
+  _onHitGuard() {
+    const key = this._animKey('hit');
+    if (this.scene.anims.exists(key)) {
+      this.sprite.play(key, true);
+      this.sprite.once('animationcomplete', () => {
+        if (!this.isDead()) this.sprite.play(this._animKey('idle_sw'));
+      });
+    }
+  }
+
+  _onGuardBreak() {
+    this._applyStagger(GUARD_BREAK_STAGGER_MS);
+  }
+
+  _onHitNoGuard() {
+    this._applyStagger(GUARD_BREAK_STAGGER_MS);
   }
 
   _spendStamina(amount) {
@@ -360,6 +367,12 @@ export default class Character extends Entity {
     this.currentStamina = Math.min(
       this.derivedStats.maxStamina,
       this.currentStamina + this.derivedStats.staminaRegen * delta,
+    );
+
+    // Guard regeneration.
+    this.currentGuard = Math.min(
+      this.derivedStats.maxGuard,
+      this.currentGuard + this.derivedStats.guardRegen * delta,
     );
 
     // Ensure the body is stopped when no target is set.

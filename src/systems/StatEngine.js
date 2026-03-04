@@ -28,6 +28,10 @@ const GUARD_BREAK_STAGGER_MS  = 400;
 const BASE_STAMINA_REGEN          = 8;
 const STAMINA_REGEN_PER_ENDURANCE = 1.5;
 
+// ── Guard regen constants ──
+const BASE_GUARD_REGEN          = 3;    // guard points per second baseline
+const GUARD_REGEN_PER_ENDURANCE = 0.5;  // per endurance point
+
 // ── Guard lookup tables (derived from item properties instead of per-item stats) ──
 const GUARD_BONUS_BY_WEIGHT = { light: 5, medium: 15, heavy: 30 };
 const GUARD_DAMAGE_BY_SUBTYPE = {
@@ -55,7 +59,7 @@ export function computeDerivedStats(baseStats, gearStats) {
 
     // ── Resource pools ──
     maxHP:      baseStats.hp      + (baseStats.vitality     * HP_PER_VITALITY)        + gearStats.hp,
-    maxStamina: baseStats.stamina + (baseStats.endurance    * STAMINA_PER_ENDURANCE)  + gearStats.stamina + gearStats.guardBonus,
+    maxStamina: baseStats.stamina + (baseStats.endurance    * STAMINA_PER_ENDURANCE)  + gearStats.stamina,
     maxMagicka: baseStats.magicka + (baseStats.intelligence * MAGICKA_PER_INTELLIGENCE) + gearStats.magicka,
 
     // ── Regeneration (per second) ──
@@ -86,7 +90,8 @@ export function computeDerivedStats(baseStats, gearStats) {
     visionRadius: baseStats.visionRadius ?? 0,
 
     // ── Guard ──
-    guard:       BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
+    maxGuard:    BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
+    guardRegen:  BASE_GUARD_REGEN + (baseStats.endurance * GUARD_REGEN_PER_ENDURANCE),
     guardDamage: (baseStats.guardDamage ?? 0) + (gearStats.guardDamage ?? 0),
 
     // ── Stamina cost ──

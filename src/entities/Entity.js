@@ -16,17 +16,34 @@ export default class Entity {
     this.currentHp      = this.derivedStats.maxHP;
     this.currentStamina = this.derivedStats.maxStamina;
     this.currentMagicka = this.derivedStats.maxMagicka;
+    this.currentGuard   = this.derivedStats.maxGuard;
   }
 
-  takeDamage(amount, type = 'physical') {
+  takeDamage(amount, type = 'physical', attackerX = null, guardDamage = 10) {
     const resist    = type === 'magical'
       ? this.derivedStats.magicalResist
       : this.derivedStats.physicalResist;
     const effective = Math.max(1, amount - resist);
-    this.currentHp  = Math.max(0, this.currentHp - effective);
-    if (this.isDead()) this.onDeath();
-    return effective;
+
+    if (this.currentGuard > 0) {
+      this.currentGuard = Math.max(0, this.currentGuard - guardDamage);
+      this._applyHitReaction(this.hitbox ?? this.sprite, attackerX);
+      this._onHitGuard();
+      if (this.currentGuard <= 0) this._onGuardBreak();
+      return 0;
+    } else {
+      this.currentHp = Math.max(0, this.currentHp - effective);
+      this._applyHitReaction(this.hitbox ?? this.sprite, attackerX);
+      this._onHitNoGuard();
+      if (this.isDead()) this.onDeath();
+      return effective;
+    }
   }
+
+  // Hook stubs — implemented in Character
+  _onHitGuard()   {}
+  _onGuardBreak() {}
+  _onHitNoGuard() {}
 
   heal(amount) {
     this.currentHp = Math.min(this.currentHp + amount, this.derivedStats.maxHP);
