@@ -69,7 +69,7 @@ export const goblinBaseStats = {
   critChanceBonus: 0,
   accuracyBonus: 0,
   moveSpeedBonus: 0,
-  staminaCost: 0,
+  staminaCost: 8,
   rangeType: 'melee',
   aggroRadius: 200,
 }

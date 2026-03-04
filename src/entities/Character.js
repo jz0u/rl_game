@@ -190,7 +190,7 @@ export default class Character extends Entity {
     if (this.scene.time.now < this.staggerUntil) return;
 
     this.attackId         = Symbol();   // new token per attack swing
-    if (this.playable) this._spendStamina(this.derivedStats.staminaCost);
+    this._spendStamina(this.derivedStats.staminaCost);
     this.attackInProgress = true;
     if (this.sprite.body) this.sprite.body.setVelocity(0, 0);
     this.attackAngle      = angle;
