@@ -46,7 +46,7 @@ export default class Knight extends Character {
     this.shadow = scene.add.sprite(x, y, 'Medieval_Shadow_Male_idle1_diag');
     this.shadow.setAlpha(0.4);
 
-    this.sprite = scene.physics.add.sprite(x, y, 'player_idle1_diag');
+    this.sprite = scene.physics.add.sprite(x, y, 'Medieval_Warfare_Male_1_idle1_diag');
     this.sprite.setCollideWorldBounds(true);
     this.sprite.body.setSize(32, 32);
     this.sprite.body.setOffset(48, 80);

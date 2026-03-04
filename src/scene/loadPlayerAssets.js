@@ -6,14 +6,6 @@ import { SPRITE_FRAME_SIZE } from '../config/constants';
  * @param {Phaser.Scene} scene
  */
 export function loadPlayerSpritesheets(scene) {
-  // Legacy placeholder sheets — existing animation keys still reference these.
-  const legacySheets = [
-    { key: 'player_idle1_diag',   path: 'assets/player/player_idle.png' },
-    { key: 'player_walking_diag', path: 'assets/player/player_walk.png' },
-    { key: 'player_attack1',      path: 'assets/player/player_attack1.png' },
-    { key: 'player_attack2',      path: 'assets/player/player_attack2.png' },
-  ];
-
   // All Medieval_Warfare_Male_1 spritesheets.
   // Key = filename minus .png (exact artist naming convention).
   // Note: for animations with both a regular and _diag variant, _diag is the
@@ -123,7 +115,6 @@ export function loadPlayerSpritesheets(scene) {
   ];
 
   const opts = { frameWidth: SPRITE_FRAME_SIZE, frameHeight: SPRITE_FRAME_SIZE };
-  legacySheets.forEach(({ key, path }) => scene.load.spritesheet(key, path, opts));
   newKeys.forEach(key => scene.load.spritesheet(key, `${BASE}${key}.png`, opts));
   shadowKeys.forEach(key => scene.load.spritesheet(key, `${SHADOW_BASE}${key}.png`, opts));
 }
@@ -196,16 +187,16 @@ export function registerGoblinAnims(scene) {
 export function registerPlayerAnims(scene) {
   const anims = [
     // Player walk
-    { key: "walk_sw", frames: scene.anims.generateFrameNumbers("player_walking_diag", { start: 0, end: 7 }), frameRate: 8, repeat: -1 },
-    { key: "walk_nw", frames: scene.anims.generateFrameNumbers("player_walking_diag", { start: 8, end: 15 }), frameRate: 8, repeat: -1 },
-    { key: "walk_se", frames: scene.anims.generateFrameNumbers("player_walking_diag", { start: 16, end: 23 }), frameRate: 8, repeat: -1 },
-    { key: "walk_ne", frames: scene.anims.generateFrameNumbers("player_walking_diag", { start: 24, end: 31 }), frameRate: 8, repeat: -1 },
+    { key: "walk_sw", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_walking_diag", { start: 0, end: 7 }), frameRate: 8, repeat: -1 },
+    { key: "walk_nw", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_walking_diag", { start: 8, end: 15 }), frameRate: 8, repeat: -1 },
+    { key: "walk_se", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_walking_diag", { start: 16, end: 23 }), frameRate: 8, repeat: -1 },
+    { key: "walk_ne", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_walking_diag", { start: 24, end: 31 }), frameRate: 8, repeat: -1 },
 
     // Player idle
-    { key: "idle_sw", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 0, end: 2 }), frameRate: 6, repeat: -1 },
-    { key: "idle_nw", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 3, end: 5 }), frameRate: 6, repeat: -1 },
-    { key: "idle_se", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 6, end: 8 }), frameRate: 6, repeat: -1 },
-    { key: "idle_ne", frames: scene.anims.generateFrameNumbers("player_idle1_diag", { start: 9, end: 11 }), frameRate: 6, repeat: -1 },
+    { key: "idle_sw", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_idle1_diag", { start: 0, end: 2 }), frameRate: 6, repeat: -1 },
+    { key: "idle_nw", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_idle1_diag", { start: 3, end: 5 }), frameRate: 6, repeat: -1 },
+    { key: "idle_se", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_idle1_diag", { start: 6, end: 8 }), frameRate: 6, repeat: -1 },
+    { key: "idle_ne", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_idle1_diag", { start: 9, end: 11 }), frameRate: 6, repeat: -1 },
 
     // Player attack
     { key: "attack1", frames: scene.anims.generateFrameNumbers("Medieval_Warfare_Male_1_MVsv_alt_attack1", { start: 0, end: 2 }), frameRate: 8, repeat: 0 },
