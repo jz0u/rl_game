@@ -23,24 +23,17 @@ export const knightBaseStats = {
   minDamage: 0,
   maxDamage: 0,
 
-  // ── Base gear bonus fields (all zero until gear is equipped) ──
-  hpBonus: 0,
-  staminaBonus: 0,
-  magickaBonus: 0,
-  attackSpeedBonus: 0,
-  critChanceBonus: 0,
-  accuracyBonus: 0,
-  moveSpeedBonus: 0,
+  // ── Combat behaviour ──
   staminaCost: 10,    // unarmed attack stamina cost baseline
   rangeType: 'melee', // default to melee for unarmed
   visionRadius: 100,
   coinValue: 0,
 
   // ── Regeneration (per second, before stat scaling) ──
-  healthRegen:  2,    // HP restored per second; vitality adds on top
-  staminaRegen: 8,    // stamina restored per second; endurance adds on top
-  magickaRegen: 1,    // magicka restored per second; intelligence adds on top
-  guardRegen:   3,    // guard restored per second; endurance adds on top
+  healthRegen:  0.1,    // HP restored per second; vitality adds on top
+  staminaRegen: 0.1,    // stamina restored per second; endurance adds on top
+  magickaRegen: 0.1,    // magicka restored per second; intelligence adds on top
+  guardRegen:   0.1,    // guard restored per second; endurance adds on top
 }
 
 export const goblinBaseStats = {
@@ -68,22 +61,15 @@ export const goblinBaseStats = {
   attackRange: 70,    // short melee reach in pixels
   guardDamage: 25,    // goblin jab stagger baseline
 
-  // ── Base gear bonus fields ──
-  hpBonus: 0,
-  staminaBonus: 0,
-  magickaBonus: 0,
-  attackSpeedBonus: 0,
-  critChanceBonus: 0,
-  accuracyBonus: 0,
-  moveSpeedBonus: 0,
+  // ── Combat behaviour ──
   staminaCost: 1,
   rangeType: 'melee',
   visionRadius: 200,
   coinValue: 1,
 
   // ── Regeneration (per second, before stat scaling) ──
-  healthRegen:  1,    // HP restored per second; vitality adds on top
-  staminaRegen: 5,    // stamina restored per second; endurance adds on top
-  magickaRegen: 0,    // magicka restored per second; intelligence adds on top
-  guardRegen:   2,    // guard restored per second; endurance adds on top
+  healthRegen:  0.1,    // HP restored per second; vitality adds on top
+  staminaRegen: 0.1,    // stamina restored per second; endurance adds on top
+  magickaRegen: 0.1,    // magicka restored per second; intelligence adds on top
+  guardRegen:   0.1,    // guard restored per second; endurance adds on top
 }
