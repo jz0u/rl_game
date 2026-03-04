@@ -7,7 +7,7 @@ export const knightBaseStats = {
   endurance: 5,    // increases max stamina, stamina regen, and heavy armor penalty reduction
 
   // ── Base resource pools (tuning values — override per entity type) ──
-  hp: 100,     // flat HP before vitality scaling — reduce for weaker enemies, increase for bosses
+  hp: 10000,     // flat HP before vitality scaling — reduce for weaker enemies, increase for bosses
   stamina: 50, // flat stamina before endurance scaling
   magicka: 20, // flat magicka before intelligence scaling — low default, magic builds invest INT
 
