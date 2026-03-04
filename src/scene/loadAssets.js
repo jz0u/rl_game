@@ -41,6 +41,7 @@ export function loadAssets(scene){
     scene.load.image('hud-orb-mana',    'assets/hud/ManaBarVar1.png');
     scene.load.image('hud-skill-slots', 'assets/hud/SkillSlots.png');
     scene.load.image('hud-exp',         'assets/hud/EXPBar.png');
+    scene.load.image('hud-orb-guard',   'assets/hud/Fill.png');
 
     MapManager.load(scene, map2);
 }
