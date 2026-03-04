@@ -21,7 +21,7 @@ const BASE_CRIT_DAMAGE = 1.5;       // 1.5x crit multiplier before STR scaling
 const ATTACK_SPEED_FLOOR = 300;     // ms — fastest possible attack
 
 // ── Guard constants ──
-const BASE_GUARD              = 10;
+// BASE_GUARD removed — flat guard floor now lives in baseStats.guard per entity.
 const GUARD_PER_ENDURANCE     = 3;
 const GUARD_BREAK_STAGGER_MS  = 400;
 
@@ -92,7 +92,7 @@ export function computeDerivedStats(baseStats, gearStats) {
     visionRadius: baseStats.visionRadius ?? 0,
 
     // ── Guard ──
-    maxGuard:    BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
+    maxGuard:    (baseStats.guard ?? 0) + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
     guardRegen:  (baseStats.guardRegen ?? 0) + (baseStats.endurance * GUARD_REGEN_PER_ENDURANCE),
     guardDamage: (baseStats.guardDamage ?? 0) + (gearStats.guardDamage ?? 0),
 

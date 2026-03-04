@@ -10,6 +10,7 @@ export const knightBaseStats = {
   hp: 100,     // flat HP before vitality scaling — reduce for weaker enemies, increase for bosses
   stamina: 100, // flat stamina before endurance scaling
   magicka: 100, // flat magicka before intelligence scaling — low default, magic builds invest INT
+  guard: 50,   // flat guard pool before endurance scaling
 
   // ── Base defenses ──
   physicalResist: 0,
@@ -48,6 +49,7 @@ export const goblinBaseStats = {
   hp: 100,
   stamina: 100,
   magicka: 0,
+  guard: 30,   // flat guard pool before endurance scaling
 
   // ── Base defenses ──
   physicalResist: 0,

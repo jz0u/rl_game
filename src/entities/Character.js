@@ -54,6 +54,7 @@ export default class Character extends Entity {
     this.currentAttackRange = baseStats.attackRange ?? 70;
     this.staggerUntil     = 0;      // scene.time.now value after which stagger expires
     this.attackId         = null;   // cancel token — invalidated when an attack is staggered out
+    this.pendingAttack    = null;   // queued angle (radians) to fire once hit-pause resumes
 
     /**
      * Returns the array of characters this entity can damage during an attack.
@@ -133,6 +134,12 @@ export default class Character extends Entity {
         this.scene.time.delayedCall(80, () => {
           this.scene.physics.resume();
           this.scene.anims.resumeAll();
+          // Fire any attack input that arrived during the hit-pause freeze.
+          if (this.pendingAttack !== null && !this.attackInProgress) {
+            const angle = this.pendingAttack;
+            this.pendingAttack = null;
+            this.attack(angle);
+          }
         });
       }
     });
@@ -186,8 +193,16 @@ export default class Character extends Entity {
    * @param {number} angle - World-space angle in radians from attacker to target.
    */
   attack(angle) {
+    // If the scene is frozen in a hit-pause, queue this attack to fire when it resumes.
+    // This prevents clicks during the 80ms freeze window from being silently dropped.
+    if (this.scene.physics.world.isPaused) {
+      this.pendingAttack = angle;
+      return;
+    }
     if (this.attackInProgress) return;
     if (this.scene.time.now < this.staggerUntil) return;
+    // Insufficient stamina — can't swing, but no stagger.
+    if (this.currentStamina < this.derivedStats.staminaCost) return;
 
     this.attackId         = Symbol();   // new token per attack swing
     this._spendStamina(this.derivedStats.staminaCost);
@@ -275,13 +290,8 @@ export default class Character extends Entity {
   }
 
   _onHitGuard() {
-    const key = this._animKey('hit');
-    if (this.scene.anims.exists(key)) {
-      this.sprite.play(key, true);
-      this.sprite.once('animationcomplete', () => {
-        if (!this.isDead()) this.sprite.play(this._animKey('idle_sw'));
-      });
-    }
+    // Guard absorbed the hit — no stagger, no animation interrupt.
+    // Hit flash is handled by _applyHitReaction in Entity.
   }
 
   _onGuardBreak() {
@@ -293,11 +303,9 @@ export default class Character extends Entity {
   }
 
   _spendStamina(amount) {
-    this.currentStamina -= amount;
-    if (this.currentStamina <= 0) {
-      this.currentStamina = this.derivedStats.maxStamina;
-      this._applyStagger(GUARD_BREAK_STAGGER_MS);
-    }
+    // Stamina gates attacks only. Draining to zero prevents swinging but does not
+    // stagger — guard depletion (from taking hits) is the only stagger trigger.
+    this.currentStamina = Math.max(0, this.currentStamina - amount);
   }
 
   // ── Health bar ──

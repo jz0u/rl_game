@@ -120,6 +120,19 @@ export default class Knight extends Character {
    * @param {number} pointerX - World X of the click, used for facing + angle calculation.
    */
   attack(pointerX) {
+    // Compute angle first — needed for both immediate and queued attacks.
+    const angle = Math.atan2(
+      this.scene.input.activePointer.worldY - this.sprite.y,
+      this.scene.input.activePointer.worldX - this.sprite.x,
+    );
+
+    // If the scene is frozen in a hit-pause, store the angle so the pending
+    // attack fires with the correct direction even if the pointer has moved.
+    if (this.scene.physics.world.isPaused) {
+      this.pendingAttack = angle;
+      return;
+    }
+
     if (this.attackInProgress) return;
 
     this.sprite.flipX = pointerX > this.sprite.x;
@@ -128,12 +141,13 @@ export default class Knight extends Character {
     this.currentAttackRange = weapon?.attackRange ?? this.derivedStats.attackRange;
     this.currentArcType     = weapon?.arcType     ?? 'stab';
 
-    const angle = Math.atan2(
-      this.scene.input.activePointer.worldY - this.sprite.y,
-      this.scene.input.activePointer.worldX - this.sprite.x,
-    );
+    // Cancel movement — attacking commits the player to their current position.
+    // Character.attack() stops body velocity, but moveTarget must also be cleared
+    // or Character.update() will resume walking the moment attackInProgress clears.
+    this.moveTarget = null;
+    if (this.sprite.body) this.sprite.body.setVelocity(0, 0);
 
-    // Character.attack() sets attackInProgress, shows effects, plays anim.
+    // Character.attack() handles stagger check, stamina check, effects, and anim.
     super.attack(angle);
   }
 
