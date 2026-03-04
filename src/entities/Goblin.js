@@ -34,8 +34,7 @@ export default class Goblin extends Character {
     };
 
     // AI
-    this.state       = 'idle';
-    this.aggroRadius = 200;
+    this.state = 'idle';
 
     this.createHealthBar(x, y);
 
@@ -104,11 +103,11 @@ export default class Goblin extends Character {
     switch (this.state) {
       case 'idle':
         this._setIdle();
-        if (dist < this.aggroRadius) this.state = 'chase';
+        if (dist < this.derivedStats.aggroRadius) this.state = 'chase';
         break;
 
       case 'chase':
-        if (dist > this.aggroRadius * 1.5) {
+        if (dist > this.derivedStats.aggroRadius * 1.5) {
           this.state = 'idle';
           this._setIdle();
         } else if (dist < this.derivedStats.attackRange) {

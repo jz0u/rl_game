@@ -82,7 +82,8 @@ export function computeDerivedStats(baseStats, gearStats) {
     moveSpeed: 3.0 + (baseStats.dexterity * MOVE_SPEED_PER_DEX) + (gearStats.moveSpeedBonus ?? 0),
 
     // ── Combat geometry ──
-    attackRange: baseStats.attackRange,
+    attackRange:  baseStats.attackRange,
+    aggroRadius:  baseStats.aggroRadius ?? 0,
 
     // ── Guard ──
     guard:       BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
