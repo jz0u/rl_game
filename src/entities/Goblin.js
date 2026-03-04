@@ -1,24 +1,21 @@
-import Character from './Character.js';
+import EnemyAI from './EnemyAI.js';
 import { goblinBaseStats } from '../data/baseStats.js';
 import CoinDrop from './CoinDrop.js';
 
 /**
- * Goblin — an AI-controlled enemy that extends Character.
+ * Goblin — a basic melee enemy.
  *
- * Uses real sprite animations (idle, walk, attack, collapse).
- * Has a 4-state AI machine: idle → chase → attack → dead.
- *
- * Setting playable = true on this class would make it respond to
- * moveTo() / attack() calls with no other changes needed.
+ * All AI logic (state machine, chase, attack, takeDamage) lives in EnemyAI.
+ * This class only sets up the sprite and defines what happens on death.
  */
-export default class Goblin extends Character {
+export default class Goblin extends EnemyAI {
   /**
    * @param {Phaser.Scene} scene
    * @param {number} x - Spawn X.
    * @param {number} y - Spawn Y.
    */
   constructor(scene, x, y) {
-    super(scene, x, y, goblinBaseStats, 'goblin', false);
+    super(scene, x, y, goblinBaseStats, 'goblin');
 
     this.sprite = scene.physics.add.sprite(x, y, 'goblin_idle1_diag');
     this.sprite.setCollideWorldBounds(true);
@@ -34,25 +31,9 @@ export default class Goblin extends Character {
       return knight ? [knight] : [];
     };
 
-    // AI
-    this.state = 'idle';
-    this.lastKnownPosition = null;
-    this.playerVisible = false;
-
     this.createHealthBar(x, y);
 
     this.sprite.play('goblin_idle_sw');
-  }
-
-  // ── Combat (enemy-style: health bar + damage numbers) ──
-
-  takeDamage(amount, type = 'physical', attackerX = null, guardDamage = 10) {
-    const effective = super.takeDamage(amount, type, attackerX, guardDamage);  // → Character.takeDamage
-    this.updateHealthBar();
-    this.showDamageNumber(effective);
-    this._applyHitReaction(this.hitbox, attackerX);
-    if (this.state === 'idle') this.state = 'chase';
-    return effective;
   }
 
   onDeath() {
@@ -63,8 +44,6 @@ export default class Goblin extends Character {
     const drop = new CoinDrop(this.scene, this.sprite.x, this.sprite.y, this.baseStats.coinValue ?? 1);
     this.scene.coinDrops ??= [];
     this.scene.coinDrops.push(drop);
-
-    // No registry to unregister from — isDead() filters this goblin out naturally.
 
     // Play collapse in the current idle direction (defaults to SW).
     const idleKey     = this.getIdleAnim();
@@ -91,120 +70,5 @@ export default class Goblin extends Character {
         hpLabel.destroy();
       },
     });
-  }
-
-  // ── AI update ──
-
-  update() {
-    this.updateHealthBar();
-
-    // When playable=true, delegate to Character's moveTo-based movement.
-    if (this.playable) {
-      super.update();
-      return;
-    }
-
-    if (this.state === 'dead') return;
-
-    const { x: px, y: py } = this.scene.actions.getKnightPosition();
-    const dist = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, px, py);
-
-    switch (this.state) {
-      case 'idle':
-        this._setIdle();
-        if (dist < this.derivedStats.visionRadius) this.state = 'chase';
-        break;
-
-      case 'chase':
-        if (dist < this.derivedStats.visionRadius) {
-          this.playerVisible = true;
-          this.lastKnownPosition = { x: px, y: py };
-          if (dist < this.derivedStats.attackRange) {
-            this.state = 'attack';
-            this.sprite.body.setVelocity(0, 0);
-          } else {
-            this._chaseKnight(px, py);
-          }
-        } else {
-          this.playerVisible = false;
-          if (this.lastKnownPosition) {
-            const distToLKP = Phaser.Math.Distance.Between(
-              this.sprite.x, this.sprite.y,
-              this.lastKnownPosition.x, this.lastKnownPosition.y
-            );
-            if (distToLKP < 10) {
-              this.state = 'idle';
-              this.lastKnownPosition = null;
-              this._setIdle();
-            } else {
-              this._chaseKnight(this.lastKnownPosition.x, this.lastKnownPosition.y);
-            }
-          } else {
-            this.state = 'idle';
-            this._setIdle();
-          }
-        }
-        break;
-
-      case 'attack':
-        if (dist > this.derivedStats.attackRange) {
-          this.state = 'chase';
-        } else if (!this.attackInProgress) {
-          if (this.scene.time.now < this.staggerUntil) return;
-          const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y, px, py);
-          // currentArcType and currentAttackRange already set to melee defaults in constructor.
-          this.attack(angle);
-        }
-        break;
-
-      case 'dead':
-        // Handled by onDeath — should never reach here after first frame.
-        break;
-    }
-  }
-
-  // ── Private AI helpers ──
-
-  _setIdle() {
-    if (!this.attackInProgress) {
-      this.sprite.body.setVelocity(0, 0);
-      const idleAnim = this.getIdleAnim();
-      if (this.sprite.anims.currentAnim?.key !== idleAnim) {
-        this.sprite.play(idleAnim);
-      }
-    }
-  }
-
-  _chaseKnight(px, py) {
-    if (this.attackInProgress) return;
-
-    const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y, px, py);
-    let vx = Math.cos(angle) * this.derivedStats.moveSpeed * 60;
-    let vy = Math.sin(angle) * this.derivedStats.moveSpeed * 60;
-
-    // Separation steering — nudge away from nearby goblins to prevent clumping.
-    const SEPARATION = 60;
-    for (const other of (this.scene.goblins ?? [])) {
-      if (other === this || other.isDead()) continue;
-      const anchor = other.sprite ?? other.rect;
-      if (!anchor) continue;
-      const dx = this.sprite.x - anchor.x;
-      const dy = this.sprite.y - anchor.y;
-      const d  = Math.sqrt(dx * dx + dy * dy);
-      if (d > 0 && d < SEPARATION) {
-        const strength = (SEPARATION - d) / SEPARATION;
-        vx += (dx / d) * strength * this.derivedStats.moveSpeed * 60;
-        vy += (dy / d) * strength * this.derivedStats.moveSpeed * 60;
-      }
-    }
-
-    this.sprite.body.setVelocity(vx, vy);
-
-    // Play walk animation in the direction of movement.
-    const walkAnim = this._animKey(this.getDirectionAnim(angle));
-    if (this.sprite.anims.currentAnim?.key !== walkAnim) {
-      this.sprite.play(walkAnim);
-    }
-    this.sprite.flipX = false;
   }
 }
