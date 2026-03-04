@@ -10,6 +10,7 @@ import InventoryPanel from "../ui/InventoryPanel";
 import WindowManager from "../ui/WindowManager";
 import EquipmentManager from "../systems/EquipmentManager";
 import GameActions from "../systems/GameActions";
+import Bank from "../systems/Bank";
 import CursorUI from "../ui/CursorUI";
 import HUD from "../ui/HUD";
 
@@ -41,6 +42,8 @@ export function createGameObjects(scene, allItems) {
     const playerY = map.heightInPixels / 2;
 
     scene.knight = new Knight(scene, playerX, playerY);
+    scene.bank = new Bank(50);
+    scene.coinDrops = [];
     scene.hud    = new HUD(scene, scene.knight);
     registerPlayerAnims(scene);
     registerGoblinAnims(scene);
@@ -84,6 +87,7 @@ export function createGameObjects(scene, allItems) {
         windowManager:    scene.windowManager,
         inventoryPanel:   scene.inventoryPanel,
         shopPanel:        scene.shopPanel,
+        bank:             scene.bank,
     });
 
     scene.cursorUI = new CursorUI(scene);

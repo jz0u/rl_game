@@ -28,6 +28,10 @@ export default class HUD {
     this.hpOrb      = this._makeOrb(orbX, y1, 'hud-orb-hp',      orbScale);
     this.staminaOrb = this._makeOrb(orbX, y2, 'hud-orb-stamina',  orbScale);
     this.manaOrb    = this._makeOrb(orbX, y3, 'hud-orb-mana',     orbScale);
+
+    this.goldText = scene.add.text(scene.cameras.main.width - 16, 16, 'Gold: 0', {
+      fontSize: '16px', color: '#ffd700', stroke: '#000000', strokeThickness: 3, fontStyle: 'bold',
+    }).setOrigin(1, 0).setScrollFactor(0).setDepth(DEPTH_HUD_TOP + 2);
   }
 
   // ── Private helpers ──
@@ -90,5 +94,6 @@ export default class HUD {
     this._updateOrb(this.hpOrb,      p.currentHp,                      d.maxHP);
     this._updateOrb(this.staminaOrb, p.currentStamina,                  d.maxStamina);
     this._updateOrb(this.manaOrb,    p.currentMagicka ?? d.maxMagicka,  d.maxMagicka);
+    if (this.scene.bank) this.goldText.setText(`Gold: ${this.scene.bank.balance}`);
   }
 }

@@ -1,5 +1,6 @@
 import Character from './Character.js';
 import { goblinBaseStats } from '../data/baseStats.js';
+import CoinDrop from './CoinDrop.js';
 
 /**
  * Goblin — an AI-controlled enemy that extends Character.
@@ -55,6 +56,11 @@ export default class Goblin extends Character {
     if (this.state === 'dead') return;
     this.state = 'dead';
     if (this.sprite.body) this.sprite.body.setVelocity(0, 0);
+
+    const drop = new CoinDrop(this.scene, this.sprite.x, this.sprite.y, this.baseStats.coinValue ?? 1);
+    this.scene.coinDrops ??= [];
+    this.scene.coinDrops.push(drop);
+
     // No registry to unregister from — isDead() filters this goblin out naturally.
 
     // Play collapse in the current idle direction (defaults to SW).
@@ -103,11 +109,11 @@ export default class Goblin extends Character {
     switch (this.state) {
       case 'idle':
         this._setIdle();
-        if (dist < this.derivedStats.aggroRadius) this.state = 'chase';
+        if (dist < this.derivedStats.visionRadius) this.state = 'chase';
         break;
 
       case 'chase':
-        if (dist > this.derivedStats.aggroRadius * 1.5) {
+        if (dist > this.derivedStats.visionRadius * 1.5) {
           this.state = 'idle';
           this._setIdle();
         } else if (dist < this.derivedStats.attackRange) {

@@ -83,7 +83,7 @@ export function computeDerivedStats(baseStats, gearStats) {
 
     // ── Combat geometry ──
     attackRange:  baseStats.attackRange,
-    aggroRadius:  baseStats.aggroRadius ?? 0,
+    visionRadius: baseStats.visionRadius ?? 0,
 
     // ── Guard ──
     guard:       BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),

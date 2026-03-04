@@ -261,11 +261,26 @@ export default class Knight extends Character {
     }
   }
 
+  _checkCoinPickups() {
+    const coins = this.scene.coinDrops;
+    if (!coins?.length) return;
+    for (let i = coins.length - 1; i >= 0; i--) {
+      const coin = coins[i];
+      if (coin.collected) { coins.splice(i, 1); continue; }
+      if (Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, coin.x, coin.y) <= this.derivedStats.visionRadius) {
+        this.scene.bank?.deposit(coin.value);
+        coin.collect();
+        coins.splice(i, 1);
+      }
+    }
+  }
+
   // ── Game loop ──
 
   update() {
     // Overlays must sync before Character.update() in case movement state changes.
     this._syncOverlays();
     super.update();
+    this._checkCoinPickups();
   }
 }

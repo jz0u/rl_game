@@ -33,7 +33,8 @@ export const knightBaseStats = {
   moveSpeedBonus: 0,
   staminaCost: 15,    // unarmed attack stamina cost baseline
   rangeType: 'melee', // default to melee for unarmed
-  aggroRadius: 0,     // knight is player-controlled; no AI aggro range
+  visionRadius: 200,
+  coinValue: 0,
 }
 
 export const goblinBaseStats = {
@@ -71,5 +72,6 @@ export const goblinBaseStats = {
   moveSpeedBonus: 0,
   staminaCost: 8,
   rangeType: 'melee',
-  aggroRadius: 200,
+  visionRadius: 200,
+  coinValue: 1,
 }

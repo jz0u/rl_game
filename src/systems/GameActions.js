@@ -1,11 +1,12 @@
 export default class GameActions {
-    constructor({ knight, inventory, equipmentManager, windowManager, inventoryPanel, shopPanel }) {
+    constructor({ knight, inventory, equipmentManager, windowManager, inventoryPanel, shopPanel, bank }) {
         this.knight           = knight;
         this.inventory        = inventory;
         this.equipmentManager = equipmentManager;
         this.windowManager    = windowManager;
         this.inventoryPanel   = inventoryPanel;
         this.shopPanel        = shopPanel;
+        this.bank             = bank;
     }
 
     // Windows
@@ -16,7 +17,12 @@ export default class GameActions {
     // Equipment
     equipItem(item)    { return this.equipmentManager.equip(item); }
     unequipSlot(slot)  { return this.equipmentManager.unequip(slot); }
-    buyItem(item)      { return this.equipmentManager.buy(item); }
+    buyItem(item) {
+        if (!this.bank?.canAfford(item.value)) return false;
+        const result = this.equipmentManager.buy(item);
+        if (result !== false) this.bank.withdraw(item.value);
+        return result;
+    }
 
     // Movement / combat — called by input.js
     moveTo(x, y)       { this.knight.moveTo(x, y); }
