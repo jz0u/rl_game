@@ -3,10 +3,11 @@ import { goblinBaseStats } from '../data/baseStats.js';
 import CoinDrop from './CoinDrop.js';
 
 /**
- * Goblin — a basic melee enemy.
+ * Goblin — a basic melee enemy with goblin-specific personality traits.
  *
- * All AI logic (state machine, chase, attack, takeDamage) lives in EnemyAI.
- * This class only sets up the sprite and defines what happens on death.
+ * Extends EnemyAI for the shared state machine. Overrides three hooks
+ * to add goblin character: random speed variance, randomised attack hesitation,
+ * and a short lunge burst at attack start.
  */
 export default class Goblin extends EnemyAI {
   /**
@@ -34,6 +35,77 @@ export default class Goblin extends EnemyAI {
     this.createHealthBar(x, y);
 
     this.sprite.play('goblin_idle_sw');
+
+    // Personality: each goblin runs at a slightly different speed.
+    this.speedMultiplier  = Phaser.Math.FloatBetween(0.85, 1.15);
+    // Personality: random hesitation before each swing.
+    this.attackDelayUntil = 0;
+  }
+
+  // ── Goblin personality overrides ──
+
+  /** Chase with per-goblin speed variance. */
+  _onChase(tx, ty) {
+    if (this.attackInProgress) return;
+
+    const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y, tx, ty);
+    let vx = Math.cos(angle) * this.derivedStats.moveSpeed * 60;
+    let vy = Math.sin(angle) * this.derivedStats.moveSpeed * 60;
+
+    // Separation steering — nudge away from nearby enemies to prevent clumping.
+    const SEPARATION = 60;
+    const peers = this.scene.enemies ?? this.scene.goblins ?? [];
+    for (const other of peers) {
+      if (other === this || other.isDead()) continue;
+      const anchor = other.sprite ?? other.rect;
+      if (!anchor) continue;
+      const dx = this.sprite.x - anchor.x;
+      const dy = this.sprite.y - anchor.y;
+      const d  = Math.sqrt(dx * dx + dy * dy);
+      if (d > 0 && d < SEPARATION) {
+        const strength = (SEPARATION - d) / SEPARATION;
+        vx += (dx / d) * strength * this.derivedStats.moveSpeed * 60;
+        vy += (dy / d) * strength * this.derivedStats.moveSpeed * 60;
+      }
+    }
+
+    // Apply per-goblin speed personality.
+    vx *= this.speedMultiplier;
+    vy *= this.speedMultiplier;
+
+    this.sprite.body.setVelocity(vx, vy);
+
+    const walkAnim = this._animKey(this.getDirectionAnim(angle));
+    if (this.sprite.anims.currentAnim?.key !== walkAnim) {
+      this.sprite.play(walkAnim);
+    }
+    this.sprite.flipX = false;
+  }
+
+  /** Attack with random hesitation delay and a lunge burst. */
+  _onAttack(px, py) {
+    if (this.scene.time.now < this.attackDelayUntil) return;
+    if (this.attackInProgress) return;
+    if (this.scene.time.now < this.staggerUntil) return;
+
+    // Set the next attack's hesitation window before swinging.
+    this.attackDelayUntil = this.scene.time.now + Phaser.Math.Between(200, 600);
+
+    const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y, px, py);
+    this.attack(angle);
+
+    // Brief lunge burst toward the player after attack() zeroes velocity.
+    this.scene.time.delayedCall(50, () => {
+      if (this.attackInProgress && !this.isDead()) {
+        this.sprite.body.setVelocity(
+          Math.cos(angle) * 180,
+          Math.sin(angle) * 180,
+        );
+        this.scene.time.delayedCall(80, () => {
+          if (!this.isDead()) this.sprite.body.setVelocity(0, 0);
+        });
+      }
+    });
   }
 
   onDeath() {
