@@ -141,6 +141,8 @@ export function loadGoblinSpritesheets(scene) {
   scene.load.spritesheet('goblin_walking_diag',  BASE + 'walking_diag.png',  opts);
   scene.load.spritesheet('goblin_collapse_diag', BASE + 'collapse_diag.png', opts);
 
+  scene.load.spritesheet('goblin_ko_diag', BASE + 'ko_diag.png', opts);
+
   // Attack / special — single row, 3 frames
   scene.load.spritesheet('goblin_MVsv_alt_attack1', BASE + 'MVsv_alt_attack1.png', opts);
 }
@@ -172,6 +174,12 @@ export function registerGoblinAnims(scene) {
       key:       'goblin_attack1',
       frames:    scene.anims.generateFrameNumbers('goblin_MVsv_alt_attack1', { start: 0, end: 2 }),
       frameRate: 8,
+      repeat:    0,
+    },
+    {
+      key:       'goblin_guard_break',
+      frames:    scene.anims.generateFrameNumbers('goblin_ko_diag', { frames: [0, 1, 3, 4, 6, 7, 9, 10] }),
+      frameRate: 10,
       repeat:    0,
     },
   ];
@@ -223,6 +231,14 @@ export function registerPlayerAnims(scene) {
     ({ key, frames: scene.anims.generateFrameNumbers(sheet, { start: 0, end: 2 }), frameRate: rate, repeat: rep });
 
   const newAnims = [
+    // Guard break — single non-directional animation from ko_diag sheet
+    {
+      key:       'guard_break',
+      frames:    scene.anims.generateFrameNumbers('Medieval_Warfare_Male_1_ko_diag', { frames: [0, 1, 3, 4, 6, 7, 9, 10] }),
+      frameRate: 10,
+      repeat:    0,
+    },
+
     // Directional _diag animations (3 frames/dir × 4 dirs)
     ...diag3('collapse', 'Medieval_Warfare_Male_1_collapse_diag',  8,  0),
     ...diag3('dead',     'Medieval_Warfare_Male_1_dead_diag',      8,  0),

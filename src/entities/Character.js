@@ -1,7 +1,7 @@
 import Entity from './Entity.js';
 import CombatEffects from '../effects/CombatEffects.js';
 import { COLOR_HP_BAR_BG, COLOR_DAMAGE_RED } from '../config/constants.js';
-const GUARD_BREAK_STAGGER_MS = 400;
+const GUARD_BREAK_STAGGER_MS = 800; // 8 frames at 10fps
 
 /** Half-arc angles (radians) for each weapon arc type used in canHit(). */
 const ARC_HALF = {
@@ -265,19 +265,24 @@ export default class Character extends Entity {
   }
 
   /**
-   * Staggered characters cannot attack for `duration` ms.
-   * If an attack animation is in progress it is immediately cancelled.
+   * Guard-break stagger: cancels any in-progress attack, plays the guard_break
+   * animation, and blocks new attacks for `duration` ms.
    */
   _applyStagger(duration) {
     if (this.attackInProgress) {
       this.attackInProgress = false;
-      this.attackId         = null;   // invalidate cancel token
-      if (this.sprite.anims) {
-        this.sprite.stop();
-        this.sprite.play(this._animKey('idle_sw'));
-      }
+      this.attackId = null;
+      this.sprite.stop();
     }
+
     this.staggerUntil = this.scene.time.now + duration;
+
+    const animKey = this._animKey('guard_break');
+    this.sprite.play(animKey);
+
+    this.sprite.once('animationcomplete', () => {
+      this.sprite.play(this._animKey('idle_sw'));
+    });
   }
 
   _spendStamina(amount) {
