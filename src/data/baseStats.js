@@ -1,10 +1,10 @@
 export const knightBaseStats = {
   // ── Primary stats ──
-  strength: 0,     // increases melee damage, carry weight, and heavy armor effectiveness
-  dexterity: 0,    // increases attack speed, ranged damage, dodge chance, and move speed
-  intelligence: 0, // increases magic damage, magicka pool, and magic resist
-  vitality: 0,     // increases max HP, HP regen, and physical resistance
-  endurance: 0,    // increases max stamina, stamina regen, and heavy armor penalty reduction
+  strength: 1,     // increases melee damage, carry weight, and heavy armor effectiveness
+  dexterity: 1,    // increases attack speed, ranged damage, dodge chance, and move speed
+  intelligence: 1, // increases magic damage, magicka pool, and magic resist
+  vitality: 1,     // increases max HP, HP regen, and physical resistance
+  endurance: 1,    // increases max stamina, stamina regen, and heavy armor penalty reduction
 
   // ── Base resource pools (tuning values — override per entity type) ──
   hp: 100,     // flat HP before vitality scaling — reduce for weaker enemies, increase for bosses
@@ -38,11 +38,11 @@ export const knightBaseStats = {
 
 export const goblinBaseStats = {
   // ── Primary stats ──
-  strength: 0,
-  dexterity: 0,
-  intelligence: 0,
-  vitality: 0,
-  endurance: 0,
+  strength: 1,
+  dexterity: 1,
+  intelligence: 1,
+  vitality: 1,
+  endurance: 1,
 
   // ── Base resource pools ──
   hp: 100,
@@ -59,7 +59,7 @@ export const goblinBaseStats = {
   minDamage: 0,
   maxDamage: 0,
   attackRange: 70,    // short melee reach in pixels
-  guardDamage: 25,    // goblin jab stagger baseline
+  guardDamage: 1,    // goblin jab stagger baseline
 
   // ── Combat behaviour ──
   staminaCost: 1,
