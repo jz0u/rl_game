@@ -4,7 +4,8 @@ import { defaultGearStats } from '../data/gearStats.js';
 const HP_PER_VITALITY = 15;
 const STAMINA_PER_ENDURANCE = 8;
 const MAGICKA_PER_INTELLIGENCE = 10;
-const REGEN_BASE = 0.1;
+// Regen base rates moved to baseStats — each entity defines its own floor.
+// Only per-stat scaling multipliers remain here as tuning constants.
 const REGEN_PER_STAT = 0.1;
 const PHYSICAL_DAMAGE_PER_STR = 0.1;
 const MAGICAL_DAMAGE_PER_INT = 0.1;
@@ -25,11 +26,9 @@ const GUARD_PER_ENDURANCE     = 3;
 const GUARD_BREAK_STAGGER_MS  = 400;
 
 // ── Stamina regen constants ──
-const BASE_STAMINA_REGEN          = 8;
 const STAMINA_REGEN_PER_ENDURANCE = 1.5;
 
 // ── Guard regen constants ──
-const BASE_GUARD_REGEN          = 3;    // guard points per second baseline
 const GUARD_REGEN_PER_ENDURANCE = 0.5;  // per endurance point
 
 // ── Guard lookup tables (derived from item properties instead of per-item stats) ──
@@ -63,9 +62,12 @@ export function computeDerivedStats(baseStats, gearStats) {
     maxMagicka: baseStats.magicka + (baseStats.intelligence * MAGICKA_PER_INTELLIGENCE) + gearStats.magicka,
 
     // ── Regeneration (per second) ──
-    healthRegen:  REGEN_BASE + (baseStats.vitality     * REGEN_PER_STAT),
-    staminaRegen: BASE_STAMINA_REGEN + (baseStats.endurance * STAMINA_REGEN_PER_ENDURANCE),
-    magickaRegen: REGEN_BASE + (baseStats.intelligence * REGEN_PER_STAT),
+    // Base rate comes from entity baseStats so each entity type has its own floor.
+    // Primary stat scaling is added on top — vitality/endurance/intelligence
+    // let the player invest in faster recovery without overriding the entity baseline.
+    healthRegen:  (baseStats.healthRegen  ?? 0) + (baseStats.vitality     * REGEN_PER_STAT),
+    staminaRegen: (baseStats.staminaRegen ?? 0) + (baseStats.endurance    * STAMINA_REGEN_PER_ENDURANCE),
+    magickaRegen: (baseStats.magickaRegen ?? 0) + (baseStats.intelligence * REGEN_PER_STAT),
 
     // ── Defense ──
     physicalResist: baseStats.physicalResist + gearStats.physicalResist,
@@ -91,7 +93,7 @@ export function computeDerivedStats(baseStats, gearStats) {
 
     // ── Guard ──
     maxGuard:    BASE_GUARD + (baseStats.endurance * GUARD_PER_ENDURANCE) + (gearStats.guardBonus ?? 0),
-    guardRegen:  BASE_GUARD_REGEN + (baseStats.endurance * GUARD_REGEN_PER_ENDURANCE),
+    guardRegen:  (baseStats.guardRegen ?? 0) + (baseStats.endurance * GUARD_REGEN_PER_ENDURANCE),
     guardDamage: (baseStats.guardDamage ?? 0) + (gearStats.guardDamage ?? 0),
 
     // ── Stamina cost ──

@@ -35,6 +35,12 @@ export const knightBaseStats = {
   rangeType: 'melee', // default to melee for unarmed
   visionRadius: 100,
   coinValue: 0,
+
+  // ── Regeneration (per second, before stat scaling) ──
+  healthRegen:  2,    // HP restored per second; vitality adds on top
+  staminaRegen: 8,    // stamina restored per second; endurance adds on top
+  magickaRegen: 1,    // magicka restored per second; intelligence adds on top
+  guardRegen:   3,    // guard restored per second; endurance adds on top
 }
 
 export const goblinBaseStats = {
@@ -74,4 +80,10 @@ export const goblinBaseStats = {
   rangeType: 'melee',
   visionRadius: 200,
   coinValue: 1,
+
+  // ── Regeneration (per second, before stat scaling) ──
+  healthRegen:  1,    // HP restored per second; vitality adds on top
+  staminaRegen: 5,    // stamina restored per second; endurance adds on top
+  magickaRegen: 0,    // magicka restored per second; intelligence adds on top
+  guardRegen:   2,    // guard restored per second; endurance adds on top
 }
