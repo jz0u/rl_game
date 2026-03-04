@@ -36,6 +36,8 @@ export default class Goblin extends Character {
 
     // AI
     this.state = 'idle';
+    this.lastKnownPosition = null;
+    this.playerVisible = false;
 
     this.createHealthBar(x, y);
 
@@ -49,6 +51,7 @@ export default class Goblin extends Character {
     this.updateHealthBar();
     this.showDamageNumber(effective);
     this._applyHitReaction(this.hitbox, attackerX);
+    if (this.state === 'idle') this.state = 'chase';
     return effective;
   }
 
@@ -113,14 +116,33 @@ export default class Goblin extends Character {
         break;
 
       case 'chase':
-        if (dist > this.derivedStats.visionRadius * 1.5) {
-          this.state = 'idle';
-          this._setIdle();
-        } else if (dist < this.derivedStats.attackRange) {
-          this.state = 'attack';
-          this.sprite.body.setVelocity(0, 0);
+        if (dist < this.derivedStats.visionRadius) {
+          this.playerVisible = true;
+          this.lastKnownPosition = { x: px, y: py };
+          if (dist < this.derivedStats.attackRange) {
+            this.state = 'attack';
+            this.sprite.body.setVelocity(0, 0);
+          } else {
+            this._chaseKnight(px, py);
+          }
         } else {
-          this._chaseKnight(px, py);
+          this.playerVisible = false;
+          if (this.lastKnownPosition) {
+            const distToLKP = Phaser.Math.Distance.Between(
+              this.sprite.x, this.sprite.y,
+              this.lastKnownPosition.x, this.lastKnownPosition.y
+            );
+            if (distToLKP < 10) {
+              this.state = 'idle';
+              this.lastKnownPosition = null;
+              this._setIdle();
+            } else {
+              this._chaseKnight(this.lastKnownPosition.x, this.lastKnownPosition.y);
+            }
+          } else {
+            this.state = 'idle';
+            this._setIdle();
+          }
         }
         break;
 
