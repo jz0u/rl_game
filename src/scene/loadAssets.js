@@ -1,7 +1,7 @@
-import { loadPlayerSpritesheets, loadGoblinSpritesheets } from './loadPlayerAssets';
+import { loadPlayerSpritesheets } from './loadPlayerAssets';
 import { Armory } from "../data/Armory";
 import MapManager from "../maps/MapManager";
-import { map2 } from "../maps/map2";
+import { map1 } from "../maps/map2";
 
 /**
  * Loads all game assets into the Phaser loader. Call from scene.preload().
@@ -10,7 +10,6 @@ import { map2 } from "../maps/map2";
 export function loadAssets(scene){
     const allItems = Object.values(Armory).flat();
     loadPlayerSpritesheets(scene);
-    loadGoblinSpritesheets(scene);
     scene.load.image('player_paperdoll', 'assets/player/Medieval_Warfare_Male_1/Medieval_Warfare_Male_1_Paperdoll.png');
     allItems.forEach(item => {
       scene.load.image(item.id, item.iconPath);
@@ -43,5 +42,5 @@ export function loadAssets(scene){
     scene.load.image('hud-exp',         'assets/hud/EXPBar.png');
     scene.load.image('hud-orb-guard',   'assets/hud/Fill.png');
 
-    MapManager.load(scene, map2);
+    MapManager.load(scene, map1);
 }
