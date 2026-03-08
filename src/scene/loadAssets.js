@@ -1,4 +1,4 @@
-import { loadPlayerSpritesheets, loadGoblinSpritesheets } from './loadPlayerAssets';
+import { loadPlayerSpritesheets } from './loadPlayerAssets';
 import { Armory } from "../data/Armory";
 import { goblin1 } from "../maps/goblin1";
 
@@ -9,7 +9,6 @@ import { goblin1 } from "../maps/goblin1";
 export function loadAssets(scene){
     const allItems = Object.values(Armory).flat();
     loadPlayerSpritesheets(scene);
-    loadGoblinSpritesheets(scene);
     scene.load.image('player_paperdoll', 'assets/player/Medieval_Warfare_Male_1/Medieval_Warfare_Male_1_Paperdoll.png');
     allItems.forEach(item => {
       scene.load.image(item.id, item.iconPath);

@@ -1,10 +1,10 @@
 export const goblin1 = {
     key: 'goblin1',
-    tilemapPath: 'assets/maps/goblin/1.tmj',
+    tilemapPath: 'assets/maps/goblin/2.tmj',
     tilesets: [
-        { name: '1_bot', path: 'assets/maps/goblin/1_bot.png' },
-        { name: '1_top', path: 'assets/maps/goblin/1_top.png' },
+        { name: 'Medieval_Underdeep_Tiles_2', path: 'assets/tiles/Medieval_Underdeep_Tiles_2.png' },
     ],
-    layers: ['bot', 'fix', 'top'],
-    collisionLayer: 'collision',
+    layers: ['bot'],
+    overheadLayers: [],
+    collisionLayer: null,
 };
