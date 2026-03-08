@@ -2,7 +2,6 @@ import Knight from "../entities/Knight";
 import { registerPlayerAnims } from './loadPlayerAssets';
 import { goblin1 } from "../maps/goblin1";
 import { CAMERA_ZOOM } from '../config/constants';
-import Shop from "../systems/Shop";
 import ShopPanel from "../ui/ShopPanel";
 import Inventory from "../systems/Inventory";
 import InventoryPanel from "../ui/InventoryPanel";
@@ -54,10 +53,9 @@ export function createGameObjects(scene, allItems) {
 
     scene.goblins = [];
 
-    scene.shop             = new Shop();
     scene.shopPanel        = new ShopPanel(scene, allItems);
     scene.inventory        = new Inventory();
-    scene.equipmentManager = new EquipmentManager(scene.inventory, scene.knight, scene);
+    scene.equipmentManager = new EquipmentManager(scene.inventory, scene);
     scene.inventoryPanel   = new InventoryPanel(scene, scene.inventory, allItems);
     scene.windowManager    = new WindowManager(scene);
 

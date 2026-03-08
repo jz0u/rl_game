@@ -77,7 +77,4 @@ export default class BasePanel {
     return { dollX, dollSize };
   }
 
-  show()   {}
-  hide()   {}
-  toggle() {}
 }

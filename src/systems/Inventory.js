@@ -34,7 +34,7 @@ export default class Inventory {
      * Adds an item to the first available inventory slot.
      * Fails silently if the inventory is full or the item is already present in inventory or equipped.
      * @param {{ id: string, equipSlot: string }} item - The item to add.
-     * @returns {false|undefined} Returns false if the item could not be added.
+     * @returns {boolean} false if the item could not be added, true on success.
      */
     addItemToInventory(item) {
         if (this.inventoryCount >= INVENTORY_SIZE) return false;
@@ -45,13 +45,14 @@ export default class Inventory {
         this.itemSlotMap.set(item.id, slot);
         this.inventoryItemIds.add(item.id);
         this.inventoryCount++;
+        return true;
     }
 
     /**
      * Removes an item from the inventory and frees its slot.
      * Fails silently if the inventory is empty or the item is not present.
      * @param {{ id: string }} item - The item to remove.
-     * @returns {false|undefined} Returns false if the item could not be removed.
+     * @returns {boolean} false if the item could not be removed, true on success.
      */
     removeItemFromInventory(item) {
         if (this.inventoryCount === 0) return false;
@@ -62,6 +63,7 @@ export default class Inventory {
         this.inventoryItemIds.delete(item.id);
         this.emptySlots.add(slot);
         this.inventoryCount--;
+        return true;
     }
 
     /**
@@ -72,7 +74,7 @@ export default class Inventory {
      * Note: this method only manages data. Callers must also call player.equip(item)
      * separately to update the visual overlay on the player sprite.
      * @param {{ id: string, equipSlot: string }} item - The item to equip.
-     * @returns {false|undefined} Returns false if the item could not be equipped.
+     * @returns {boolean} false if the item could not be equipped, true on success.
      */
     equipItemFromInventory(item) {
         const equipSlot = item.equipSlot;
@@ -129,14 +131,14 @@ export default class Inventory {
                 this.inventoryCount++;
             }
         }
+        return true;
     }
 
     /**
      * Moves an item from the equipped map back into the inventory.
      * Fails silently if nothing is equipped, the item is not found, or the inventory is full.
      * @param {{ id: string, equipSlot: string }} item - The item to unequip.
-     * @returns {false|undefined} Returns false if the item could not be unequipped.
-     *   Also returns false if the inventory is full.
+     * @returns {boolean} false if the item could not be unequipped or inventory is full, true on success.
      */
     removeItemFromEquipped(item) {
         const equipSlot = item.equipSlot;
@@ -150,5 +152,6 @@ export default class Inventory {
         this.itemSlotMap.set(item.id, slot);
         this.inventoryItemIds.add(item.id);
         this.inventoryCount++;
+        return true;
     }
 }
