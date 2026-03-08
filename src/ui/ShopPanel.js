@@ -12,8 +12,6 @@ import {
 import BasePanel from './BasePanel';
 import SelectionBorder from './SelectionBorder';
 import { scaleIcon } from '../utils';
-import Shop from '../systems/Shop';
-
 const TAB_ROW_HEIGHT = 28;
 
 export default class ShopPanel extends BasePanel {
@@ -29,7 +27,6 @@ export default class ShopPanel extends BasePanel {
     this.currentPage  = 0;
     this.activeFilter = 'all';
     this.filterTabs   = [];
-    this.shop         = new Shop();
     /** Icons currently rendered on this page; destroyed and rebuilt on page change. */
     this.onPage = [];
 
@@ -303,15 +300,4 @@ export default class ShopPanel extends BasePanel {
     this.shopPanel.setVisible(false);
   }
 
-  // WARNING: calling toggle() directly bypasses WindowManager.
-  // Always route open/close through windowManager.toggle()
-  // (via GameActions) to keep nav arrows and ESC handling in sync.
-  /** Toggles the panel open/closed. */
-  toggle() {
-    if (this.shopPanel.visible) {
-      this.hide();
-    } else {
-      this.show();
-    }
-  }
 }
