@@ -16,16 +16,15 @@ import { loadAssets } from "./scene/loadAssets";
 import { createGameObjects } from "./scene/createGameObjects";
 import { setupInput } from "./input/input";
 import { setupKeybinds } from "./input/keybinds";
+import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './config/constants';
 
 /** Flat array of every item across all equipment slots. */
 const allItems = Object.values(Armory).flat();
 
 if (import.meta.env.DEV) {
   const violations = validateArmory(Armory);
-  if (violations === 0) console.log('[Armory] All items valid.');
+  if (violations === 0) console.log("[Armory] All items valid.");
 }
-
-import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './config/constants';
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -62,7 +61,7 @@ new Phaser.Game({
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width:  GAME_WINDOW_WIDTH,
+    width: GAME_WINDOW_WIDTH,
     height: GAME_WINDOW_HEIGHT,
   },
   physics: {

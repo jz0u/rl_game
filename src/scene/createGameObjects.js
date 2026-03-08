@@ -1,6 +1,7 @@
 import Knight from "../entities/Knight";
 import { registerPlayerAnims } from './loadPlayerAssets';
 import { goblin1 } from "../maps/goblin1";
+import { CAMERA_ZOOM } from '../config/constants';
 import Shop from "../systems/Shop";
 import ShopPanel from "../ui/ShopPanel";
 import Inventory from "../systems/Inventory";
@@ -12,6 +13,16 @@ import Bank from "../systems/Bank";
 import CursorUI from "../ui/CursorUI";
 import HUD from "../ui/HUD";
 
+function createMapLayers(scene, tilemap, mapDef) {
+    const tilesetImages = mapDef.tilesets.map(ts =>
+        tilemap.addTilesetImage(ts.name, ts.name)
+    );
+    mapDef.layers.forEach((name, i) => {
+        const isOverhead = mapDef.overheadLayers?.includes(name) ?? false;
+        tilemap.createLayer(name, tilesetImages, 0, 0).setDepth(isOverhead ? 20 : i);
+    });
+}
+
 /**
  * Instantiates the core game objects and attaches them to the scene.
  * @param {Phaser.Scene} scene - The active Phaser scene.
@@ -19,13 +30,7 @@ import HUD from "../ui/HUD";
  */
 export function createGameObjects(scene, allItems) {
     const tilemap = scene.make.tilemap({ key: goblin1.key });
-    const tilesetImages = goblin1.tilesets.map(ts =>
-        tilemap.addTilesetImage(ts.name, ts.name)
-    );
-    goblin1.layers.forEach((name, i) => {
-        const isOverhead = goblin1.overheadLayers?.includes(name) ?? false;
-        tilemap.createLayer(name, tilesetImages, 0, 0).setDepth(isOverhead ? 20 : i);
-    });
+    createMapLayers(scene, tilemap, goblin1);
 
     scene.collisionGroup = scene.physics.add.staticGroup();
 
@@ -39,7 +44,7 @@ export function createGameObjects(scene, allItems) {
     scene.hud    = new HUD(scene, scene.knight);
     registerPlayerAnims(scene);
 
-    scene.cameras.main.setZoom(1);
+    scene.cameras.main.setZoom(CAMERA_ZOOM);
     scene.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
     scene.cameras.main.startFollow(scene.knight.sprite, true, 0.1, 0.1);
 

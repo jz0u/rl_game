@@ -24,6 +24,12 @@ export default class Inventory {
         this.emptySlots = new Set(Array.from({ length: INVENTORY_SIZE }, (_, i) => i + 1));
     }
 
+    _takeFirstEmptySlot() {
+        const slot = Math.min(...this.emptySlots);
+        this.emptySlots.delete(slot);
+        return slot;
+    }
+
     /**
      * Adds an item to the first available inventory slot.
      * Fails silently if the inventory is full or the item is already present in inventory or equipped.
@@ -31,23 +37,14 @@ export default class Inventory {
      * @returns {false|undefined} Returns false if the item could not be added.
      */
     addItemToInventory(item) {
-        if (this.inventoryCount >= INVENTORY_SIZE) {
-            return false;
-        }
-        else if (this.inventoryItemIds.has(item.id)) {
-            return false;
-        }
-        else if (this.equippedItemIds.has(item.id)) {
-            return false;
-        }
-        else {
-            const slot = Math.min(...this.emptySlots);
-            this.emptySlots.delete(slot);
-            this.inventory.set(slot, item);
-            this.itemSlotMap.set(item.id, slot);
-            this.inventoryItemIds.add(item.id);
-            this.inventoryCount++;
-        }
+        if (this.inventoryCount >= INVENTORY_SIZE) return false;
+        if (this.inventoryItemIds.has(item.id)) return false;
+        if (this.equippedItemIds.has(item.id)) return false;
+        const slot = this._takeFirstEmptySlot();
+        this.inventory.set(slot, item);
+        this.itemSlotMap.set(item.id, slot);
+        this.inventoryItemIds.add(item.id);
+        this.inventoryCount++;
     }
 
     /**
@@ -57,20 +54,14 @@ export default class Inventory {
      * @returns {false|undefined} Returns false if the item could not be removed.
      */
     removeItemFromInventory(item) {
-        if (this.inventoryCount === 0) {
-            return false;
-        }
-        else if (!this.inventoryItemIds.has(item.id)) {
-            return false;
-        }
-        else {
-            const slot = this.itemSlotMap.get(item.id);
-            this.inventory.delete(slot);
-            this.itemSlotMap.delete(item.id);
-            this.inventoryItemIds.delete(item.id);
-            this.emptySlots.add(slot);
-            this.inventoryCount--;
-        }
+        if (this.inventoryCount === 0) return false;
+        if (!this.inventoryItemIds.has(item.id)) return false;
+        const slot = this.itemSlotMap.get(item.id);
+        this.inventory.delete(slot);
+        this.itemSlotMap.delete(item.id);
+        this.inventoryItemIds.delete(item.id);
+        this.emptySlots.add(slot);
+        this.inventoryCount--;
     }
 
     /**
@@ -85,67 +76,57 @@ export default class Inventory {
      */
     equipItemFromInventory(item) {
         const equipSlot = item.equipSlot;
-        if (this.inventoryCount === 0) {
-            return false;
+        if (this.inventoryCount === 0) return false;
+        if (!this.inventoryItemIds.has(item.id)) return false;
+        // Block equipping a secondary while a two-handed weapon is in the primary slot.
+        if (item.equipSlot === 'secondary') {
+            const currentWeapon = this.equipped.get('primary');
+            if (currentWeapon !== null && currentWeapon.handType === 'two') return false;
         }
-        else if (!this.inventoryItemIds.has(item.id)) {
-            return false;
+
+        const incomingSlot = this.itemSlotMap.get(item.id);
+        const currentlyEquipped = this.equipped.get(equipSlot);
+
+        if (currentlyEquipped !== null) {
+            // Free the incoming item's inventory slot first so there is always
+            // a home for the displaced item, even when the inventory is otherwise full.
+            this.inventory.delete(incomingSlot);
+            this.itemSlotMap.delete(item.id);
+            this.inventoryItemIds.delete(item.id);
+            this.emptySlots.add(incomingSlot);
+
+            // Move the previously equipped item back into inventory.
+            const returnSlot = this._takeFirstEmptySlot();
+            this.inventory.set(returnSlot, currentlyEquipped);
+            this.itemSlotMap.set(currentlyEquipped.id, returnSlot);
+            this.inventoryItemIds.add(currentlyEquipped.id);
+            this.equippedItemIds.delete(currentlyEquipped.id);
+
+            // inventoryCount: one item left (-1), one returned (+1) — net 0.
+            this.equipped.set(equipSlot, item);
+            this.equippedItemIds.add(item.id);
+        } else {
+            // Slot was empty — standard equip, inventory shrinks by one.
+            this.equipped.set(equipSlot, item);
+            this.equippedItemIds.add(item.id);
+            this.inventoryItemIds.delete(item.id);
+            this.inventory.delete(incomingSlot);
+            this.itemSlotMap.delete(item.id);
+            this.emptySlots.add(incomingSlot);
+            this.inventoryCount--;
         }
-        else {
-            // Block equipping a secondary while a two-handed weapon is in the primary slot.
-            if (item.equipSlot === 'secondary') {
-                const currentWeapon = this.equipped.get('primary');
-                if (currentWeapon !== null && currentWeapon.handType === 'two') {
-                    return false;
-                }
-            }
 
-            const incomingSlot = this.itemSlotMap.get(item.id);
-            const currentlyEquipped = this.equipped.get(equipSlot);
-
-            if (currentlyEquipped !== null) {
-                // Free the incoming item's inventory slot first so there is always
-                // a home for the displaced item, even when the inventory is otherwise full.
-                this.inventory.delete(incomingSlot);
-                this.itemSlotMap.delete(item.id);
-                this.inventoryItemIds.delete(item.id);
-                this.emptySlots.add(incomingSlot);
-
-                // Move the previously equipped item back into inventory.
-                const returnSlot = Math.min(...this.emptySlots);
-                this.emptySlots.delete(returnSlot);
-                this.inventory.set(returnSlot, currentlyEquipped);
-                this.itemSlotMap.set(currentlyEquipped.id, returnSlot);
-                this.inventoryItemIds.add(currentlyEquipped.id);
-                this.equippedItemIds.delete(currentlyEquipped.id);
-
-                // inventoryCount: one item left (-1), one returned (+1) — net 0.
-                this.equipped.set(equipSlot, item);
-                this.equippedItemIds.add(item.id);
-            } else {
-                // Slot was empty — standard equip, inventory shrinks by one.
-                this.equipped.set(equipSlot, item);
-                this.equippedItemIds.add(item.id);
-                this.inventoryItemIds.delete(item.id);
-                this.inventory.delete(incomingSlot);
-                this.itemSlotMap.delete(item.id);
-                this.emptySlots.add(incomingSlot);
-                this.inventoryCount--;
-            }
-
-            // After equipping a two-handed weapon, evict any secondary back to inventory.
-            if (item.equipSlot === 'primary' && item.handType === 'two') {
-                const secondaryItem = this.equipped.get('secondary');
-                if (secondaryItem !== null) {
-                    const returnSlot = Math.min(...this.emptySlots);
-                    this.emptySlots.delete(returnSlot);
-                    this.equipped.set('secondary', null);
-                    this.equippedItemIds.delete(secondaryItem.id);
-                    this.inventory.set(returnSlot, secondaryItem);
-                    this.itemSlotMap.set(secondaryItem.id, returnSlot);
-                    this.inventoryItemIds.add(secondaryItem.id);
-                    this.inventoryCount++;
-                }
+        // After equipping a two-handed weapon, evict any secondary back to inventory.
+        if (item.equipSlot === 'primary' && item.handType === 'two') {
+            const secondaryItem = this.equipped.get('secondary');
+            if (secondaryItem !== null) {
+                const returnSlot = this._takeFirstEmptySlot();
+                this.equipped.set('secondary', null);
+                this.equippedItemIds.delete(secondaryItem.id);
+                this.inventory.set(returnSlot, secondaryItem);
+                this.itemSlotMap.set(secondaryItem.id, returnSlot);
+                this.inventoryItemIds.add(secondaryItem.id);
+                this.inventoryCount++;
             }
         }
     }
@@ -159,24 +140,15 @@ export default class Inventory {
      */
     removeItemFromEquipped(item) {
         const equipSlot = item.equipSlot;
-        if (this.equippedItemIds.size === 0) {
-            return false;
-        }
-        else if (!this.equippedItemIds.has(item.id)) {
-            return false;
-        }
-        else {
-            if (this.inventoryCount >= INVENTORY_SIZE) {
-                return false;
-            }
-            const slot = Math.min(...this.emptySlots);
-            this.emptySlots.delete(slot);
-            this.equipped.set(equipSlot, null);
-            this.equippedItemIds.delete(item.id);
-            this.inventory.set(slot, item);
-            this.itemSlotMap.set(item.id, slot);
-            this.inventoryItemIds.add(item.id);
-            this.inventoryCount++;
-        }
+        if (this.equippedItemIds.size === 0) return false;
+        if (!this.equippedItemIds.has(item.id)) return false;
+        if (this.inventoryCount >= INVENTORY_SIZE) return false;
+        const slot = this._takeFirstEmptySlot();
+        this.equipped.set(equipSlot, null);
+        this.equippedItemIds.delete(item.id);
+        this.inventory.set(slot, item);
+        this.itemSlotMap.set(item.id, slot);
+        this.inventoryItemIds.add(item.id);
+        this.inventoryCount++;
     }
 }
