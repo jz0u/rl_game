@@ -97,7 +97,14 @@ export default class HUD {
     const mask = maskRect.createGeometryMask();
     orb.setMask(mask);
 
-    const label = { setText: () => {} };
+    const fontSize = Math.max(9, Math.round(orbH * 0.14));
+    const label = scene.add.text(x, y - orbH / 2, '', {
+      fontSize: `${fontSize}px`,
+      color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 3,
+      align: 'center',
+    }).setOrigin(0.5, 0.5).setScrollFactor(0).setDepth(DEPTH_HUD_TOP + 3);
 
     return { orb, maskRect, orbW, orbH, anchorX: x, anchorY: y, label };
   }
@@ -121,6 +128,9 @@ export default class HUD {
     this._updateOrb(this.guardOrb,   p.currentGuard,                   d.maxGuard);
     this._updateOrb(this.staminaOrb, p.currentStamina,                  d.maxStamina);
     this._updateOrb(this.manaOrb,    p.currentMagicka ?? d.maxMagicka,  d.maxMagicka);
+    const guardActive = p.currentGuard > 0;
+    this.hpOrb.label.setVisible(!guardActive);
+    this.guardOrb.label.setVisible(guardActive);
     if (this.scene.bank) this.goldText.setText(`Gold: ${this.scene.bank.balance}`);
   }
 }
