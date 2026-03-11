@@ -1,11 +1,13 @@
+import levelClock from './LevelClock';
+
 const levels = [
-  { sceneKey: 'MainMenuScene', winCondition: 'Click PLAY' },
-  { sceneKey: 'Level1Scene',   winCondition: 'Defeat all enemies' },
+  { sceneKey: 'MainMenuScene', winCondition: 'Click PLAY',         clock: null },
+  { sceneKey: 'Level1Scene',   winCondition: 'Defeat all enemies', clock: { start: 'scene:ready', end: 'scene:shutdown' } },
 ];
 
 class LevelManager {
   constructor() {
-    this.game = null;
+    this.game         = null;
     this.currentIndex = 0;
   }
 
@@ -13,13 +15,27 @@ class LevelManager {
     this.game = game;
   }
 
+  _startClockForScene(sceneKey, clockConfig) {
+    const scene = this.game.scene.getScene(sceneKey);
+    scene.events.once(clockConfig.start, () => levelClock.start());
+    scene.events.once(clockConfig.end,   () => {
+      levelClock.stop();
+      levelClock.reset();
+    });
+  }
+
   advance() {
-    const currentKey = levels[this.currentIndex].sceneKey;
+    const currentNode = levels[this.currentIndex];
     this.currentIndex++;
     if (this.currentIndex >= levels.length) return;
-    const nextKey = levels[this.currentIndex].sceneKey;
-    this.game.scene.stop(currentKey);
-    this.game.scene.start(nextKey);
+    const nextNode = levels[this.currentIndex];
+
+    this.game.scene.stop(currentNode.sceneKey);
+    this.game.scene.start(nextNode.sceneKey);
+
+    if (nextNode.clock) {
+      this._startClockForScene(nextNode.sceneKey, nextNode.clock);
+    }
   }
 }
 

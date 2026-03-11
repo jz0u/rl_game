@@ -37,6 +37,11 @@ export default class Level1Scene extends Phaser.Scene {
     initEnemies(this);
     setupInput(this);
     setupKeybinds(this);
+    this.events.emit('scene:ready');
+  }
+
+  shutdown() {
+    this.events.emit('scene:shutdown');
   }
 
   update() {
