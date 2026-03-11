@@ -17,7 +17,7 @@ export const knightBaseStats = {
   magicalResist: 0,
 
   // ── Base offense (unarmed) ──
-  physicalDamage: 1,  // weak unarmed hits — equip a weapon for real damage
+  physicalDamage: 1000,  // weak unarmed hits — equip a weapon for real damage
   magicalDamage: 0,   // magic requires a staff/wand equipped
   attackRange: 70,    // unarmed reach in pixels
   guardDamage: 1,    // unarmed stagger baseline

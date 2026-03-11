@@ -1,35 +1,35 @@
 import { defaultGearStats } from '../data/gearStats.js';
 
 // ── Scaling constants (tuning knobs — adjust during playtesting) ──
-const HP_PER_VITALITY = 15;
-const STAMINA_PER_ENDURANCE = 8;
-const MAGICKA_PER_INTELLIGENCE = 10;
+const HP_PER_VITALITY = 1;
+const STAMINA_PER_ENDURANCE = 1;
+const MAGICKA_PER_INTELLIGENCE = 1;
 // Regen base rates moved to baseStats — each entity defines its own floor.
 // Only per-stat scaling multipliers remain here as tuning constants.
 const REGEN_PER_STAT = 0.1;
 const PHYSICAL_DAMAGE_PER_STR = 0.1;
 const MAGICAL_DAMAGE_PER_INT = 0.1;
 const RANGED_DAMAGE_PER_DEX = 0.1;
-const ATTACK_SPEED_PER_DEX = 0.5;   // ms reduction per DEX point
-const CRIT_CHANCE_PER_DEX = 0.5;    // % per DEX point
-const CRIT_DAMAGE_PER_STR = 0.02;   // multiplier per STR point
-const ACCURACY_PER_DEX = 0.3;
-const MOVE_SPEED_PER_DEX = 0.05;
+const ATTACK_SPEED_PER_DEX = 0.1;   // ms reduction per DEX point
+const CRIT_CHANCE_PER_DEX = 0.1;    // % per DEX point
+const CRIT_DAMAGE_PER_STR = 0.05;   // multiplier per STR point
+const ACCURACY_PER_DEX = 0.1;
+const MOVE_SPEED_PER_DEX = 0.01;
 const DODGE_CAP = 75;
 const BASE_ATTACK_SPEED = 1000;     // ms between attacks at 0 DEX
 const BASE_CRIT_DAMAGE = 1.5;       // 1.5x crit multiplier before STR scaling
-const ATTACK_SPEED_FLOOR = 300;     // ms — fastest possible attack
+const ATTACK_SPEED_FLOOR = 100;     // ms — fastest possible attack
 
 // ── Guard constants ──
 // BASE_GUARD removed — flat guard floor now lives in baseStats.guard per entity.
-const GUARD_PER_ENDURANCE     = 3;
+const GUARD_PER_ENDURANCE     = 1;
 const GUARD_BREAK_STAGGER_MS  = 400;
 
 // ── Stamina regen constants ──
-const STAMINA_REGEN_PER_ENDURANCE = 1.5;
+const STAMINA_REGEN_PER_ENDURANCE = 0.1;
 
 // ── Guard regen constants ──
-const GUARD_REGEN_PER_ENDURANCE = 0.5;  // per endurance point
+const GUARD_REGEN_PER_ENDURANCE = 0.1;  // per endurance point
 
 // ── Guard lookup tables (derived from item properties instead of per-item stats) ──
 const GUARD_BONUS_BY_WEIGHT = { light: 5, medium: 15, heavy: 30 };
