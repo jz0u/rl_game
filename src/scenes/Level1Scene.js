@@ -16,9 +16,9 @@ import { updateEnemies }   from '../pipelines/update/updateEnemies';
 import { setupInput }      from '../input/input';
 import { setupKeybinds }   from '../input/keybinds';
 
-export default class GameScene extends Phaser.Scene {
+export default class Level1Scene extends Phaser.Scene {
   constructor() {
-    super({ key: "GameScene" });
+    super({ key: "Level1Scene" });
   }
 
   preload() {

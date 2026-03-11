@@ -1,6 +1,6 @@
 const levels = [
   { sceneKey: 'MainMenuScene', winCondition: 'Click PLAY' },
-  { sceneKey: 'GameScene',     winCondition: 'Defeat all enemies' },
+  { sceneKey: 'Level1Scene',   winCondition: 'Defeat all enemies' },
 ];
 
 class LevelManager {

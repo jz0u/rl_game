@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import GameScene from "./scenes/GameScene";
+import Level1Scene from "./scenes/Level1Scene";
 import MainMenuScene from "./scenes/MainMenuScene";
 import levelManager from "./systems/LevelManager";
 import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './config/constants';
@@ -17,7 +17,7 @@ const game = new Phaser.Game({
     default: "arcade",
     arcade: { gravity: { y: 0 } },
   },
-  scene: [MainMenuScene, GameScene],
+  scene: [MainMenuScene, Level1Scene],
 });
 
 levelManager.init(game);
