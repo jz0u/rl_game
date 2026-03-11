@@ -26,6 +26,7 @@ class LevelManager {
 
   advance() {
     const currentNode = levels[this.currentIndex];
+    if (currentNode.clock) { levelClock.stop(); levelClock.reset(); }
     this.currentIndex++;
     if (this.currentIndex >= levels.length) return;
     const nextNode = levels[this.currentIndex];
