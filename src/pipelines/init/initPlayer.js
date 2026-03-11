@@ -10,7 +10,7 @@ export function initPlayer(scene) {
 
     scene.knight = new Knight(scene, playerX, playerY);
     scene.knight.sprite.setDepth(10);
-    scene.bank = new Bank(50);
+    scene.bank = new Bank(0);
     scene.coinDrops = [];
     registerPlayerAnims(scene);
 

@@ -25,7 +25,7 @@ export const knightBaseStats = {
   maxDamage: 0,
 
   // ── Combat behaviour ──
-  staminaCost: 10,    // unarmed attack stamina cost baseline
+  staminaCost: 0.5,    // unarmed attack stamina cost baseline
   rangeType: 'melee', // default to melee for unarmed
   visionRadius: 100,
   coinValue: 0,
@@ -66,7 +66,7 @@ export const goblinBaseStats = {
   // ── Combat behaviour ──
   staminaCost: 1,
   rangeType: 'melee',
-  visionRadius: 200,
+  visionRadius: 2000,
   coinValue: 1,
 
   // ── Regeneration (per second, before stat scaling) ──
