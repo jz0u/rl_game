@@ -1,4 +1,4 @@
-import { loadPlayerSpritesheets } from '../../scene/loadPlayerAssets';
+import { loadPlayerSpritesheets, loadGoblinSpritesheets } from '../../scene/loadPlayerAssets';
 
 function loadImageBatch(scene, entries) {
     entries.forEach(([key, path]) => scene.load.image(key, path));
@@ -15,6 +15,7 @@ const UI_IMAGES = [
 
 export function loadCoreAssets(scene) {
     loadPlayerSpritesheets(scene);
+    loadGoblinSpritesheets(scene);
     scene.load.image('player_paperdoll', 'assets/player/Medieval_Warfare_Male_1/Medieval_Warfare_Male_1_Paperdoll.png');
     loadImageBatch(scene, UI_IMAGES);
 }

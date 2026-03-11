@@ -15,8 +15,9 @@ import { updateCamera }    from '../pipelines/update/updateCamera';
 import { updateEnemies }   from '../pipelines/update/updateEnemies';
 import { setupInput }      from '../input/input';
 import { setupKeybinds }   from '../input/keybinds';
-import ClockDisplay from '../ui/ClockDisplay';
-import levelClock   from '../systems/LevelClock';
+import ClockDisplay  from '../ui/ClockDisplay';
+import levelClock    from '../systems/LevelClock';
+import Level1Spawner from '../systems/Level1Spawner';
 
 export default class Level1Scene extends Phaser.Scene {
   constructor() {
@@ -37,6 +38,7 @@ export default class Level1Scene extends Phaser.Scene {
     initUI(this);
     initActions(this);
     initEnemies(this);
+    this.spawner = new Level1Spawner(this, this.knight);
     setupInput(this);
     setupKeybinds(this);
     this.clockDisplay = new ClockDisplay(this, levelClock);
@@ -47,11 +49,12 @@ export default class Level1Scene extends Phaser.Scene {
     this.events.emit('scene:shutdown');
   }
 
-  update() {
+  update(time, delta) {
     updatePlayer(this);
     updateHUD(this);
     updateCamera(this);
     updateEnemies(this);
     this.clockDisplay.update();
+    this.spawner.update(delta);
   }
 }
