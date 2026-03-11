@@ -3,7 +3,6 @@ import HUD from '../../ui/HUD';
 import ShopPanel from '../../ui/ShopPanel';
 import InventoryPanel from '../../ui/InventoryPanel';
 import WindowManager from '../../ui/WindowManager';
-import CursorUI from '../../ui/CursorUI';
 
 export function initUI(scene) {
     const allItems = Object.values(Armory).flat();
@@ -13,5 +12,4 @@ export function initUI(scene) {
     scene.windowManager  = new WindowManager(scene);
     scene.windowManager.addWindow(scene.shopPanel);
     scene.windowManager.addWindow(scene.inventoryPanel);
-    scene.cursorUI = new CursorUI(scene);
 }
