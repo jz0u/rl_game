@@ -15,10 +15,12 @@ import { updateCamera }    from '../pipelines/update/updateCamera';
 import { updateEnemies }   from '../pipelines/update/updateEnemies';
 import { setupInput }      from '../input/input';
 import { setupKeybinds }   from '../input/keybinds';
+import ClockDisplay from '../ui/ClockDisplay';
+import levelClock   from '../systems/LevelClock';
 
-export default class GameScene extends Phaser.Scene {
+export default class Level1Scene extends Phaser.Scene {
   constructor() {
-    super({ key: "GameScene" });
+    super({ key: "Level1Scene" });
   }
 
   preload() {
@@ -37,6 +39,12 @@ export default class GameScene extends Phaser.Scene {
     initEnemies(this);
     setupInput(this);
     setupKeybinds(this);
+    this.clockDisplay = new ClockDisplay(this, levelClock);
+    this.events.emit('scene:ready');
+  }
+
+  shutdown() {
+    this.events.emit('scene:shutdown');
   }
 
   update() {
@@ -44,5 +52,6 @@ export default class GameScene extends Phaser.Scene {
     updateHUD(this);
     updateCamera(this);
     updateEnemies(this);
+    this.clockDisplay.update();
   }
 }

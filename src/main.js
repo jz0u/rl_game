@@ -1,8 +1,10 @@
 import Phaser from "phaser";
-import GameScene from "./scenes/GameScene";
+import Level1Scene from "./scenes/Level1Scene";
+import MainMenuScene from "./scenes/MainMenuScene";
+import levelManager from "./systems/LevelManager";
 import { GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT } from './config/constants';
 
-new Phaser.Game({
+const game = new Phaser.Game({
   type: Phaser.AUTO,
   backgroundColor: "#000000",
   scale: {
@@ -15,5 +17,7 @@ new Phaser.Game({
     default: "arcade",
     arcade: { gravity: { y: 0 } },
   },
-  scene: [GameScene],
+  scene: [MainMenuScene, Level1Scene],
 });
+
+levelManager.init(game);

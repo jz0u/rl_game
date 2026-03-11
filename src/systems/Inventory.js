@@ -25,6 +25,7 @@ export default class Inventory {
     }
 
     _takeFirstEmptySlot() {
+        if (this.emptySlots.size === 0) return null;
         const slot = Math.min(...this.emptySlots);
         this.emptySlots.delete(slot);
         return slot;
@@ -41,6 +42,7 @@ export default class Inventory {
         if (this.inventoryItemIds.has(item.id)) return false;
         if (this.equippedItemIds.has(item.id)) return false;
         const slot = this._takeFirstEmptySlot();
+        if (slot === null) return false;
         this.inventory.set(slot, item);
         this.itemSlotMap.set(item.id, slot);
         this.inventoryItemIds.add(item.id);
@@ -88,6 +90,17 @@ export default class Inventory {
 
         const incomingSlot = this.itemSlotMap.get(item.id);
         const currentlyEquipped = this.equipped.get(equipSlot);
+        const secondaryItem = this.equipped.get('secondary');
+
+        if (
+            item.equipSlot === 'primary' &&
+            item.handType === 'two' &&
+            currentlyEquipped !== null &&
+            secondaryItem !== null &&
+            this.emptySlots.size === 0
+        ) {
+            return false;
+        }
 
         if (currentlyEquipped !== null) {
             // Free the incoming item's inventory slot first so there is always
@@ -99,6 +112,7 @@ export default class Inventory {
 
             // Move the previously equipped item back into inventory.
             const returnSlot = this._takeFirstEmptySlot();
+            if (returnSlot === null) return false;
             this.inventory.set(returnSlot, currentlyEquipped);
             this.itemSlotMap.set(currentlyEquipped.id, returnSlot);
             this.inventoryItemIds.add(currentlyEquipped.id);
@@ -120,9 +134,9 @@ export default class Inventory {
 
         // After equipping a two-handed weapon, evict any secondary back to inventory.
         if (item.equipSlot === 'primary' && item.handType === 'two') {
-            const secondaryItem = this.equipped.get('secondary');
             if (secondaryItem !== null) {
                 const returnSlot = this._takeFirstEmptySlot();
+                if (returnSlot === null) return false;
                 this.equipped.set('secondary', null);
                 this.equippedItemIds.delete(secondaryItem.id);
                 this.inventory.set(returnSlot, secondaryItem);
@@ -146,6 +160,7 @@ export default class Inventory {
         if (!this.equippedItemIds.has(item.id)) return false;
         if (this.inventoryCount >= INVENTORY_SIZE) return false;
         const slot = this._takeFirstEmptySlot();
+        if (slot === null) return false;
         this.equipped.set(equipSlot, null);
         this.equippedItemIds.delete(item.id);
         this.inventory.set(slot, item);
